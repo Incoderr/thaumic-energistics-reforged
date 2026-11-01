@@ -1,0 +1,6 @@
+src/main/java/thaumicenergistics/Features.java merge=union
+src/main/java/thaumicenergistics/client/ClientFeatures.java merge=union
+tools/features.txt merge=union
+src/main/java/thaumicenergistics/network/ModPayloads.java merge=union
+src/main/java/thaumicenergistics/client/ClientPayloadHandlers.java merge=union
+src/generated/** merge=ours
