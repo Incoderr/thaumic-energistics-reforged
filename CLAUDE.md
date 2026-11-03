@@ -50,6 +50,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 ## Research and recipes
 
 - `research/TeResearch`: category `thaumicenergistics` (registered in `TeResearch.init()` from `CoreFeature.research()`, which must stay first in `Features.research`), keys `TeResearch.key("CORES")` = `thaumicenergistics.TECORES`, pages `TeResearch.text(key, n)`.
+- The base scrolls the tab background in proportion to the category bounds, so `TeResearch.init()` registers two virtual research items at the corners of the full TE tree (-6,-7 and 6,2). Without them a partly ported tab scrolls its background far too fast.
 - TE pseudo research: `TeResearch.pseudo("DISTILESSENTIA")` registers once a hidden stub `thaumicenergistics.Pseudo.<KEY>` in the TE tab at the TE position, mirrors the real research name and pages, and adds itself to the real research siblings, so it unlocks with it. Use it wherever TE used `PseudoResearchTypes`.
 - `crafting/TeRecipes` over `TcRecipes.register`; recipe keys are TE `RecipeRegistry` field names with the mod prefix (`thaumicenergistics.ITEM_STORAGE_COMPONENT_1K`). Workbench recipes are JSON from the feature generator plus `TeRecipes.vanilla` refs for research pages.
 - TE certus quartz groups (certus, charged, pure) become the `#ae2:all_certus_quartz` tag; AE2 1.21 has no pure certus.

@@ -52,6 +52,14 @@ public final class TeResearch {
             ThaumicEnergistics.id("textures/research/tab.icon.png"),
             ThaumicEnergistics.id("textures/research/research.background.png")
         );
+        bound("min", -6, -7);
+        bound("max", 6, 2);
+    }
+
+    private static void bound(String name, int column, int row) {
+        new ResearchItem(ThaumicEnergistics.MODID + ".Bounds." + name, CATEGORY, new AspectList(), column, row, 1, ThaumicEnergistics.id("textures/research/tab.icon.png"))
+            .setVirtual()
+            .registerResearchItem();
     }
 
     public static String key(String name) {

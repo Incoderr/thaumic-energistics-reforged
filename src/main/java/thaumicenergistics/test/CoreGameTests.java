@@ -39,6 +39,8 @@ public final class CoreGameTests {
         ResearchItem basic = research(helper, "thaumicenergistics.TERESEARCH");
         helper.assertTrue(basic.isAutoUnlock() && basic.isRound(), "basic research flags are wrong");
         helper.assertTrue(basic.column() == 0 && basic.row() == 0, "basic research position is wrong");
+        var category = ResearchCategories.get(TeResearch.CATEGORY);
+        helper.assertTrue(category.minColumn() == -6 && category.maxColumn() == 6 && category.minRow() == -7 && category.maxRow() == 2, "category bounds do not match the full TE tree");
         helper.succeed();
     }
 
