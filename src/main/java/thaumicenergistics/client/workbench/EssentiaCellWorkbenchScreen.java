@@ -3,7 +3,6 @@ package thaumicenergistics.client.workbench;
 import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.IconButton;
 import appeng.core.localization.ButtonToolTips;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.ChatFormatting;
@@ -13,11 +12,9 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.fml.ModList;
 import thaumcraft.aspect.Aspect;
-import thaumcraft.client.aspect.AspectRenderer;
-import thaumcraft.item.AspectTooltips;
 import thaumicenergistics.ThaumicEnergistics;
+import thaumicenergistics.client.essentia.AspectWidgets;
 import thaumicenergistics.client.platform.TeClientNetwork;
 import thaumicenergistics.workbench.EssentiaCellWorkbenchMenu;
 import thaumicenergistics.workbench.WorkbenchActionPayload;
@@ -52,7 +49,7 @@ public final class EssentiaCellWorkbenchScreen extends AbstractContainerScreen<E
         int widget = widgetAt(mouseX, mouseY);
         Aspect aspect = widget < 0 ? null : aspectAt(widget);
         if (aspect != null && menu.getCarried().isEmpty()) {
-            graphics.renderComponentTooltip(font, tooltip(aspect), mouseX, mouseY);
+            graphics.renderComponentTooltip(font, AspectWidgets.tooltip(aspect), mouseX, mouseY);
         } else {
             renderTooltip(graphics, mouseX, mouseY);
         }
@@ -70,11 +67,7 @@ public final class EssentiaCellWorkbenchScreen extends AbstractContainerScreen<E
             if (aspect == null) {
                 continue;
             }
-            if (AspectTooltips.isDiscovered(aspect)) {
-                AspectRenderer.drawTag(graphics, x + 1, y + 1, aspect, 0.0F, 0, 1.0F, false);
-            } else {
-                AspectRenderer.drawUnknown(graphics, x + 1, y + 1);
-            }
+            AspectWidgets.draw(graphics, x + 1, y + 1, aspect);
         }
     }
 
@@ -118,23 +111,6 @@ public final class EssentiaCellWorkbenchScreen extends AbstractContainerScreen<E
 
     private static int widgetY(int index) {
         return WIDGET_Y + index / WIDGETS_PER_ROW * WIDGET_SIZE;
-    }
-
-    private static List<Component> tooltip(Aspect aspect) {
-        List<Component> lines = new ArrayList<>();
-        if (AspectTooltips.isDiscovered(aspect)) {
-            lines.add(Component.literal(aspect.getName()));
-            lines.add(aspect.getDescription().copy().withStyle(ChatFormatting.GRAY));
-            String namespace = aspect.getImage().getNamespace();
-            String mod = ModList.get().getModContainerById(namespace).map(container -> container.getModInfo().getDisplayName()).orElse("Unknown");
-            lines.add(Component.literal(mod).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
-        } else {
-            Component unknown = Component.translatable("tc.aspect.unknown");
-            lines.add(unknown);
-            lines.add(unknown.copy().withStyle(ChatFormatting.GRAY));
-            lines.add(Component.literal("Unknown").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
-        }
-        return lines;
     }
 
     private static final class WorkbenchButton extends IconButton {

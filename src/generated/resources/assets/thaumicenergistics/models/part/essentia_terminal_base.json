@@ -1,0 +1,8 @@
+{
+  "parent": "ae2:part/display_base",
+  "textures": {
+    "sides": "thaumicenergistics:block/parts/essentia.terminal.side",
+    "front": "thaumicenergistics:block/parts/essentia.termina.border",
+    "particle": "thaumicenergistics:block/parts/essentia.terminal.side"
+  }
+}

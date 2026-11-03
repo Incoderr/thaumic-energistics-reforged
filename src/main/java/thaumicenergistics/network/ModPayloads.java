@@ -1,5 +1,6 @@
 package thaumicenergistics.network;
 
+import thaumicenergistics.terminal.TerminalFeature;
 import thaumicenergistics.workbench.WorkbenchFeature;
 
 public final class ModPayloads {
@@ -8,5 +9,6 @@ public final class ModPayloads {
 
     public static void register() {
         WorkbenchFeature.payloads();
+        TerminalFeature.payloads();
     }
 }

@@ -1,8 +1,11 @@
 package thaumicenergistics.research;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import thaumcraft.aspect.AspectList;
+import thaumcraft.crafting.TcRecipes;
 import thaumcraft.crafting.TcStack;
 import thaumcraft.research.ResearchCategories;
 import thaumcraft.research.ResearchItem;
@@ -14,6 +17,7 @@ public final class TeResearch {
     public static final String BASIC = key("RESEARCH");
     public static final String CORES = key("CORES");
     public static final String STORAGE = key("STORAGE");
+    public static final String ESSENTIA_TERMINAL = key("ESSTERM");
     public static final String DISTILESSENTIA = "DISTILESSENTIA";
     public static final String WARDED = "WARDEDARCANA";
     public static final int COMPLEXITY_SMALL = 1;
@@ -60,6 +64,34 @@ public final class TeResearch {
 
     public static ResearchPage text(String key, String name) {
         return ResearchPage.text(ThaumicEnergistics.MODID + ".research_page." + key.substring(ThaumicEnergistics.MODID.length() + 1) + "." + name);
+    }
+
+    public static ResearchPage[] existing(ResearchPage... pages) {
+        List<ResearchPage> result = new ArrayList<>();
+        for (ResearchPage page : pages) {
+            List<String> recipes = switch (page) {
+                case ResearchPage.Arcane arcane -> arcane.recipes();
+                case ResearchPage.Crafting crafting -> crafting.recipes();
+                case ResearchPage.Crucible crucible -> crucible.recipes();
+                case ResearchPage.Infusion infusion -> infusion.recipes();
+                default -> null;
+            };
+            if (recipes == null) {
+                result.add(page);
+                continue;
+            }
+            String[] present = recipes.stream().filter(key -> TcRecipes.get(key) != null).toArray(String[]::new);
+            if (present.length == 0) {
+                continue;
+            }
+            result.add(switch (page) {
+                case ResearchPage.Arcane ignored -> ResearchPage.arcane(present);
+                case ResearchPage.Crafting ignored -> ResearchPage.crafting(present);
+                case ResearchPage.Crucible ignored -> ResearchPage.crucible(present);
+                default -> ResearchPage.infusion(present);
+            });
+        }
+        return result.toArray(ResearchPage[]::new);
     }
 
     public static ResearchItem item(String key, AspectList tags, int column, int row, int complexity, TcStack icon) {

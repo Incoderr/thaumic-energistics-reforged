@@ -1,0 +1,8 @@
+{
+  "parent": "ae2:part/terminal_off",
+  "textures": {
+    "lightsBright": "thaumicenergistics:block/parts/essentia.terminal.overlay.light",
+    "lightsMedium": "thaumicenergistics:block/parts/essentia.terminal.overlay.medium",
+    "lightsDark": "thaumicenergistics:block/parts/essentia.terminal.overlay.dark"
+  }
+}

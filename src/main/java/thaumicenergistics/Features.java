@@ -5,8 +5,10 @@ import thaumcraft.aspect.AspectRegistry;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
+import thaumicenergistics.terminal.TerminalFeature;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
+import thaumicenergistics.test.TerminalGameTests;
 import thaumicenergistics.test.WorkbenchGameTests;
 import thaumicenergistics.workbench.WorkbenchFeature;
 
@@ -19,17 +21,20 @@ public final class Features {
         CoreFeature.load();
         CellsFeature.load();
         WorkbenchFeature.load();
+        TerminalFeature.load();
     }
 
     public static void research() {
         CoreFeature.research();
         CellsFeature.research();
+        TerminalFeature.research();
     }
 
     public static void recipes() {
         CoreFeature.recipes();
         CellsFeature.recipes();
         WorkbenchFeature.recipes();
+        TerminalFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -39,5 +44,6 @@ public final class Features {
         CoreGameTests.register(modEventBus);
         CellsGameTests.register(modEventBus);
         WorkbenchGameTests.register(modEventBus);
+        TerminalGameTests.register(modEventBus);
     }
 }

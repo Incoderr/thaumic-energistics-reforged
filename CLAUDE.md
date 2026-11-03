@@ -54,6 +54,13 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - `crafting/TeRecipes` over `TcRecipes.register`; recipe keys are TE `RecipeRegistry` field names with the mod prefix (`thaumicenergistics.ITEM_STORAGE_COMPONENT_1K`). Workbench recipes are JSON from the feature generator plus `TeRecipes.vanilla` refs for research pages.
 - TE certus quartz groups (certus, charged, pure) become the `#ae2:all_certus_quartz` tag; AE2 1.21 has no pure certus.
 
+## AE2 parts and menus
+
+- TE parts are AE2 parts on AE2 base classes (`AbstractTerminalPart` and friends), items are `appeng.items.parts.PartItem`. Part models are JSON in `models/part/` written by the feature generator and must be listed in `PartModels.registerModels` from the feature `load()`. Part items need an `ItemColor` (`StaticItemColor(AEColor.TRANSPARENT)`) for the tinted cable-color layers.
+- Menus opened from parts use `MenuTypeBuilder.create(Menu::new, HostInterface.class).buildUnregistered(id)` inside the addon `MENUS` register, and extend `AEBaseMenu` for `@GuiSync` fields and `registerClientAction`. Screens are plain `AbstractContainerScreen`, so slots are vanilla `Slot`s with TE coordinates: AE2 slots get positions only from AE2 screen style JSON.
+- Server work that TE did in `detectAndSendChanges` runs in `broadcastChanges`. Essentia lists go to the client as the addon's own payload with the menu `containerId`.
+- `TeResearch.existing(pages...)` drops recipe pages whose recipes are not registered yet, so a research shared by several features (TEESSTERM) gets its pages as the features land; keep the full TE page order in the call.
+
 ## Essentia cells
 
 - The 16k cell holds 16348 bytes, a TE typo kept on purpose. Bytes count as `ceil(essentia / 2)`.
