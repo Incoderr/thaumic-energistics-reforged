@@ -1,10 +1,213 @@
 {
-  "parent": "ae2:item/display_base",
+  "parent": "ae2:item/part_base",
   "textures": {
     "sides": "thaumicenergistics:block/parts/essentia.terminal.side",
-    "front_base": "thaumicenergistics:block/parts/essentia.termina.border",
-    "front_bright": "thaumicenergistics:block/parts/essentia.terminal.overlay.light",
-    "front_medium": "thaumicenergistics:block/parts/essentia.terminal.overlay.medium",
-    "front_dark": "thaumicenergistics:block/parts/essentia.terminal.overlay.dark"
-  }
+    "back": "thaumicenergistics:block/parts/essentia.terminal.side",
+    "front": "thaumicenergistics:block/parts/essentia.termina.border",
+    "dark": "thaumicenergistics:block/parts/essentia.terminal.overlay.dark",
+    "medium": "thaumicenergistics:block/parts/essentia.terminal.overlay.medium",
+    "light": "thaumicenergistics:block/parts/essentia.terminal.overlay.light",
+    "particle": "thaumicenergistics:block/parts/essentia.terminal.side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        7
+      ],
+      "to": [
+        14,
+        14,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#front"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#sides"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#sides"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#sides"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            14,
+            16
+          ],
+          "texture": "#sides"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        6.98
+      ],
+      "to": [
+        13,
+        13,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#dark",
+          "tintindex": 1
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        6.96
+      ],
+      "to": [
+        13,
+        13,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#medium",
+          "tintindex": 2
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        6.94
+      ],
+      "to": [
+        13,
+        13,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#light",
+          "tintindex": 3
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        9
+      ],
+      "to": [
+        12,
+        12,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            4,
+            7,
+            12
+          ],
+          "texture": "#sides"
+        },
+        "south": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#back"
+        },
+        "west": {
+          "uv": [
+            9,
+            4,
+            10,
+            12
+          ],
+          "texture": "#sides"
+        },
+        "up": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#sides"
+        },
+        "down": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#sides"
+        }
+      }
+    }
+  ]
 }
