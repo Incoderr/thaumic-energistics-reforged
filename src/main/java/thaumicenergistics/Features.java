@@ -7,6 +7,8 @@ import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
+import thaumicenergistics.test.WorkbenchGameTests;
+import thaumicenergistics.workbench.WorkbenchFeature;
 
 public final class Features {
     private Features() {
@@ -16,6 +18,7 @@ public final class Features {
         EssentiaFeature.load();
         CoreFeature.load();
         CellsFeature.load();
+        WorkbenchFeature.load();
     }
 
     public static void research() {
@@ -26,6 +29,7 @@ public final class Features {
     public static void recipes() {
         CoreFeature.recipes();
         CellsFeature.recipes();
+        WorkbenchFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -34,5 +38,6 @@ public final class Features {
     public static void tests(IEventBus modEventBus) {
         CoreGameTests.register(modEventBus);
         CellsGameTests.register(modEventBus);
+        WorkbenchGameTests.register(modEventBus);
     }
 }

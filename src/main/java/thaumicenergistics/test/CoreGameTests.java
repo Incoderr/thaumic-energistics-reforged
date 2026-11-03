@@ -55,7 +55,7 @@ public final class CoreGameTests {
         ResearchItem storage = research(helper, "thaumicenergistics.TESTORAGE");
         helper.assertTrue(storage.column() == 0 && storage.row() == 2, "storage position is wrong");
         helper.assertTrue(storage.parents().equals(List.of(TeResearch.BASIC, "thaumicenergistics.Pseudo.DISTILESSENTIA", "thaumicenergistics.Pseudo.WARDEDARCANA")), "storage parents are " + storage.parents());
-        helper.assertTrue(storage.pages().size() == 7, "storage has " + storage.pages().size() + " pages");
+        helper.assertTrue(storage.pages().size() == 8, "storage has " + storage.pages().size() + " pages");
         helper.succeed();
     }
 

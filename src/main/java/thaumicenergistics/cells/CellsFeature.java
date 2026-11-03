@@ -14,6 +14,7 @@ import thaumicenergistics.crafting.TeRecipes;
 import thaumicenergistics.platform.TeStackKey;
 import thaumicenergistics.registry.ModItems;
 import thaumicenergistics.research.TeResearch;
+import thaumicenergistics.workbench.WorkbenchFeature;
 
 public final class CellsFeature {
     public static final TeStackKey<EssentiaCellData> CELL_DATA = TeStackKey.register("essentia_cell", EssentiaCellData.CODEC, EssentiaCellData.STREAM_CODEC);
@@ -113,7 +114,8 @@ public final class CellsFeature {
                 ResearchPage.arcane(componentRecipe(EssentiaStorageType.TYPE_4K), componentRecipe(EssentiaStorageType.TYPE_16K), componentRecipe(EssentiaStorageType.TYPE_64K)),
                 ResearchPage.crafting(HOUSING_RECIPE),
                 ResearchPage.crafting(COMPONENTS.keySet().stream().map(CellsFeature::shapedCellRecipe).toArray(String[]::new)),
-                ResearchPage.crafting(COMPONENTS.keySet().stream().map(CellsFeature::shapelessCellRecipe).toArray(String[]::new))
+                ResearchPage.crafting(COMPONENTS.keySet().stream().map(CellsFeature::shapelessCellRecipe).toArray(String[]::new)),
+                ResearchPage.crafting(WorkbenchFeature.RECIPE)
             )
             .setParents(TeResearch.BASIC, TeResearch.pseudo(TeResearch.DISTILESSENTIA), TeResearch.pseudo(TeResearch.WARDED))
             .setParentsHidden(TeResearch.DISTILESSENTIA)
