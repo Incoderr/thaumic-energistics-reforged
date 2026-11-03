@@ -9,12 +9,14 @@ import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 import thaumcraft.aspect.AspectSync;
 import thaumicenergistics.network.ModPayloads;
+import thaumicenergistics.platform.TeStackData;
 import thaumicenergistics.registry.ModBlockEntities;
 import thaumicenergistics.registry.ModBlocks;
 import thaumicenergistics.registry.ModCreativeTabs;
 import thaumicenergistics.registry.ModEffects;
 import thaumicenergistics.registry.ModEntities;
 import thaumicenergistics.registry.ModItems;
+import thaumicenergistics.registry.ModKeyTypes;
 import thaumicenergistics.registry.ModMenus;
 import thaumicenergistics.registry.ModSounds;
 import thaumicenergistics.test.SmokeGameTests;
@@ -27,6 +29,8 @@ public class ThaumicEnergistics {
     public ThaumicEnergistics(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         Features.load();
+        TeStackData.register(modEventBus);
+        ModKeyTypes.register(modEventBus);
         ModEffects.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);

@@ -2,23 +2,37 @@ package thaumicenergistics;
 
 import net.neoforged.bus.api.IEventBus;
 import thaumcraft.aspect.AspectRegistry;
+import thaumicenergistics.cells.CellsFeature;
+import thaumicenergistics.core.CoreFeature;
+import thaumicenergistics.essentia.EssentiaFeature;
+import thaumicenergistics.test.CellsGameTests;
+import thaumicenergistics.test.CoreGameTests;
 
 public final class Features {
     private Features() {
     }
 
     public static void load() {
+        EssentiaFeature.load();
+        CoreFeature.load();
+        CellsFeature.load();
     }
 
     public static void research() {
+        CoreFeature.research();
+        CellsFeature.research();
     }
 
     public static void recipes() {
+        CoreFeature.recipes();
+        CellsFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
     }
 
     public static void tests(IEventBus modEventBus) {
+        CoreGameTests.register(modEventBus);
+        CellsGameTests.register(modEventBus);
     }
 }

@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_cell_16k"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_storage_component_16k"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": {
+      "item": "thaumcraft:warded_glass"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    "C": {
+      "item": "thaumicenergistics:essentia_storage_component_16k"
+    }
+  },
+  "pattern": [
+    "WRW",
+    "RCR",
+    "TTT"
+  ],
+  "result": {
+    "id": "thaumicenergistics:essentia_cell_16k"
+  }
+}

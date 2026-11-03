@@ -47,6 +47,19 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - A feature adds one line each to the shared files: `Features.java`, `client/ClientFeatures.java`, `tools/features.txt`, `network/ModPayloads.java`, `client/ClientPayloadHandlers.java`. These files use `merge=union` in `.gitattributes`, write lines as separate statements.
 - A feature's GameTests live in `test/<Feature>GameTests.java` on `TeGameTestSuite` (`new TeGameTestSuite("name").add("test", body)`, registered with one line in `Features.tests`).
 
+## Research and recipes
+
+- `research/TeResearch`: category `thaumicenergistics` (registered in `TeResearch.init()` from `CoreFeature.research()`, which must stay first in `Features.research`), keys `TeResearch.key("CORES")` = `thaumicenergistics.TECORES`, pages `TeResearch.text(key, n)`.
+- TE pseudo research: `TeResearch.pseudo("DISTILESSENTIA")` registers once a hidden stub `thaumicenergistics.Pseudo.<KEY>` in the TE tab at the TE position, mirrors the real research name and pages, and adds itself to the real research siblings, so it unlocks with it. Use it wherever TE used `PseudoResearchTypes`.
+- `crafting/TeRecipes` over `TcRecipes.register`; recipe keys are TE `RecipeRegistry` field names with the mod prefix (`thaumicenergistics.ITEM_STORAGE_COMPONENT_1K`). Workbench recipes are JSON from the feature generator plus `TeRecipes.vanilla` refs for research pages.
+- TE certus quartz groups (certus, charged, pure) become the `#ae2:all_certus_quartz` tag; AE2 1.21 has no pure certus.
+
+## Essentia cells
+
+- The 16k cell holds 16348 bytes, a TE typo kept on purpose. Bytes count as `ceil(essentia / 2)`.
+- Cell contents live in the `thaumicenergistics:essentia_cell` data component (`CellsFeature.CELL_DATA`), written in `persist()` (AE2 calls it after `saveChanges`; without a save provider the inventory persists at once).
+- The creative cell accepts nothing and gives an unlimited amount of each partitioned aspect (2,000,000,000 shown), as in TE.
+
 ## Generated files (do not edit by hand)
 
 | File | Generator |

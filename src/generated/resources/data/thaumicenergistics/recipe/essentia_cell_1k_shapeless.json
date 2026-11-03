@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_cell_1k"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_cell_housing"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_storage_component_1k"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thaumicenergistics:essentia_storage_component_1k"
+    },
+    {
+      "item": "thaumicenergistics:essentia_cell_housing"
+    }
+  ],
+  "result": {
+    "id": "thaumicenergistics:essentia_cell_1k"
+  }
+}
