@@ -80,6 +80,9 @@ reference/                 original mod source (git ignored)
 | `tools/fetch_te.py`    | Downloads the Thaumic Energistics source (branch `AE2-RV3`, MC 1.7.10) into `reference/te-src` |
 | `tools/fetch_libs.py`  | Downloads the AE2 and GuideME jars into `libs/` and verifies their SHA-512 |
 | `tools/check_seams.py` | Checks version-specific API boundaries                                                  |
+| `tools/convert_assets.py` | Copies TE textures and converts TE lang files to JSON using `tools/id_map.json`      |
+| `tools/gen_resources.py` | Writes models, blockstates, loot, recipes and tags into `src/generated/resources` from per-feature generators |
+| `tools/id_map.json`    | Maps TE registry names and metadata to 1.21.1 ids                                       |
 | `tools/features.txt`   | List of per-feature resource generators                                                 |
 
 ## Credits

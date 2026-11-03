@@ -1,0 +1,42 @@
+{
+  "blocks": [
+    {"old": "block.essentia.provider", "meta": null, "lang": "thaumicenergistics.block.essentia.provider.name", "id": "essentia_provider", "state": {}, "skip": null},
+    {"old": "block.infusion.provider", "meta": null, "lang": "thaumicenergistics.block.infusion.provider.name", "id": "infusion_provider", "state": {}, "skip": null},
+    {"old": "block.gear.box", "meta": null, "lang": "thaumicenergistics.block.gear.box.name", "id": "iron_gear_box", "state": {}, "skip": null},
+    {"old": "block.golem.gear.box", "meta": null, "lang": "thaumicenergistics.block.golem.gear.box.name", "id": "thaumium_gear_box", "state": {}, "skip": null},
+    {"old": "block.essentia.cell.workbench", "meta": null, "lang": "thaumicenergistics.block.essentia.cell.workbench.name", "id": "essentia_cell_workbench", "state": {}, "skip": null},
+    {"old": "block.arcane.assembler", "meta": null, "lang": "thaumicenergistics.block.arcane.assembler.name", "id": "arcane_assembler", "state": {}, "skip": null},
+    {"old": "block.knowledge.inscriber", "meta": null, "lang": "thaumicenergistics.block.knowledge.inscriber.name", "id": "knowledge_inscriber", "state": {}, "skip": null},
+    {"old": "block.essentia.vibration.chamber", "meta": null, "lang": "thaumicenergistics.block.essentia.vibration.chamber.name", "id": "essentia_vibration_chamber", "state": {}, "skip": null},
+    {"old": "block.distillation.encoder", "meta": null, "lang": "thaumicenergistics.block.distillation.encoder.name", "id": "distillation_pattern_encoder", "state": {}, "skip": null}
+  ],
+  "items": [
+    {"old": "part.base", "meta": 0, "lang": "thaumicenergistics.aeparts.essentia.ImportBus.name", "id": "essentia_import_bus", "skip": null},
+    {"old": "part.base", "meta": 1, "lang": "thaumicenergistics.aeparts.essentia.levelemitter.name", "id": "essentia_level_emitter", "skip": null},
+    {"old": "part.base", "meta": 2, "lang": "thaumicenergistics.aeparts.essentia.StorageBus.name", "id": "essentia_storage_bus", "skip": null},
+    {"old": "part.base", "meta": 3, "lang": "thaumicenergistics.aeparts.essentia.ExportBus.name", "id": "essentia_export_bus", "skip": null},
+    {"old": "part.base", "meta": 4, "lang": "thaumicenergistics.aeparts.essentia.terminal.name", "id": "essentia_terminal", "skip": null},
+    {"old": "part.base", "meta": 5, "lang": "thaumicenergistics.aeparts.arcane.crafting.terminal.name", "id": "arcane_crafting_terminal", "skip": null},
+    {"old": "part.base", "meta": 6, "lang": "thaumicenergistics.aeparts.vis.interface.name", "id": "vis_relay_interface", "skip": null},
+    {"old": "part.base", "meta": 7, "lang": "thaumicenergistics.aeparts.essentia.storage.monitor.name", "id": "essentia_storage_monitor", "skip": null},
+    {"old": "part.base", "meta": 8, "lang": "thaumicenergistics.aeparts.essentia.conversion.monitor.name", "id": "essentia_conversion_monitor", "skip": null},
+    {"old": "storage.essentia", "meta": 0, "lang": "thaumicenergistics.item.essentia.cell.1k.name", "id": "essentia_cell_1k", "skip": null},
+    {"old": "storage.essentia", "meta": 1, "lang": "thaumicenergistics.item.essentia.cell.4k.name", "id": "essentia_cell_4k", "skip": null},
+    {"old": "storage.essentia", "meta": 2, "lang": "thaumicenergistics.item.essentia.cell.16k.name", "id": "essentia_cell_16k", "skip": null},
+    {"old": "storage.essentia", "meta": 3, "lang": "thaumicenergistics.item.essentia.cell.64k.name", "id": "essentia_cell_64k", "skip": null},
+    {"old": "storage.essentia", "meta": 4, "lang": "thaumicenergistics.item.essentia.cell.creative.name", "id": "creative_essentia_cell", "skip": null},
+    {"old": "storage.component", "meta": 0, "lang": "thaumicenergistics.item.storage.component.1k.name", "id": "essentia_storage_component_1k", "skip": null},
+    {"old": "storage.component", "meta": 1, "lang": "thaumicenergistics.item.storage.component.4k.name", "id": "essentia_storage_component_4k", "skip": null},
+    {"old": "storage.component", "meta": 2, "lang": "thaumicenergistics.item.storage.component.16k.name", "id": "essentia_storage_component_16k", "skip": null},
+    {"old": "storage.component", "meta": 3, "lang": "thaumicenergistics.item.storage.component.64k.name", "id": "essentia_storage_component_64k", "skip": null},
+    {"old": "storage.casing", "meta": null, "lang": "thaumicenergistics.item.storage.casing.name", "id": "essentia_cell_housing", "skip": null},
+    {"old": "material", "meta": 0, "lang": "thaumicenergistics.item.material.diffusion.core.name", "id": "diffusion_core", "skip": null},
+    {"old": "material", "meta": 1, "lang": "thaumicenergistics.item.material.coalescence.core.name", "id": "coalescence_core", "skip": null},
+    {"old": "material", "meta": 2, "lang": "thaumicenergistics.item.material.iron.gear.name", "id": "iron_gear", "skip": null},
+    {"old": "wireless.essentia.terminal", "meta": null, "lang": "thaumicenergistics.item.wireless.essentia.terminal.name", "id": "wireless_essentia_terminal", "skip": null},
+    {"old": "knowledge.core", "meta": null, "lang": "thaumicenergistics.item.knowledge.core.name", "id": "knowledge_core", "skip": null},
+    {"old": "focus.aewrench", "meta": null, "lang": "thaumicenergistics.item.focus.aewrench.name", "id": "ae_wrench_focus", "skip": null},
+    {"old": "crafting.aspect", "meta": null, "lang": null, "id": "crafting_aspect", "skip": "AE2 1.21.1 crafts essentia through its own key type, the placeholder item is not needed"},
+    {"old": "golem.wifi.backpack", "meta": null, "lang": "thaumicenergistics.item.golem.wifi.backpack.name", "id": "wireless_golem_backpack", "skip": null}
+  ]
+}

@@ -7,7 +7,8 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 ## Principles
 
 - Source of truth for behavior: the TE 1.1.3.0 sources in `reference/te-src` (branch `AE2-RV3`, `tools/fetch_te.py`). The default GitHub branch (`AE2-RV6`) is the MC 1.12.2 / Thaumcraft 6 version, do not use it. TE code is read as data, nothing from it is executed.
-- Applied Energistics 2 `19.2.18` is a required dependency (`ordering="AFTER"`). The jar lives in `libs/` and is linked with `implementation files(...)`; AE2 is not published to a maven for this version. Its required dependency GuideME is linked the same way from `libs/`. The jars are git ignored, `tools/fetch_libs.py` downloads them from Modrinth with a SHA-512 check (CI runs it too). Use the AE2 API in `appeng.api.*` only, internal `appeng.*` classes change between releases.
+- Applied Energistics 2 `19.2.18` is a required dependency (`ordering="AFTER"`). The jar lives in `libs/` and is linked with `implementation files(...)`; AE2 is not published to a maven for this version. Its required dependency GuideME is linked the same way from `libs/`. The jars are git ignored, `tools/fetch_libs.py` downloads them from Modrinth with a SHA-512 check (CI runs it too). Internal `appeng.*` classes may be used (parts, part items, menus, screens, upgrades) because AE2 is pinned to 19.2.18; prefer `appeng.api.*` where it covers the need.
+- Essentia is a native AE2 resource: its own `AEKeyType`, not TE's `GridEssentiaCache`/`EssentiaMonitor` and not the essentia gas fluids. Everything TE did through its grid cache goes through AE2 `MEStorage`, so do not port those classes back. Essentia cells keep TE math (2 essentia per byte, 12 types, no per-type byte overhead) with their own `StorageCell`.
 - Integrations with other mods (Waila, IC2, ExtraCells, NEI) are excluded. The recipe viewer is REI (not JEI): API `compileOnly`, full mod `localRuntime`, optional `roughlyenoughitems` dependency in `neoforge.mods.toml`.
 - The TE coremod (`thaumicenergistics/fml`, the `ThE-core` module) is not ported as ASM, the required behavior is done with NeoForge events, the base API or mixins.
 - TE bugs are fixed only if they break the game (dupes, item loss, NPE, desync, server crash). Gameplay quirks stay.
@@ -46,10 +47,24 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - A feature adds one line each to the shared files: `Features.java`, `client/ClientFeatures.java`, `tools/features.txt`, `network/ModPayloads.java`, `client/ClientPayloadHandlers.java`. These files use `merge=union` in `.gitattributes`, write lines as separate statements.
 - A feature's GameTests live in `test/<Feature>GameTests.java` on `TeGameTestSuite` (`new TeGameTestSuite("name").add("test", body)`, registered with one line in `Features.tests`).
 
+## Generated files (do not edit by hand)
+
+| File | Generator |
+|---|---|
+| `src/main/resources/assets/thaumicenergistics` (textures, lang) | `tools/convert_assets.py` (+ `tools/assets_extra/`, `tools/lang/`) |
+| `src/generated/resources` (rewritten entirely) | `tools/gen_resources.py` (`tools/mcformat.py` with the 1.21.1 profile) |
+
+- After a lang change run `convert_assets.py`, then `gen_resources.py`. Hand-written translations go only to en_us and ru_ru in `tools/lang/<feature>/`; missing ru_ru TE strings are translated by hand there.
+- `tools/id_map.json` is edited by hand: `old` (TE registry name), `meta`, `lang` (en_US.lang key or null), `id`, `state` (blocks only), `skip` (reason or null). TE AE parts (`part.base` meta) and meta subitems become separate ids.
+- Lang keys: blocks `block.thaumicenergistics.<id>`, items and parts `item.thaumicenergistics.<id>`. All other TE keys (`thaumicenergistics.*`, `tc.research_name/text.*`, `tc.research_category.*`) are kept as is: TE research keys are `thaumicenergistics.<KEY>` and its page texts are raw keys `thaumicenergistics.research_page.<KEY>.<N>` numbered from 1, the base `ResearchPage.Text` takes them directly. `%d` becomes `%s`.
+- Textures keep TE names lowercased (`blocks` to `block`, `items` to `item`; `models`, `gui`, `research` keep their folders).
+
 ## Checks
 
 ```sh
 python3 tools/fetch_te.py
+python3 tools/convert_assets.py
+python3 tools/gen_resources.py
 python3 tools/check_seams.py
 ./gradlew build
 ./gradlew runGameTestServer
