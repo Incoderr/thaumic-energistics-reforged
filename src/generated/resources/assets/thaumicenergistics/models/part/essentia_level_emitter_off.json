@@ -1,0 +1,42 @@
+{
+  "textures": {
+    "base": "thaumicenergistics:block/parts/essentia.level.emitter.base",
+    "active": "thaumicenergistics:block/parts/essentia.level.emitter.active",
+    "inactive": "thaumicenergistics:block/parts/essentia.level.emitter.inactive",
+    "particle": "thaumicenergistics:block/parts/essentia.level.emitter.active"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        7,
+        1
+      ],
+      "to": [
+        9,
+        9,
+        3
+      ],
+      "faces": {
+        "south": {
+          "texture": "#inactive"
+        },
+        "north": {
+          "texture": "#inactive"
+        },
+        "west": {
+          "texture": "#inactive"
+        },
+        "east": {
+          "texture": "#inactive"
+        },
+        "up": {
+          "texture": "#inactive"
+        },
+        "down": {
+          "texture": "#inactive"
+        }
+      }
+    }
+  ]
+}
