@@ -14,6 +14,8 @@ import thaumicenergistics.client.essentia.ClientEssentia;
 import thaumicenergistics.client.monitor.EssentiaMonitorRenderer;
 import thaumicenergistics.monitor.EssentiaStorageMonitorPart;
 import thaumicenergistics.monitor.MonitorFeature;
+import thaumicenergistics.provider.ProviderBlockEntity;
+import thaumicenergistics.provider.ProviderFeature;
 import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
 import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
 import thaumicenergistics.terminal.TerminalFeature;
@@ -39,6 +41,15 @@ public final class ClientFeatures {
         event.register(new StaticItemColor(AEColor.TRANSPARENT), TerminalFeature.TERMINAL.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), BusesFeature.IMPORT_BUS.get(), BusesFeature.EXPORT_BUS.get(), BusesFeature.STORAGE_BUS.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), MonitorFeature.STORAGE_MONITOR.get(), MonitorFeature.CONVERSION_MONITOR.get());
+    }
+
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tint) -> {
+            if (level != null && pos != null && level.getBlockEntity(pos) instanceof ProviderBlockEntity provider) {
+                return provider.isActive() ? provider.getColor().mediumVariant : 0;
+            }
+            return AEColor.TRANSPARENT.mediumVariant;
+        }, ProviderFeature.ESSENTIA_PROVIDER.get(), ProviderFeature.INFUSION_PROVIDER.get());
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

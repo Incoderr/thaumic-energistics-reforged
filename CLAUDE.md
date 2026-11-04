@@ -77,6 +77,12 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Shift + right-click with an essentia container on the conversion monitor needs the block to receive the click while sneaking: `MonitorFeature` sets `setUseBlock(TRUE)` in `RightClickBlock`.
 - Empty warded and void jar items are essentia containers (TE `BlockJarItem`); filling them gives the filled jar item.
 
+## Essentia providers
+
+- Provider blocks are `AENetworkedBlockEntity` (channel required) on the addon's `AeWrenchableBlock`. `AEBaseBlockEntity.registerBlockEntityItem` runs in the feature `setup()`, otherwise the grid node shows no item.
+- The block has an `active` state property, set from `markForUpdate`, which picks the model whose overlay glows. The overlay colour comes from the `RegisterColorHandlersEvent.Block` handler: medium variant of the provider colour when active, black otherwise. The provider colour follows the attached cable as in TE until a colour applicator forces it.
+- TE's infusion provider runes were spawned on the server through the proxy; here they go to nearby clients as `ProviderRunesPayload`. Its `addToContainer` returns the full amount instead of TE's 0, so nothing pushed into it is destroyed.
+
 ## Essentia cells
 
 - The 16k cell holds 16348 bytes, a TE typo kept on purpose. Bytes count as `ceil(essentia / 2)`.

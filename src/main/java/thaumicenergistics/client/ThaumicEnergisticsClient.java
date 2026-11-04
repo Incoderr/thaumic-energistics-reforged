@@ -38,6 +38,11 @@ public final class ThaumicEnergisticsClient {
     }
 
     @SubscribeEvent
+    static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        ClientFeatures.registerBlockColors(event);
+    }
+
+    @SubscribeEvent
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ClientFeatures.registerRenderers(event);
     }

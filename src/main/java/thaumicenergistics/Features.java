@@ -8,12 +8,14 @@ import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.monitor.MonitorFeature;
+import thaumicenergistics.provider.ProviderFeature;
 import thaumicenergistics.terminal.TerminalFeature;
 import thaumicenergistics.test.BusesGameTests;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.MonitorGameTests;
+import thaumicenergistics.test.ProviderGameTests;
 import thaumicenergistics.test.TerminalGameTests;
 import thaumicenergistics.test.WorkbenchGameTests;
 import thaumicenergistics.workbench.WorkbenchFeature;
@@ -31,11 +33,13 @@ public final class Features {
         BusesFeature.load();
         EmitterFeature.load();
         MonitorFeature.load();
+        ProviderFeature.load();
     }
 
     public static void setup() {
         TerminalFeature.setup();
         BusesFeature.setup();
+        ProviderFeature.setup();
     }
 
     public static void research() {
@@ -43,6 +47,7 @@ public final class Features {
         CellsFeature.research();
         TerminalFeature.research();
         BusesFeature.research();
+        ProviderFeature.research();
     }
 
     public static void recipes() {
@@ -53,6 +58,7 @@ public final class Features {
         BusesFeature.recipes();
         EmitterFeature.recipes();
         MonitorFeature.recipes();
+        ProviderFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -66,5 +72,6 @@ public final class Features {
         BusesGameTests.register(modEventBus);
         EmitterGameTests.register(modEventBus);
         MonitorGameTests.register(modEventBus);
+        ProviderGameTests.register(modEventBus);
     }
 }

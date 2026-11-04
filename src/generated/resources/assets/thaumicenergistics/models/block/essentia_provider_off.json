@@ -1,0 +1,87 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "base": "thaumicenergistics:block/essentia.provider",
+    "overlay": "thaumicenergistics:block/essentia.provider.overlay",
+    "particle": "thaumicenergistics:block/essentia.provider"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#base",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#base",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#base",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#base",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#base",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#base",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        -0.01,
+        -0.01,
+        -0.01
+      ],
+      "to": [
+        16.01,
+        16.01,
+        16.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay",
+          "tintindex": 0
+        },
+        "south": {
+          "texture": "#overlay",
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#overlay",
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#overlay",
+          "tintindex": 0
+        },
+        "up": {
+          "texture": "#overlay",
+          "tintindex": 0
+        },
+        "down": {
+          "texture": "#overlay",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "thaumicenergistics:block/essentia_provider_off"
+    },
+    "active=true": {
+      "model": "thaumicenergistics:block/essentia_provider_on"
+    }
+  }
+}

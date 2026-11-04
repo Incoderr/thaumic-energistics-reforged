@@ -4,6 +4,14 @@
     {
       "id": "thaumicenergistics:essentia_cell_workbench",
       "required": false
+    },
+    {
+      "id": "thaumicenergistics:essentia_provider",
+      "required": false
+    },
+    {
+      "id": "thaumicenergistics:infusion_provider",
+      "required": false
     }
   ]
 }

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "thaumicenergistics:block/infusion_provider_off"
+    },
+    "active=true": {
+      "model": "thaumicenergistics:block/infusion_provider_on"
+    }
+  }
+}
