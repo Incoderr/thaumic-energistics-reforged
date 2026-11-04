@@ -1,6 +1,7 @@
 package thaumicenergistics.test;
 
 import appeng.api.config.Actionable;
+import appeng.api.networking.GridHelper;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.parts.IPartItem;
@@ -69,9 +70,10 @@ public final class ProviderGameTests {
         helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
         DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
-        PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
         helper.setBlock(PROVIDER, block);
-        helper.runAfterDelay(20, () -> {
+        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable"))));
+        helper.runAfterDelay(25, () -> {
+            helper.assertTrue(GridHelper.getNodeHost(helper.getLevel(), helper.absolutePos(PROVIDER)) != null, "provider exposes no grid node host capability");
             T provider = (T) helper.getBlockEntity(PROVIDER);
             helper.assertTrue(provider.isActive(), "provider is not active in the network");
             helper.assertTrue(helper.getBlockState(PROVIDER).getValue(ProviderBlock.ACTIVE), "provider block state is not active");

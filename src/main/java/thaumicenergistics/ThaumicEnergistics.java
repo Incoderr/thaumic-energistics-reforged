@@ -10,6 +10,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 import thaumcraft.aspect.AspectSync;
 import thaumicenergistics.network.ModPayloads;
+import thaumicenergistics.platform.TeCapabilities;
 import thaumicenergistics.platform.TeStackData;
 import thaumicenergistics.registry.ModBlockEntities;
 import thaumicenergistics.registry.ModBlocks;
@@ -40,6 +41,7 @@ public class ThaumicEnergistics {
         ModCreativeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
         ModMenus.register(modEventBus);
+        TeCapabilities.register(modEventBus);
         ModPayloads.register();
         Features.recipes();
         Features.research();

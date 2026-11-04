@@ -19,6 +19,7 @@ import thaumcraft.crafting.TcStack;
 import thaumcraft.research.ResearchPage;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.crafting.TeRecipes;
+import thaumicenergistics.platform.TeCapabilities;
 import thaumicenergistics.platform.TeNetwork;
 import thaumicenergistics.registry.ModBlockEntities;
 import thaumicenergistics.registry.ModBlocks;
@@ -45,6 +46,8 @@ public final class ProviderFeature {
     }
 
     public static void load() {
+        TeCapabilities.gridHost(ESSENTIA_PROVIDER_ENTITY);
+        TeCapabilities.gridHost(INFUSION_PROVIDER_ENTITY);
     }
 
     public static void setup() {

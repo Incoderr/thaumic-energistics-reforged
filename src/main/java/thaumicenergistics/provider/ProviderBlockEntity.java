@@ -34,6 +34,7 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
     private boolean colorForced;
     private AEColor color = AEColor.TRANSPARENT;
     private boolean active;
+    private boolean unloading;
 
     protected ProviderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, double idlePower) {
         super(type, pos, state);
@@ -84,6 +85,9 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
 
     @Override
     public void onMainNodeStateChanged(IGridNodeListener.State reason) {
+        if (unloading || isRemoved()) {
+            return;
+        }
         boolean now = getMainNode().isActive();
         if (now != active) {
             active = now;
@@ -94,6 +98,12 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
     }
 
     @Override
+    public void onChunkUnloaded() {
+        unloading = true;
+        super.onChunkUnloaded();
+    }
+
+    @Override
     public void onReady() {
         super.onReady();
         checkGridConnectionColor();
@@ -101,7 +111,7 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
 
     @Override
     public void markForUpdate() {
-        if (level != null && !level.isClientSide() && !isRemoved()) {
+        if (level != null && !level.isClientSide() && !isRemoved() && !unloading && !notLoaded()) {
             BlockState state = getBlockState();
             if (state.hasProperty(ProviderBlock.ACTIVE) && state.getValue(ProviderBlock.ACTIVE) != active) {
                 level.setBlockAndUpdate(worldPosition, state.setValue(ProviderBlock.ACTIVE, active));
