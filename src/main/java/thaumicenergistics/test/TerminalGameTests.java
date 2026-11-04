@@ -1,12 +1,15 @@
 package thaumicenergistics.test;
 
 import appeng.api.config.Actionable;
+import appeng.api.config.ViewItems;
+import appeng.api.features.GridLinkables;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.PartHelper;
 import appeng.api.storage.MEStorage;
 import appeng.blockentity.storage.DriveBlockEntity;
+import appeng.menu.locator.MenuLocators;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,14 +26,20 @@ import thaumcraft.aspect.AspectList;
 import thaumcraft.essentia.EssentiaKeys;
 import thaumcraft.research.ResearchCategories;
 import thaumcraft.research.ResearchItem;
+import thaumcraft.research.ResearchPage;
+import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.cells.EssentiaStorageType;
 import thaumicenergistics.essentia.EssentiaContainers;
 import thaumicenergistics.essentia.EssentiaKey;
 import thaumicenergistics.terminal.EssentiaListPayload;
+import thaumicenergistics.terminal.EssentiaSortMode;
 import thaumicenergistics.terminal.EssentiaTerminalMenu;
+import thaumicenergistics.terminal.EssentiaTerminalModes;
 import thaumicenergistics.terminal.EssentiaTerminalPart;
 import thaumicenergistics.terminal.TerminalFeature;
+import thaumicenergistics.terminal.WirelessEssentiaTerminalHost;
+import thaumicenergistics.terminal.WirelessEssentiaTerminalItem;
 
 public final class TerminalGameTests {
     private static final BlockPos ENERGY = new BlockPos(1, 1, 1);
@@ -48,6 +57,7 @@ public final class TerminalGameTests {
             .add("label", TerminalGameTests::label)
             .add("research", TerminalGameTests::research)
             .add("terminal_in_network", TerminalGameTests::terminalInNetwork)
+            .add("wireless_terminal", TerminalGameTests::wirelessTerminal)
             .register(bus);
     }
 
@@ -153,5 +163,28 @@ public final class TerminalGameTests {
             helper.assertTrue(entries.contains(new EssentiaListPayload.Entry(Aspect.FIRE, 4, false)), "essentia list is " + entries);
             helper.succeed();
         });
+    }
+
+    private static void wirelessTerminal(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack stack = new ItemStack(TerminalFeature.WIRELESS_TERMINAL.get());
+        player.getInventory().setItem(0, stack);
+        helper.assertTrue(GridLinkables.get(TerminalFeature.WIRELESS_TERMINAL.get()) != null, "wireless terminal is not linkable");
+        helper.assertTrue(TerminalFeature.WIRELESS_TERMINAL.get().getAEMaxPower(stack) == WirelessEssentiaTerminalItem.POWER_STORAGE, "wireless terminal power storage is wrong");
+        WirelessEssentiaTerminalHost host = new WirelessEssentiaTerminalHost(TerminalFeature.WIRELESS_TERMINAL.get(), player, MenuLocators.forInventorySlot(0), (target, menu) -> {
+        });
+        helper.assertTrue(host.getEssentiaGrid() == null, "unlinked wireless terminal reports a grid");
+        helper.assertTrue(host.lockedPlayerSlot() == 0, "terminal slot is not locked");
+        host.setSortMode(EssentiaSortMode.AMOUNT);
+        host.setViewMode(ViewItems.CRAFTABLE);
+        EssentiaTerminalModes modes = TerminalFeature.MODES.get(player.getInventory().getItem(0));
+        helper.assertTrue(modes != null && modes.sort() == EssentiaSortMode.AMOUNT && modes.view() == ViewItems.CRAFTABLE, "modes are not stored on the item: " + modes);
+        host.getWorkInventory().setItemDirect(0, item("thaumcraft:glass_phial"));
+        host.onMenuClosed(player);
+        helper.assertTrue(player.getInventory().contains(item("thaumcraft:glass_phial")), "work slot item was not returned");
+        helper.assertTrue(helper.getLevel().getRecipeManager().byKey(ThaumicEnergistics.id("wireless_essentia_terminal")).isPresent(), "wireless terminal recipe is not loaded");
+        ResearchItem research = ResearchCategories.getResearch("thaumicenergistics.TEESSTERM");
+        helper.assertTrue(research.pages().contains(ResearchPage.crafting(TerminalFeature.WIRELESS_TERMINAL_RECIPE)), "research has no wireless terminal page");
+        helper.succeed();
     }
 }

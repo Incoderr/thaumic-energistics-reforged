@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
@@ -82,17 +83,48 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
         }, SlotSemantics.MACHINE_OUTPUT);
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, 8 + column * 18, PLAYER_INVENTORY_Y + row * 18), SlotSemantics.PLAYER_INVENTORY);
+                addSlot(playerSlot(inventory, column + row * 9 + 9, 8 + column * 18, PLAYER_INVENTORY_Y + row * 18), SlotSemantics.PLAYER_INVENTORY);
             }
         }
         for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, 8 + column * 18, HOTBAR_Y), SlotSemantics.PLAYER_HOTBAR);
+            addSlot(playerSlot(inventory, column, 8 + column * 18, HOTBAR_Y), SlotSemantics.PLAYER_HOTBAR);
         }
         registerClientAction(ACTION_SELECT, String.class, this::selectAspect);
         registerClientAction(ACTION_SORT, Boolean.class, this::cycleSortMode);
         registerClientAction(ACTION_VIEW, Boolean.class, this::cycleViewMode);
         registerClientAction(ACTION_INTERACT, String.class, this::interactWithHeldItem);
         registerClientAction(ACTION_CRAFT, String.class, this::requestCraft);
+    }
+
+    private Slot playerSlot(Inventory inventory, int index, int x, int y) {
+        boolean locked = index == host.lockedPlayerSlot();
+        return new Slot(inventory, index, x, y) {
+            @Override
+            public boolean mayPickup(Player player) {
+                return !locked;
+            }
+
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return !locked;
+            }
+        };
+    }
+
+    @Override
+    public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
+        if (clickType == ClickType.SWAP && button == host.lockedPlayerSlot()) {
+            return;
+        }
+        super.clicked(slotIndex, button, clickType, player);
+    }
+
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        if (isServerSide()) {
+            host.onMenuClosed(player);
+        }
     }
 
     public EssentiaTerminalHost getHost() {
@@ -352,7 +384,7 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
+        if (!slot.hasItem() || !slot.mayPickup(player)) {
             return ItemStack.EMPTY;
         }
         ItemStack stack = slot.getItem();

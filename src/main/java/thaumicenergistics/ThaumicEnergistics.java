@@ -6,6 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 import thaumcraft.aspect.AspectSync;
 import thaumicenergistics.network.ModPayloads;
@@ -45,6 +46,7 @@ public class ThaumicEnergistics {
         AspectSync.addRegistrar(Features::aspects);
         SmokeGameTests.register(modEventBus);
         Features.tests(modEventBus);
+        modEventBus.addListener(FMLCommonSetupEvent.class, event -> event.enqueueWork(Features::setup));
     }
 
     public static ResourceLocation id(String path) {

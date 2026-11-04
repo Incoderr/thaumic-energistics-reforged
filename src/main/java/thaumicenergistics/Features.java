@@ -24,6 +24,10 @@ public final class Features {
         TerminalFeature.load();
     }
 
+    public static void setup() {
+        TerminalFeature.setup();
+    }
+
     public static void research() {
         CoreFeature.research();
         CellsFeature.research();

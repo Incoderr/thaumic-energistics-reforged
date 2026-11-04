@@ -62,3 +62,7 @@ def generate(ctx):
         ],
     })
     ctx.item_definition("essentia_terminal", ctx.ref("essentia_terminal", "item"))
+    ctx.generated_item("wireless_essentia_terminal", "wireless.essentia.terminal")
+    ctx.shapeless("wireless_essentia_terminal", "thaumicenergistics:wireless_essentia_terminal", 1, [
+        "ae2:wireless_receiver", "thaumicenergistics:essentia_terminal", "ae2:dense_energy_cell",
+    ])

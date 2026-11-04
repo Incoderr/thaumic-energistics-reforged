@@ -1,7 +1,9 @@
 package thaumicenergistics.terminal;
 
+import appeng.api.features.GridLinkables;
 import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
+import appeng.items.tools.powered.WirelessTerminalItem;
 import appeng.menu.implementations.MenuTypeBuilder;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -15,6 +17,7 @@ import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.crafting.TeRecipes;
 import thaumicenergistics.platform.TeNetwork;
+import thaumicenergistics.platform.TeStackKey;
 import thaumicenergistics.registry.ModItems;
 import thaumicenergistics.registry.ModMenus;
 import thaumicenergistics.research.TeResearch;
@@ -29,6 +32,10 @@ public final class TerminalFeature {
     public static final DeferredItem<PartItem<EssentiaTerminalPart>> TERMINAL = ModItems.ITEMS.registerItem(
         "essentia_terminal", properties -> new PartItem<>(properties, EssentiaTerminalPart.class, EssentiaTerminalPart::new), properties -> properties
     );
+    public static final DeferredItem<WirelessEssentiaTerminalItem> WIRELESS_TERMINAL = ModItems.ITEMS.registerItem(
+        "wireless_essentia_terminal", WirelessEssentiaTerminalItem::new, properties -> properties
+    );
+    public static final TeStackKey<EssentiaTerminalModes> MODES = TeStackKey.register("essentia_terminal_modes", EssentiaTerminalModes.CODEC, EssentiaTerminalModes.STREAM_CODEC);
     public static final DeferredHolder<MenuType<?>, MenuType<EssentiaTerminalMenu>> MENU = ModMenus.MENUS.register(
         "essentia_terminal",
         () -> MenuTypeBuilder.create(EssentiaTerminalMenu::new, EssentiaTerminalHost.class).buildUnregistered(ThaumicEnergistics.id("essentia_terminal"))
@@ -39,6 +46,10 @@ public final class TerminalFeature {
 
     public static void load() {
         PartModels.registerModels(EssentiaTerminalPart.MODEL_TERMINAL_BASE, EssentiaTerminalPart.MODEL_OFF, EssentiaTerminalPart.MODEL_ON);
+    }
+
+    public static void setup() {
+        GridLinkables.register(WIRELESS_TERMINAL.get(), WirelessTerminalItem.LINKABLE_HANDLER);
     }
 
     public static void payloads() {
@@ -55,6 +66,7 @@ public final class TerminalFeature {
             TcIngredient.item("ae2:logic_processor"),
             TcIngredient.item("thaumcraft:vis_filter")
         );
+        TeRecipes.vanilla(WIRELESS_TERMINAL_RECIPE, TeResearch.ESSENTIA_TERMINAL, "wireless_essentia_terminal", TcStack.of(WIRELESS_TERMINAL.getId().toString()));
     }
 
     public static void research() {
