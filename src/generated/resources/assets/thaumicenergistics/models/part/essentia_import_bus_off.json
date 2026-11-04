@@ -1,0 +1,82 @@
+{
+  "textures": {
+    "side": "thaumicenergistics:block/parts/essentia.import.bus.side",
+    "face": "thaumicenergistics:block/parts/essentia.import.bus.face",
+    "overlay": "thaumicenergistics:block/parts/essentia.import.bus.overlay",
+    "border": "thaumicenergistics:block/parts/bus.color.border",
+    "lightside": "thaumicenergistics:block/parts/bus.color.side",
+    "light": "thaumicenergistics:block/parts/bus.color.light",
+    "particle": "thaumicenergistics:block/parts/essentia.import.bus.side",
+    "chamber": "thaumicenergistics:block/parts/essentia.import.bus.chamber"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        4,
+        -0.010000000000001563
+      ],
+      "to": [
+        12,
+        12,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay",
+          "tintindex": 1
+        }
+      }
+    },
+    {
+      "from": [
+        5.99,
+        5.99,
+        3.99
+      ],
+      "to": [
+        10.01,
+        10.01,
+        5.01
+      ],
+      "faces": {
+        "south": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "north": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "west": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "east": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "up": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "down": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -18,8 +18,10 @@ public final class TeResearch {
     public static final String CORES = key("CORES");
     public static final String STORAGE = key("STORAGE");
     public static final String ESSENTIA_TERMINAL = key("ESSTERM");
+    public static final String IO = key("IO");
     public static final String DISTILESSENTIA = "DISTILESSENTIA";
     public static final String WARDED = "WARDEDARCANA";
+    public static final String TUBEFILTER = "TUBEFILTER";
     public static final int COMPLEXITY_SMALL = 1;
     public static final int COMPLEXITY_MEDIUM = 2;
     public static final int COMPLEXITY_LARGE = 3;

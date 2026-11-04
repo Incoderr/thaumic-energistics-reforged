@@ -1,0 +1,194 @@
+{
+  "parent": "ae2:item/part_base",
+  "textures": {
+    "side": "thaumicenergistics:block/parts/essentia.storage.bus.side",
+    "face": "thaumicenergistics:block/parts/essentia.storage.bus.face",
+    "overlay": "thaumicenergistics:block/parts/essentia.storage.bus.overlay",
+    "border": "thaumicenergistics:block/parts/bus.color.border",
+    "lightside": "thaumicenergistics:block/parts/bus.color.side",
+    "light": "thaumicenergistics:block/parts/bus.color.light",
+    "particle": "thaumicenergistics:block/parts/essentia.storage.bus.side"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        1,
+        6
+      ],
+      "to": [
+        15,
+        15,
+        7
+      ],
+      "faces": {
+        "south": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#face"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        7
+      ],
+      "to": [
+        12,
+        12,
+        8
+      ],
+      "faces": {
+        "south": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#face"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        5,
+        8
+      ],
+      "to": [
+        11,
+        11,
+        9
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lightside"
+        },
+        "north": {
+          "texture": "#lightside"
+        },
+        "west": {
+          "texture": "#border"
+        },
+        "east": {
+          "texture": "#border"
+        },
+        "up": {
+          "texture": "#border"
+        },
+        "down": {
+          "texture": "#border"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        5.989999999999998
+      ],
+      "to": [
+        14,
+        14,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          }
+        }
+      }
+    },
+    {
+      "from": [
+        4.99,
+        4.99,
+        7.99
+      ],
+      "to": [
+        11.01,
+        11.01,
+        9.01
+      ],
+      "faces": {
+        "south": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "north": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "west": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "east": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "up": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "down": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        }
+      }
+    }
+  ]
+}

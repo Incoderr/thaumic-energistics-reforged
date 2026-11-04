@@ -62,6 +62,14 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Server work that TE did in `detectAndSendChanges` runs in `broadcastChanges`. Essentia lists go to the client as the addon's own payload with the menu `containerId`.
 - `TeResearch.existing(pages...)` drops recipe pages whose recipes are not registered yet, so a research shared by several features (TEESSTERM) gets its pages as the features land; keep the full TE page order in the call.
 
+## Essentia buses
+
+- `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
+- Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.
+- The storage bus mounts its own `MEStorage` with `IStorageProvider`; AE2 polls mounted storage every tick, so TE's cached diff and `postAlterationToHostGrid` are not ported. A neighbour exposing `AECapabilities.ME_STORAGE` (interface, condenser, ME chest) is used as is, filtered to essentia.
+- Deliberate fixes of TE bugs: the import bus drains only what the network accepted (TE drained the full transfer amount and lost the rest), bus filters and the inverter apply to every storage bus target and to the listed contents, and hidden IO filter slots cannot be set from the client.
+- Parts render in AE2's cutout layer only, so the half-transparent chamber glass of the IO buses renders opaque.
+
 ## Essentia cells
 
 - The 16k cell holds 16348 bytes, a TE typo kept on purpose. Bytes count as `ceil(essentia / 2)`.
