@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_level_emitter"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_storage_monitor"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thaumicenergistics:essentia_level_emitter"
+    },
+    [
+      {
+        "item": "ae2:monitor"
+      },
+      {
+        "item": "ae2:semi_dark_monitor"
+      },
+      {
+        "item": "ae2:dark_monitor"
+      }
+    ]
+  ],
+  "result": {
+    "id": "thaumicenergistics:essentia_storage_monitor"
+  }
+}

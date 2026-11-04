@@ -7,11 +7,13 @@ import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
+import thaumicenergistics.monitor.MonitorFeature;
 import thaumicenergistics.terminal.TerminalFeature;
 import thaumicenergistics.test.BusesGameTests;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.EmitterGameTests;
+import thaumicenergistics.test.MonitorGameTests;
 import thaumicenergistics.test.TerminalGameTests;
 import thaumicenergistics.test.WorkbenchGameTests;
 import thaumicenergistics.workbench.WorkbenchFeature;
@@ -28,6 +30,7 @@ public final class Features {
         TerminalFeature.load();
         BusesFeature.load();
         EmitterFeature.load();
+        MonitorFeature.load();
     }
 
     public static void setup() {
@@ -49,6 +52,7 @@ public final class Features {
         TerminalFeature.recipes();
         BusesFeature.recipes();
         EmitterFeature.recipes();
+        MonitorFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -61,5 +65,6 @@ public final class Features {
         TerminalGameTests.register(modEventBus);
         BusesGameTests.register(modEventBus);
         EmitterGameTests.register(modEventBus);
+        MonitorGameTests.register(modEventBus);
     }
 }

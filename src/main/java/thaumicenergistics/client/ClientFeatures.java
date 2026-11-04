@@ -11,6 +11,9 @@ import thaumicenergistics.client.buses.EssentiaBusScreen;
 import thaumicenergistics.client.emitter.EssentiaLevelEmitterScreen;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.client.essentia.ClientEssentia;
+import thaumicenergistics.client.monitor.EssentiaMonitorRenderer;
+import thaumicenergistics.monitor.EssentiaStorageMonitorPart;
+import thaumicenergistics.monitor.MonitorFeature;
 import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
 import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
 import thaumicenergistics.terminal.TerminalFeature;
@@ -22,6 +25,7 @@ public final class ClientFeatures {
 
     public static void setup(FMLClientSetupEvent event) {
         ClientEssentia.setup(event);
+        EssentiaStorageMonitorPart.renderer = new EssentiaMonitorRenderer();
     }
 
     public static void registerScreens(RegisterMenuScreensEvent event) {
@@ -34,6 +38,7 @@ public final class ClientFeatures {
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register(new StaticItemColor(AEColor.TRANSPARENT), TerminalFeature.TERMINAL.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), BusesFeature.IMPORT_BUS.get(), BusesFeature.EXPORT_BUS.get(), BusesFeature.STORAGE_BUS.get());
+        event.register(new StaticItemColor(AEColor.TRANSPARENT), MonitorFeature.STORAGE_MONITOR.get(), MonitorFeature.CONVERSION_MONITOR.get());
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

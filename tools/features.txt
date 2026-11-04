@@ -4,3 +4,4 @@ workbench
 terminal
 buses
 emitter
+monitor

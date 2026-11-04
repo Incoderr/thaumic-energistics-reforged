@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:coalescence_core"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:diffusion_core"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_conversion_monitor"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "thaumicenergistics:essentia_storage_monitor"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thaumicenergistics:coalescence_core"
+    },
+    {
+      "item": "thaumicenergistics:essentia_storage_monitor"
+    },
+    {
+      "item": "thaumicenergistics:diffusion_core"
+    }
+  ],
+  "result": {
+    "id": "thaumicenergistics:essentia_conversion_monitor"
+  }
+}

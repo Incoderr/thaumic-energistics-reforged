@@ -59,6 +59,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 
 - TE parts are AE2 parts on AE2 base classes (`AbstractTerminalPart` and friends), items are `appeng.items.parts.PartItem`. Part models are JSON in `models/part/` written by the feature generator and must be listed in `PartModels.registerModels` from the feature `load()`. Part items need an `ItemColor` (`StaticItemColor(AEColor.TRANSPARENT)`) for the tinted cable-color layers.
 - Menus opened from parts use `MenuTypeBuilder.create(Menu::new, HostInterface.class).buildUnregistered(id)` inside the addon `MENUS` register, and extend `AEBaseMenu` for `@GuiSync` fields and `registerClientAction`. Screens are plain `AbstractContainerScreen`, so slots are vanilla `Slot`s with TE coordinates: AE2 slots get positions only from AE2 screen style JSON.
+- A part with dynamic rendering overrides `IPart.renderDynamic` and delegates to a renderer interface that `ClientFeatures.setup` assigns from `client/`. Only `PoseStack` and `MultiBufferSource` may be imported outside `client/` for that signature (`check_seams.py` allows exactly these two). The renderer field starts as `null`; a default lambda there loads `PoseStack` on a dedicated server and crashes it.
 - Server work that TE did in `detectAndSendChanges` runs in `broadcastChanges`. Essentia lists go to the client as the addon's own payload with the menu `containerId`.
 - `TeResearch.existing(pages...)` drops recipe pages whose recipes are not registered yet, so a research shared by several features (TEESSTERM) gets its pages as the features land; keep the full TE page order in the call.
 
@@ -69,6 +70,12 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - The storage bus mounts its own `MEStorage` with `IStorageProvider`; AE2 polls mounted storage every tick, so TE's cached diff and `postAlterationToHostGrid` are not ported. A neighbour exposing `AECapabilities.ME_STORAGE` (interface, condenser, ME chest) is used as is, filtered to essentia.
 - Deliberate fixes of TE bugs: the import bus drains only what the network accepted (TE drained the full transfer amount and lost the rest), bus filters and the inverter apply to every storage bus target and to the listed contents, and hidden IO filter slots cannot be set from the client.
 - Parts render in AE2's cutout layer only, so the half-transparent chamber glass of the IO buses renders opaque.
+
+## Essentia monitors
+
+- The storage and conversion monitors use AE2 1.21's `conversion_monitor_medium`/`_bright` textures for the front. TE used AE2 rv3's conversion-monitor textures, which no longer exist; the storage monitor tints the medium layer with the medium cable colour and the conversion monitor with the dark one, as TE swapped them.
+- Shift + right-click with an essentia container on the conversion monitor needs the block to receive the click while sneaking: `MonitorFeature` sets `setUseBlock(TRUE)` in `RightClickBlock`.
+- Empty warded and void jar items are essentia containers (TE `BlockJarItem`); filling them gives the filled jar item.
 
 ## Essentia cells
 

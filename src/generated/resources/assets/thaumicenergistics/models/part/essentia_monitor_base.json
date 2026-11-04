@@ -1,0 +1,78 @@
+{
+  "textures": {
+    "side": "thaumicenergistics:block/parts/arcane.crafting.side",
+    "border": "thaumicenergistics:block/parts/bus.color.border",
+    "lightside": "thaumicenergistics:block/parts/bus.color.side",
+    "light": "thaumicenergistics:block/parts/bus.color.light",
+    "medium": "ae2:part/conversion_monitor_medium",
+    "bright": "ae2:part/conversion_monitor_bright",
+    "empty": "thaumicenergistics:block/parts/essentia.terminal.overlay.dark",
+    "particle": "thaumicenergistics:block/parts/arcane.crafting.side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        0
+      ],
+      "to": [
+        14,
+        14,
+        2
+      ],
+      "faces": {
+        "south": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        5,
+        2
+      ],
+      "to": [
+        11,
+        11,
+        3
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lightside"
+        },
+        "north": {
+          "texture": "#lightside"
+        },
+        "west": {
+          "texture": "#border"
+        },
+        "east": {
+          "texture": "#border"
+        },
+        "up": {
+          "texture": "#border"
+        },
+        "down": {
+          "texture": "#border"
+        }
+      }
+    }
+  ]
+}

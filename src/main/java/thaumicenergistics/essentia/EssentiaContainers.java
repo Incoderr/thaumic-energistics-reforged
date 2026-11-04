@@ -24,6 +24,10 @@ public final class EssentiaContainers {
         FILLED_JAR, ResourceLocation.parse("thaumcraft:warded_jar"),
         FILLED_VOID_JAR, ResourceLocation.parse("thaumcraft:void_jar")
     );
+    private static final Map<ResourceLocation, ResourceLocation> FILLED_JARS = Map.of(
+        ResourceLocation.parse("thaumcraft:warded_jar"), FILLED_JAR,
+        ResourceLocation.parse("thaumcraft:void_jar"), FILLED_VOID_JAR
+    );
 
     public record Result(int amount, ItemStack stack) {
     }
@@ -46,7 +50,7 @@ public final class EssentiaContainers {
     }
 
     private static boolean isJar(ItemStack stack) {
-        return EMPTY_JARS.containsKey(id(stack));
+        return EMPTY_JARS.containsKey(id(stack)) || FILLED_JARS.containsKey(id(stack));
     }
 
     public static boolean isLabel(ItemStack stack) {
@@ -164,7 +168,14 @@ public final class EssentiaContainers {
         if (filled <= 0) {
             return null;
         }
-        ItemStack result = isPhial(container) ? create(ESSENTIA_PHIAL) : container.copyWithCount(1);
+        ItemStack result;
+        if (isPhial(container)) {
+            result = create(ESSENTIA_PHIAL);
+        } else if (FILLED_JARS.containsKey(id(container))) {
+            result = create(FILLED_JARS.get(id(container)));
+        } else {
+            result = container.copyWithCount(1);
+        }
         AspectKeys.ASPECTS.set(result, new AspectList().add(aspect, storedAmount + filled));
         return new Result(filled, result);
     }
