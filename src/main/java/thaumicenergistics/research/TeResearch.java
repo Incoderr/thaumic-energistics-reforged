@@ -19,6 +19,7 @@ public final class TeResearch {
     public static final String STORAGE = key("STORAGE");
     public static final String ESSENTIA_TERMINAL = key("ESSTERM");
     public static final String IO = key("IO");
+    public static final String ARCANE_TERMINAL = key("ARCANETERM");
     public static final String ESSENTIA_PROVIDER = key("ESSPROV");
     public static final String INFUSION_PROVIDER = key("INFPROV");
     public static final String DISTILESSENTIA = "DISTILESSENTIA";

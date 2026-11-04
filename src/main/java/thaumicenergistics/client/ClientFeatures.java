@@ -6,7 +6,10 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import appeng.init.client.InitScreens;
+import thaumicenergistics.act.ActFeature;
 import thaumicenergistics.buses.BusesFeature;
+import thaumicenergistics.client.act.ArcaneCraftingTermScreen;
 import thaumicenergistics.client.buses.EssentiaBusScreen;
 import thaumicenergistics.client.emitter.EssentiaLevelEmitterScreen;
 import thaumicenergistics.emitter.EmitterFeature;
@@ -35,12 +38,14 @@ public final class ClientFeatures {
         event.register(TerminalFeature.MENU.get(), EssentiaTerminalScreen::new);
         event.register(BusesFeature.MENU.get(), EssentiaBusScreen::new);
         event.register(EmitterFeature.MENU.get(), EssentiaLevelEmitterScreen::new);
+        InitScreens.register(event, ActFeature.MENU.get(), ArcaneCraftingTermScreen::new, ArcaneCraftingTermScreen.STYLE);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register(new StaticItemColor(AEColor.TRANSPARENT), TerminalFeature.TERMINAL.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), BusesFeature.IMPORT_BUS.get(), BusesFeature.EXPORT_BUS.get(), BusesFeature.STORAGE_BUS.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), MonitorFeature.STORAGE_MONITOR.get(), MonitorFeature.CONVERSION_MONITOR.get());
+        event.register(new StaticItemColor(AEColor.TRANSPARENT), ActFeature.TERMINAL.get());
     }
 
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

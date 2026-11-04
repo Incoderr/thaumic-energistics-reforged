@@ -1,0 +1,65 @@
+{
+  "textures": {
+    "side": "thaumicenergistics:block/parts/arcane.crafting.side",
+    "overlay1": "thaumicenergistics:block/parts/arcane.crafting.overlay1",
+    "overlay2": "thaumicenergistics:block/parts/arcane.crafting.overlay2",
+    "overlay3": "thaumicenergistics:block/parts/arcane.crafting.overlay3",
+    "overlay4": "thaumicenergistics:block/parts/arcane.crafting.overlay4",
+    "border": "thaumicenergistics:block/parts/bus.color.border",
+    "lightside": "thaumicenergistics:block/parts/bus.color.side",
+    "light": "thaumicenergistics:block/parts/bus.color.light",
+    "particle": "thaumicenergistics:block/parts/arcane.crafting.side"
+  },
+  "elements": [
+    {
+      "from": [
+        4.99,
+        4.99,
+        1.9900000000000002
+      ],
+      "to": [
+        11.01,
+        11.01,
+        3.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "south": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "east": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "west": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "up": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        },
+        "down": {
+          "texture": "#light",
+          "neoforge_data": {
+            "color": "FF000000"
+          }
+        }
+      }
+    }
+  ]
+}

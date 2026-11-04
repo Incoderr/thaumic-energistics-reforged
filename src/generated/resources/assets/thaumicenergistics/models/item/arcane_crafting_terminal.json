@@ -1,0 +1,225 @@
+{
+  "parent": "ae2:item/part_base",
+  "textures": {
+    "side": "thaumicenergistics:block/parts/arcane.crafting.side",
+    "overlay1": "thaumicenergistics:block/parts/arcane.crafting.overlay1",
+    "overlay2": "thaumicenergistics:block/parts/arcane.crafting.overlay2",
+    "overlay3": "thaumicenergistics:block/parts/arcane.crafting.overlay3",
+    "overlay4": "thaumicenergistics:block/parts/arcane.crafting.overlay4",
+    "border": "thaumicenergistics:block/parts/bus.color.border",
+    "lightside": "thaumicenergistics:block/parts/bus.color.side",
+    "light": "thaumicenergistics:block/parts/bus.color.light",
+    "particle": "thaumicenergistics:block/parts/arcane.crafting.side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        6
+      ],
+      "to": [
+        14,
+        14,
+        8
+      ],
+      "faces": {
+        "south": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        5,
+        8
+      ],
+      "to": [
+        11,
+        11,
+        9
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lightside"
+        },
+        "north": {
+          "texture": "#lightside"
+        },
+        "west": {
+          "texture": "#border"
+        },
+        "east": {
+          "texture": "#border"
+        },
+        "up": {
+          "texture": "#border"
+        },
+        "down": {
+          "texture": "#border"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        5.989999999999998
+      ],
+      "to": [
+        14,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay1"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        5.98
+      ],
+      "to": [
+        14,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay3",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          }
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        5.969999999999999
+      ],
+      "to": [
+        14,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay2",
+          "tintindex": 2,
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          }
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        5.960000000000001
+      ],
+      "to": [
+        14,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay4",
+          "neoforge_data": {
+            "color": "FF4EC04E",
+            "block_light": 10,
+            "sky_light": 10
+          }
+        }
+      }
+    },
+    {
+      "from": [
+        4.99,
+        4.99,
+        7.99
+      ],
+      "to": [
+        11.01,
+        11.01,
+        9.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "south": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "east": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "west": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "up": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        },
+        "down": {
+          "texture": "#light",
+          "tintindex": 1,
+          "neoforge_data": {
+            "block_light": 13,
+            "sky_light": 13
+          }
+        }
+      }
+    }
+  ]
+}

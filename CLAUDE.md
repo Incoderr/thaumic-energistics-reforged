@@ -63,6 +63,14 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Server work that TE did in `detectAndSendChanges` runs in `broadcastChanges`. Essentia lists go to the client as the addon's own payload with the menu `containerId`.
 - `TeResearch.existing(pages...)` drops recipe pages whose recipes are not registered yet, so a research shared by several features (TEESSTERM) gets its pages as the features land; keep the full TE page order in the call.
 
+## Arcane crafting terminal
+
+- The terminal is an exception to the plain-screen rule: the menu extends AE2 `MEStorageMenu` and the screen `MEStorageScreen`, so the ME item list, search, sorting, view cells, terminal sizes and autocrafting come from AE2. Slot positions come from an AE2 screen style; AE2 loads styles and their textures only from the `ae2` namespace, so `gen_act.py` writes `assets/ae2/screens/thaumicenergistics/arcane_crafting_terminal.json` and copies the GUI texture to `assets/ae2/textures/guis/thaumicenergistics/`. Positions are TE coordinates turned into `bottom` anchors against the 243 px default height.
+- The wand and armor slots use the addon's slot semantics `THAUMICENERGISTICS_WAND` and `THAUMICENERGISTICS_ARMOR`, registered in `ArcaneCraftingTermMenu`.
+- The result follows TE: a vanilla recipe wins, otherwise the arcane recipe needs the full vis cost in the wand. A consumed grid item is refilled first from the player inventory, then from the network (exact item, then any item of the same type).
+- TE refilled the wand from a linked vis relay interface; that part waits for the vis relay interface feature.
+- Menu-level tests must call `broadcastChanges()` once: AE2 updates the menu's grid link there, and without it every network action is refused.
+
 ## Essentia buses
 
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
