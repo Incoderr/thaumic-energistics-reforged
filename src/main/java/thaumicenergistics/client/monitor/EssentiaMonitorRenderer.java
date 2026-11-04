@@ -39,7 +39,7 @@ public final class EssentiaMonitorRenderer implements EssentiaStorageMonitorPart
             FastColor.ARGB32.color(229, FastColor.ARGB32.red(color), FastColor.ARGB32.green(color), FastColor.ARGB32.blue(color)));
         float lockU = part.isLocked() ? 0.0F : 0.5F;
         poseStack.translate(0, 0, 0.003);
-        quad(poseStack, buffers.getBuffer(RenderType.text(LOCK_TEXTURE)), 0.4F, -0.04F, 0.5F, 0.06F, lockU, lockU + 0.5F, 0x80FFFFFF);
+        quad(poseStack, buffers.getBuffer(RenderType.text(LOCK_TEXTURE)), 0.2F, 0.21F, 0.3F, 0.31F, lockU, lockU + 0.5F, 0x80FFFFFF);
         String amount = ReadableNumberConverter.format(part.getTrackedAmount(), 4);
         Font font = Minecraft.getInstance().font;
         poseStack.translate(0, -0.15, 0.003);
