@@ -18,7 +18,7 @@ import thaumicenergistics.visrelay.VisRelayInterfacePart;
 public final class VisRelayInterfaceRenderer implements VisRelayInterfacePart.Renderer {
     private static final ResourceLocation RUNES_TEXTURE = ThaumicEnergistics.id("textures/block/parts/vis.interface.runes.png");
     private static final int LIGHT = LightTexture.pack(13, 13);
-    private static final float DEPTH = 0.4345F;
+    private static final float DEPTH = 0.4385F;
     private static final float HALF_SIZE = 0.25F;
 
     @Override
