@@ -19,7 +19,9 @@ import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.MonitorGameTests;
 import thaumicenergistics.test.ProviderGameTests;
 import thaumicenergistics.test.TerminalGameTests;
+import thaumicenergistics.test.VisRelayGameTests;
 import thaumicenergistics.test.WorkbenchGameTests;
+import thaumicenergistics.visrelay.VisRelayFeature;
 import thaumicenergistics.workbench.WorkbenchFeature;
 
 public final class Features {
@@ -37,6 +39,7 @@ public final class Features {
         MonitorFeature.load();
         ProviderFeature.load();
         ActFeature.load();
+        VisRelayFeature.load();
     }
 
     public static void setup() {
@@ -52,6 +55,7 @@ public final class Features {
         BusesFeature.research();
         ProviderFeature.research();
         ActFeature.research();
+        VisRelayFeature.research();
     }
 
     public static void recipes() {
@@ -64,6 +68,7 @@ public final class Features {
         MonitorFeature.recipes();
         ProviderFeature.recipes();
         ActFeature.recipes();
+        VisRelayFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -79,5 +84,6 @@ public final class Features {
         MonitorGameTests.register(modEventBus);
         ProviderGameTests.register(modEventBus);
         ActGameTests.register(modEventBus);
+        VisRelayGameTests.register(modEventBus);
     }
 }

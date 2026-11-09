@@ -21,7 +21,10 @@ import thaumicenergistics.provider.ProviderBlockEntity;
 import thaumicenergistics.provider.ProviderFeature;
 import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
 import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
+import thaumicenergistics.client.visrelay.VisRelayInterfaceRenderer;
 import thaumicenergistics.terminal.TerminalFeature;
+import thaumicenergistics.visrelay.VisRelayFeature;
+import thaumicenergistics.visrelay.VisRelayInterfacePart;
 import thaumicenergistics.workbench.WorkbenchFeature;
 
 public final class ClientFeatures {
@@ -31,6 +34,7 @@ public final class ClientFeatures {
     public static void setup(FMLClientSetupEvent event) {
         ClientEssentia.setup(event);
         EssentiaStorageMonitorPart.renderer = new EssentiaMonitorRenderer();
+        VisRelayInterfacePart.renderer = new VisRelayInterfaceRenderer();
     }
 
     public static void registerScreens(RegisterMenuScreensEvent event) {
@@ -45,7 +49,7 @@ public final class ClientFeatures {
         event.register(new StaticItemColor(AEColor.TRANSPARENT), TerminalFeature.TERMINAL.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), BusesFeature.IMPORT_BUS.get(), BusesFeature.EXPORT_BUS.get(), BusesFeature.STORAGE_BUS.get());
         event.register(new StaticItemColor(AEColor.TRANSPARENT), MonitorFeature.STORAGE_MONITOR.get(), MonitorFeature.CONVERSION_MONITOR.get());
-        event.register(new StaticItemColor(AEColor.TRANSPARENT), ActFeature.TERMINAL.get());
+        event.register(new StaticItemColor(AEColor.TRANSPARENT), ActFeature.TERMINAL.get(), VisRelayFeature.INTERFACE.get());
     }
 
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

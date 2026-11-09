@@ -17,6 +17,10 @@ public final class TeStackKey<T> {
         this.type = type;
     }
 
+    public DataComponentType<T> type() {
+        return type.get();
+    }
+
     public static <T> TeStackKey<T> register(String name, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         return TeStackData.register(name, codec, streamCodec);
     }

@@ -68,11 +68,17 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - The terminal is an exception to the plain-screen rule: the menu extends AE2 `MEStorageMenu` and the screen `MEStorageScreen`, so the ME item list, search, sorting, view cells, terminal sizes and autocrafting come from AE2. Slot positions come from an AE2 screen style; AE2 loads styles and their textures only from the `ae2` namespace, so `gen_act.py` writes `assets/ae2/screens/thaumicenergistics/arcane_crafting_terminal.json` and copies the GUI texture to `assets/ae2/textures/guis/thaumicenergistics/`. Positions are TE coordinates turned into `bottom` anchors against the 243 px default height.
 - The wand and armor slots use the addon's slot semantics `THAUMICENERGISTICS_WAND` and `THAUMICENERGISTICS_ARMOR`, registered in `ArcaneCraftingTermMenu`.
 - The result follows TE: a vanilla recipe wins, otherwise the arcane recipe needs the full vis cost in the wand. A consumed grid item is refilled first from the player inventory, then from the network (exact item, then any item of the same type).
-- TE refilled the wand from a linked vis relay interface; that part waits for the vis relay interface feature.
+- TE refilled the wand from a linked vis relay interface; the link is a TE memory card carrying the `vis_source_link` component, loaded in `ArcaneCraftingTerminalPart.onUseItemOn`, and the wand is charged by the terminal's `IGridTickable` service.
 - Menu-level tests must call `broadcastChanges()` once: AE2 updates the menu's grid link there, and without it every network action is refused.
 
-## Essentia buses
+## Vis relay interface
 
+- `visrelay/` ports `PartVisInterface`: the part is a `DigiVisSource` (TE `IDigiVisSource`) and an `IGridTickable`; non-provider ends drain their facing vis relay for 4 AE per drain, provider ends pull vis through a `VisSourceLink` (TE `DigiVisSourceData`) from the linked source. Links live on memory cards as the `vis_source_link` data component (`VisRelayFeature.LINK`); export goes through `exportSettings(MEMORY_CARD)`, which also turns the exporting interface back into a plain end; a blank card on a provider clears the link, TE 1:1.
+- `VisProviderNode extends VisNode` (TE `VisProviderProxy`) is the fake vis net source of a provider: never registered, never ticked by the level, and driven only from the part tick. Because 1.21 validates the block state in the `BlockEntity` constructor and forbids creating `BlockEntityType`s after registries freeze, it reuses AE2's `AEBlockEntities.CABLE_BUS` type; nothing ever saves or reads it.
+- Port deviation: the proxy node sits at the cable bus block, one block behind TE's position (the block in front of the interface). The 1.21 vis net skips nodes at zero distance, so a proxy placed on the relay block could never be picked as a parent. When two interfaces on one bus block face different relays, `VisNet.addSource` keys by position and the later registration wins; stale parent chains keep their own provider, so both relays still drain.
+- The arcane assembler (later feature) implements `DigiVisSource` directly and shares this wiring.
+
+## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.
 - The storage bus mounts its own `MEStorage` with `IStorageProvider`; AE2 polls mounted storage every tick, so TE's cached diff and `postAlterationToHostGrid` are not ported. A neighbour exposing `AECapabilities.ME_STORAGE` (interface, condenser, ME chest) is used as is, filtered to essentia.
