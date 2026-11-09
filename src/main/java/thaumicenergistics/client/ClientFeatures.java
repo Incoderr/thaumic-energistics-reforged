@@ -23,6 +23,8 @@ import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
 import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
 import thaumicenergistics.client.visrelay.VisRelayInterfaceRenderer;
 import thaumicenergistics.terminal.TerminalFeature;
+import thaumicenergistics.client.knowledge.KnowledgeInscriberScreen;
+import thaumicenergistics.knowledge.KnowledgeFeature;
 import thaumicenergistics.visrelay.VisRelayFeature;
 import thaumicenergistics.visrelay.VisRelayInterfacePart;
 import thaumicenergistics.workbench.WorkbenchFeature;
@@ -43,6 +45,7 @@ public final class ClientFeatures {
         event.register(BusesFeature.MENU.get(), EssentiaBusScreen::new);
         event.register(EmitterFeature.MENU.get(), EssentiaLevelEmitterScreen::new);
         InitScreens.register(event, ActFeature.MENU.get(), ArcaneCraftingTermScreen::new, ArcaneCraftingTermScreen.STYLE);
+        event.register(KnowledgeFeature.MENU.get(), KnowledgeInscriberScreen::new);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {

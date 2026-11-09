@@ -8,3 +8,4 @@ monitor
 provider
 act
 visrelay
+knowledge

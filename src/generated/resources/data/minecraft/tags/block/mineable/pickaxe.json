@@ -12,6 +12,10 @@
     {
       "id": "thaumicenergistics:infusion_provider",
       "required": false
+    },
+    {
+      "id": "thaumicenergistics:knowledge_inscriber",
+      "required": false
     }
   ]
 }

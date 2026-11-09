@@ -78,6 +78,12 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Port deviation: the proxy node sits at the cable bus block, one block behind TE's position (the block in front of the interface). The 1.21 vis net skips nodes at zero distance, so a proxy placed on the relay block could never be picked as a parent. When two interfaces on one bus block face different relays, `VisNet.addSource` keys by position and the later registration wins; stale parent chains keep their own provider, so both relays still drain.
 - The arcane assembler (later feature) implements `DigiVisSource` directly and shares this wiring.
 
+## Knowledge core and inscriber
+
+- A knowledge core keeps up to 21 `ArcanePattern`s (grid as placed, result, base aspect cost) in the `knowledge_core_patterns` data component; patterns are unique by result stack, as in TE. TE stored per-slot recipe ingredient lists; here the pattern keeps the placed items and the arcane assembler re-matches the recipe, which keeps oredict-style substitution.
+- The inscriber menu is a vanilla menu with fake grid, pattern and result slots handled in `clicked`; save/delete and clear are `clickMenuButton` ids, the save state and a save counter are `DataSlot`s. TE's save particles are not ported.
+- The arcane assembler research (`ARCANEASSEMBLER`) is registered with the knowledge feature because the inscriber research hangs off it; its recipe page appears through `TeResearch.existing` once the assembler lands.
+
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.
