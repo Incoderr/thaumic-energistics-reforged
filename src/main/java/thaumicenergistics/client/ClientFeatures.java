@@ -8,6 +8,8 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import appeng.init.client.InitScreens;
 import thaumicenergistics.act.ActFeature;
+import thaumicenergistics.assembler.AssemblerFeature;
+import thaumicenergistics.client.assembler.ArcaneAssemblerScreen;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.client.act.ArcaneCraftingTermScreen;
 import thaumicenergistics.client.buses.EssentiaBusScreen;
@@ -46,6 +48,7 @@ public final class ClientFeatures {
         event.register(EmitterFeature.MENU.get(), EssentiaLevelEmitterScreen::new);
         InitScreens.register(event, ActFeature.MENU.get(), ArcaneCraftingTermScreen::new, ArcaneCraftingTermScreen.STYLE);
         event.register(KnowledgeFeature.MENU.get(), KnowledgeInscriberScreen::new);
+        event.register(AssemblerFeature.MENU.get(), ArcaneAssemblerScreen::new);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {

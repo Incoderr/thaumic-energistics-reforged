@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumicenergistics:arcane_assembler",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:essentia_cell_workbench",
       "required": false
     },

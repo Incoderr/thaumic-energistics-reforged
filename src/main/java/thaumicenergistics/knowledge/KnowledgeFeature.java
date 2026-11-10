@@ -69,7 +69,7 @@ public final class KnowledgeFeature {
         TeResearch.item(
                 TeResearch.ARCANE_ASSEMBLER,
                 new AspectList().add(Aspect.CRAFT, 5).add(Aspect.MECHANISM, 3).add(Aspect.MIND, 3).add(Aspect.EXCHANGE, 3).add(Aspect.AURA, 3).add(Aspect.GREED, 3),
-                6, -1, TeResearch.COMPLEXITY_LARGE, TcStack.of(INSCRIBER.getId().toString())
+                6, -1, TeResearch.COMPLEXITY_LARGE, TcStack.of("thaumicenergistics:arcane_assembler")
             )
             .setPages(TeResearch.existing(
                 TeResearch.text(TeResearch.ARCANE_ASSEMBLER, 1),

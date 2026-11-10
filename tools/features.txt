@@ -9,3 +9,4 @@ provider
 act
 visrelay
 knowledge
+assembler

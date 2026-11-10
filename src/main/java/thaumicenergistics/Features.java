@@ -3,6 +3,7 @@ package thaumicenergistics;
 import net.neoforged.bus.api.IEventBus;
 import thaumcraft.aspect.AspectRegistry;
 import thaumicenergistics.act.ActFeature;
+import thaumicenergistics.assembler.AssemblerFeature;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
@@ -12,6 +13,7 @@ import thaumicenergistics.monitor.MonitorFeature;
 import thaumicenergistics.provider.ProviderFeature;
 import thaumicenergistics.terminal.TerminalFeature;
 import thaumicenergistics.test.ActGameTests;
+import thaumicenergistics.test.AssemblerGameTests;
 import thaumicenergistics.test.BusesGameTests;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
@@ -43,12 +45,14 @@ public final class Features {
         ActFeature.load();
         VisRelayFeature.load();
         KnowledgeFeature.load();
+        AssemblerFeature.load();
     }
 
     public static void setup() {
         TerminalFeature.setup();
         BusesFeature.setup();
         ProviderFeature.setup();
+        AssemblerFeature.setup();
     }
 
     public static void research() {
@@ -74,6 +78,7 @@ public final class Features {
         ActFeature.recipes();
         VisRelayFeature.recipes();
         KnowledgeFeature.recipes();
+        AssemblerFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -91,5 +96,6 @@ public final class Features {
         ActGameTests.register(modEventBus);
         KnowledgeGameTests.register(modEventBus);
         VisRelayGameTests.register(modEventBus);
+        AssemblerGameTests.register(modEventBus);
     }
 }

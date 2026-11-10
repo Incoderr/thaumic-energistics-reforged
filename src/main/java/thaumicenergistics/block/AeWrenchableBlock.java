@@ -21,6 +21,10 @@ public abstract class AeWrenchableBlock extends Block {
         return InteractionResult.PASS;
     }
 
+    protected ItemStack dismantledStack(Level level, BlockPos pos) {
+        return new ItemStack(this);
+    }
+
     protected boolean canPlayerInteract(Player player) {
         return true;
     }
@@ -34,8 +38,9 @@ public abstract class AeWrenchableBlock extends Block {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         if (player.isShiftKeyDown() && !level.isClientSide()) {
+            ItemStack dismantled = dismantledStack(level, pos);
             level.removeBlock(pos, false);
-            popResource(level, pos, new ItemStack(this));
+            popResource(level, pos, dismantled);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }

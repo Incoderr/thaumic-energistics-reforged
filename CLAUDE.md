@@ -76,13 +76,21 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - `visrelay/` ports `PartVisInterface`: the part is a `DigiVisSource` (TE `IDigiVisSource`) and an `IGridTickable`; non-provider ends drain their facing vis relay for 4 AE per drain, provider ends pull vis through a `VisSourceLink` (TE `DigiVisSourceData`) from the linked source. Links live on memory cards as the `vis_source_link` data component (`VisRelayFeature.LINK`); export goes through `exportSettings(MEMORY_CARD)`, which also turns the exporting interface back into a plain end; a blank card on a provider clears the link, TE 1:1.
 - `VisProviderNode extends VisNode` (TE `VisProviderProxy`) is the fake vis net source of a provider: never registered, never ticked by the level, and driven only from the part tick. Because 1.21 validates the block state in the `BlockEntity` constructor and forbids creating `BlockEntityType`s after registries freeze, it reuses AE2's `AEBlockEntities.CABLE_BUS` type; nothing ever saves or reads it.
 - Port deviation: the proxy node sits at the cable bus block, one block behind TE's position (the block in front of the interface). The 1.21 vis net skips nodes at zero distance, so a proxy placed on the relay block could never be picked as a parent. When two interfaces on one bus block face different relays, `VisNet.addSource` keys by position and the later registration wins; stale parent chains keep their own provider, so both relays still drain.
-- The arcane assembler (later feature) implements `DigiVisSource` directly and shares this wiring.
+- The arcane assembler pulls vis through the same `VisSourceLink` loaded from a memory card.
 
 ## Knowledge core and inscriber
 
-- A knowledge core keeps up to 21 `ArcanePattern`s (grid as placed, result, base aspect cost) in the `knowledge_core_patterns` data component; patterns are unique by result stack, as in TE. TE stored per-slot recipe ingredient lists; here the pattern keeps the placed items and the arcane assembler re-matches the recipe, which keeps oredict-style substitution.
+- A knowledge core keeps up to 21 `ArcanePattern`s (grid as placed, result, base aspect cost) in the `knowledge_core_patterns` data component; patterns are unique by result stack, as in TE. TE stored per-slot recipe ingredient lists; here the pattern keeps the placed items, and the arcane assembler accepts only those items (TE `canSubItem` rules), not other tag members.
 - The inscriber menu is a vanilla menu with fake grid, pattern and result slots handled in `clicked`; save/delete and clear are `clickMenuButton` ids, the save state and a save counter are `DataSlot`s. TE's save particles are not ported.
-- The arcane assembler research (`ARCANEASSEMBLER`) is registered with the knowledge feature because the inscriber research hangs off it; its recipe page appears through `TeResearch.existing` once the assembler lands.
+- The arcane assembler research (`ARCANEASSEMBLER`) is registered with the knowledge feature because the inscriber research hangs off it; its recipe page comes from `AssemblerFeature.recipes()` through `TeResearch.existing`.
+
+## Arcane assembler
+
+- The assembler is an AE2 `ICraftingProvider` service on its grid node. Each knowledge core pattern becomes an `AssemblerPattern` whose definition is a knowledge core item carrying the single pattern in `arcane_assembler_pattern`; the decoder registered in `setup()` turns it back, so saved crafting jobs survive a restart.
+- Inputs are the placed grid items; a slot accepts the same item with equal components, damageable items with any damage (TE `canSubItem`). On completion the result and the ingredients' crafting remainders (and a primordial pearl, TE's eldritch object 3) go into the network.
+- TE quirk kept: crafting progresses even when the network gives less power than asked (`extracted - required <= 0`).
+- The TE sceptre infusion component is `thaumcraft:wand` with data `cap`/`rod`/`sceptre`; the addon registers the `sceptre` data handler and matcher on `TcStack`. A crafted assembler starts with full vis (`arcane_assembler_vis` component), dismantling with a wrench keeps the stored vis.
+- Not ported: the network tool panel of the GUI, the AE2 assembler animation and rune particles while crafting, the AE2 security check.
 
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
