@@ -1,0 +1,4 @@
+{
+  "thaumicenergistics.research_page.TEGOLEMWIFIBACKPACK.2": "As communicating with the network takes power, you retro-fitted a charger to draw power from two embedded Nitor. When charged the backpack will be able to transmit for only a short time before starting another charge cycle. During this window of opportunity the golem will be able to interact with the network.<BR>To link the backpack with your network, place it in the link slot of a wireless access point.<LINE>As you progress with your golemancy research, check back here for potential new uses of the backpack.",
+  "thaumicenergistics.research_page.TEGOLEMWIFIBACKPACK.CORELIQUID": "§nDecanting Core Unlocked§r<IMG>thaumicenergistics:textures/gui/states.png:48:0:16:16:1.0</IMG>A golem equipped with a §lDecanting Core§r will be able to extract fluid from the network. The maximum amount of fluid extracted is determined by how efficiently the golem manages each charge."
+}

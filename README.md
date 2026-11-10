@@ -6,7 +6,22 @@ The port targets 1.21.1 instead of 26.3 because there is no stable Applied Energ
 
 The goal is to recreate the original gameplay as closely as possible: essentia storage cells, import, export and storage buses, the essentia terminal, the arcane crafting terminal, the arcane assembler, the vis relay P2P tunnel, infusion provider and the rest of the bridge between Thaumcraft and Applied Energistics 2. Integrations with other mods (except REI and AE2) are not ported. The technical side is rebuilt on modern APIs, the original coremod (ASM transformers) is replaced by events or mixins.
 
-The project is a scaffold for now: registries, network seams, config, game test harness and the Python tooling are in place, gameplay content is ported feature by feature.
+## Ported features
+
+Everything from Thaumic Energistics 1.1.3.0 is ported:
+
+- Essentia as a native AE2 resource: essentia storage cells (1k to 64k and creative), essentia cell housing and the cell workbench
+- Essentia terminal, wireless essentia terminal, import, export and storage buses, level emitter, storage and conversion monitors
+- Essentia and infusion providers, the essentia vibration chamber (Ignis and Potentia to AE power)
+- Arcane crafting terminal with wand and armor slots, REI recipe transfer
+- Knowledge core, knowledge inscriber and the arcane assembler as an AE2 crafting provider
+- Distillation pattern encoder for essentia autocrafting through ordinary pattern providers
+- Vis relay interface, iron and thaumium gear boxes (crank AE2 chargers, the thaumium one by golems)
+- Wireless golem backpack: gather, fill, decanting and alchemy golems work with the network through a wireless access point; facades change its look
+- AE wrench wand focus, certus and nether quartz duplication, aspects for AE2 items, AE2 facades of Thaumcraft blocks
+- Thaumonomicon tab with TE research and pages in English and Russian
+
+Deliberate differences from the original are listed in `CLAUDE.md` (missing AE2 1.21 content such as the grinder, security terminal and pure certus; fixed game-breaking TE bugs).
 
 > **Personal use only.** The original Thaumic Energistics is licensed under the MIT License (Copyright (c) 2014 Chris). This port is not intended for redistribution.
 

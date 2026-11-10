@@ -10,13 +10,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumicenergistics.ThaumicEnergistics;
+import thaumicenergistics.provider.ProviderFeature;
 
 public final class ModCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ThaumicEnergistics.MODID);
 
     public static final Supplier<CreativeModeTab> THAUMIC_ENERGISTICS = TABS.register("thaumicenergistics", () -> CreativeModeTab.builder()
         .title(Component.translatable("itemGroup.thaumicenergistics"))
-        .icon(() -> new ItemStack(thaumcraft.registry.ModItems.THAUMIUM_INGOT.get()))
+        .icon(() -> new ItemStack(ProviderFeature.INFUSION_PROVIDER.get()))
         .displayItems((parameters, output) -> {
             for (DeferredHolder<Item, ? extends Item> holder : ModItems.ITEMS.getEntries()) {
                 output.accept(holder.get());
