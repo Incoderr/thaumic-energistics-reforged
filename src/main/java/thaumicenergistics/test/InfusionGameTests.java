@@ -83,6 +83,7 @@ public final class InfusionGameTests {
     }
 
     private static void crafting(GameTestHelper helper) {
+        thaumicenergistics.Config.INFUSION_ASSEMBLER_ENABLED.set(true);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
         helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));

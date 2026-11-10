@@ -14,12 +14,12 @@ public final class Config {
 
     static {
         BUILDER.translation("thaumicenergistics.configuration.crucibleAssembler").push("crucibleAssembler");
-        CRUCIBLE_ASSEMBLER_ENABLED = BUILDER.translation("thaumicenergistics.configuration.enabled").define("enabled", true);
+        CRUCIBLE_ASSEMBLER_ENABLED = BUILDER.translation("thaumicenergistics.configuration.enabled").define("enabled", false);
         CRUCIBLE_ASSEMBLER_TICKS = BUILDER.translation("thaumicenergistics.configuration.ticksPerCraft").defineInRange("ticksPerCraft", 20, 1, 1200);
         CRUCIBLE_ASSEMBLER_POWER = BUILDER.translation("thaumicenergistics.configuration.powerPerTick").defineInRange("powerPerTick", 1.5D, 0.0D, 10000.0D);
         BUILDER.pop();
         BUILDER.translation("thaumicenergistics.configuration.infusionAssembler").push("infusionAssembler");
-        INFUSION_ASSEMBLER_ENABLED = BUILDER.translation("thaumicenergistics.configuration.enabled").define("enabled", true);
+        INFUSION_ASSEMBLER_ENABLED = BUILDER.translation("thaumicenergistics.configuration.enabled").define("enabled", false);
         INFUSION_ASSEMBLER_TICKS = BUILDER.translation("thaumicenergistics.configuration.ticksPerCraft").defineInRange("ticksPerCraft", 20, 1, 1200);
         INFUSION_ASSEMBLER_POWER = BUILDER.translation("thaumicenergistics.configuration.powerPerTick").defineInRange("powerPerTick", 1.5D, 0.0D, 10000.0D);
         BUILDER.pop();
