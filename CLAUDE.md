@@ -38,7 +38,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 
 - `platform/` and `client/platform/` hold everything where version APIs diverge. The addon has its own seams in the `thaumicenergistics` namespace: `TeNetwork` (its own `RegisterPayloadHandlersEvent`, client handlers are dispatched through `setClientHandler` because 1.21.1 has no client payload registration event), `client/platform/TeClientNetwork`, `TeRegistration` (`Items`/`Blocks` with the 26.3-style `registerItem`/`registerBlock(name, factory, properties)`). Gameplay code goes only through them and through the base seams. `tools/check_seams.py` fails on forbidden imports outside the seams and on client class imports outside `client/`.
 - Registration: `registry/` (`ModItems`, `ModBlocks` with `withItem`, `ModBlockEntities`, `ModMenus`, `ModEntities`, `ModEffects`, `ModSounds`, `ModCreativeTabs`), payloads in `network/ModPayloads`, client handlers in `client/ClientPayloadHandlers`, client entry point `client/ThaumicEnergisticsClient`.
-- `Config` is SERVER only (synced to clients), keys and defaults are carried over from the TE config.
+- `Config` is SERVER only (synced to clients), keys and defaults are carried over from the TE config. The added assemblers have their own sections (`enabled`, `ticksPerCraft`, `powerPerTick`); a disabled assembler offers no patterns and refuses pushes, so the switch takes effect without a restart. The NeoForge `ConfigurationScreen` shows them, translated under `thaumicenergistics.configuration.*` in `tools/lang/config/`.
 - The creative tab is the addon's own, its icon is the infusion provider as in TE.
 
 ## Feature layout

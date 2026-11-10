@@ -16,6 +16,7 @@ import appeng.api.upgrades.UpgradeInventories;
 import appeng.blockentity.grid.AENetworkedBlockEntity;
 import appeng.core.definitions.AEItems;
 import appeng.me.helpers.MachineSource;
+import thaumicenergistics.Config;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -32,10 +33,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity implements ICraftingProvider, IUpgradeableObject {
-    public static final int BASE_TICKS_PER_CRAFT = 20;
     public static final int MAX_SPEED_UPGRADES = 4;
     public static final int CORE_SLOT = 0;
-    public static final double ACTIVE_POWER = 1.5D;
     private static final String UPGRADES_KEY = "upgrades";
     private static final String CRAFTING_KEY = "is_crafting";
     private static final String PATTERN_KEY = "pattern";
@@ -67,6 +66,7 @@ public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity i
     private boolean crafting;
     private int craftTickCounter;
     private boolean coreChanged = true;
+    private boolean wasEnabled = true;
     private boolean unloading;
 
     public InfusionAssemblerBlockEntity(BlockPos pos, BlockState state) {
@@ -93,7 +93,7 @@ public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity i
     }
 
     public int ticksPerCraft() {
-        return BASE_TICKS_PER_CRAFT - 4 * getInstalledUpgrades(AEItems.SPEED_CARD);
+        return Config.ticksPerCraft(Config.INFUSION_ASSEMBLER_TICKS, getInstalledUpgrades(AEItems.SPEED_CARD), MAX_SPEED_UPGRADES);
     }
 
     public float percentComplete() {
@@ -110,11 +110,16 @@ public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity i
         markForUpdate();
     }
 
+    private static boolean enabled() {
+        return Config.flag(Config.INFUSION_ASSEMBLER_ENABLED);
+    }
+
     private void updatePatterns() {
         coreChanged = false;
+        wasEnabled = enabled();
         List<IPatternDetails> updated = new ArrayList<>();
         for (InfusionPattern pattern : InfusionCore.patterns(inventory.getItem(CORE_SLOT))) {
-            if (pattern.isValid()) {
+            if (wasEnabled && pattern.isValid()) {
                 updated.add(new InfusionAssemblerPattern(pattern));
             }
         }
@@ -143,14 +148,15 @@ public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity i
             markForUpdate();
             return;
         }
-        double required = ACTIVE_POWER + ACTIVE_POWER * getInstalledUpgrades(AEItems.SPEED_CARD) / 2.0D;
+        double power = Config.amount(Config.INFUSION_ASSEMBLER_POWER);
+        double required = power + power * getInstalledUpgrades(AEItems.SPEED_CARD) / 2.0D;
         if (grid.getEnergyService().extractAEPower(required, Actionable.MODULATE, PowerMultiplier.CONFIG) >= required - 0.01D) {
             craftTickCounter++;
         }
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, InfusionAssemblerBlockEntity assembler) {
-        if (assembler.coreChanged) {
+        if (assembler.coreChanged || assembler.wasEnabled != enabled()) {
             assembler.updatePatterns();
         }
         IGrid grid = assembler.getMainNode().getGrid();
@@ -176,7 +182,7 @@ public final class InfusionAssemblerBlockEntity extends AENetworkedBlockEntity i
 
     @Override
     public boolean pushPattern(IPatternDetails patternDetails, KeyCounter[] inputHolder) {
-        if (crafting || !(patternDetails instanceof InfusionAssemblerPattern pattern) || !patterns.contains(pattern)) {
+        if (crafting || !enabled() || !(patternDetails instanceof InfusionAssemblerPattern pattern) || !patterns.contains(pattern)) {
             return false;
         }
         crafting = true;

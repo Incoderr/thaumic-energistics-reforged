@@ -1,0 +1,15 @@
+{
+  "thaumicenergistics.configuration.title": "Thaumic Energistics Configuration",
+  "thaumicenergistics.configuration.section.thaumicenergistics.server.toml": "Server Settings",
+  "thaumicenergistics.configuration.section.thaumicenergistics.server.toml.title": "Server Settings",
+  "thaumicenergistics.configuration.crucibleAssembler": "Crucible Assembler",
+  "thaumicenergistics.configuration.crucibleAssembler.tooltip": "Crucible recipes as network autocrafting",
+  "thaumicenergistics.configuration.infusionAssembler": "Infusion Assembler",
+  "thaumicenergistics.configuration.infusionAssembler.tooltip": "Infusion recipes as network autocrafting",
+  "thaumicenergistics.configuration.enabled": "Enabled",
+  "thaumicenergistics.configuration.enabled.tooltip": "When off, the assembler offers no recipes to the network",
+  "thaumicenergistics.configuration.ticksPerCraft": "Ticks per craft",
+  "thaumicenergistics.configuration.ticksPerCraft.tooltip": "Craft time without speed cards; each speed card removes a fifth of it",
+  "thaumicenergistics.configuration.powerPerTick": "Power per tick (AE)",
+  "thaumicenergistics.configuration.powerPerTick.tooltip": "Power drawn every tick while crafting; each speed card adds half of it"
+}
