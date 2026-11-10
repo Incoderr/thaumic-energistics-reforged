@@ -82,6 +82,9 @@ def generate(ctx):
         "textures": {"frame": ctx.ref("arcane.assembler", "models"), "particle": ctx.ref("arcane.assembler.fallback")},
         "elements": model_elements(),
     })
+    ctx.write(ctx.OUT / "assets" / "minecraft" / "atlases" / "blocks.json", {
+        "sources": [{"type": "single", "resource": ctx.ref("arcane.assembler", "models")}],
+    })
     ctx.simple_state(name)
     ctx.block_item(name)
     ctx.self_drop(name)
