@@ -74,30 +74,33 @@ public final class AlchemyFeature {
 
     public static void recipes() {
         TeRecipes.register(new InfusionRecipe(
-            ASSEMBLER_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 5,
-            new AspectList().add(Aspect.CRAFT, 32).add(Aspect.EXCHANGE, 32).add(Aspect.MAGIC, 16).add(Aspect.WATER, 16).add(Aspect.FIRE, 8),
-            TcIngredient.item("ae2:molecular_assembler"),
+            ASSEMBLER_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 6,
+            new AspectList().add(Aspect.CRAFT, 64).add(Aspect.EXCHANGE, 48).add(Aspect.WATER, 32).add(Aspect.FIRE, 32).add(Aspect.MECHANISM, 32).add(Aspect.MAGIC, 24),
+            TcIngredient.item("thaumicenergistics:arcane_assembler"),
             List.of(
-                TcIngredient.item("thaumcraft:crucible"), TcIngredient.item("thaumcraft:alchemical_construct"),
-                TcIngredient.item("thaumcraft:alembic"), TcIngredient.item("thaumcraft:essentia_tube"),
-                TcIngredient.item("ae2:pattern_provider"), TcIngredient.item("thaumcraft:alchemical_construct"),
-                TcIngredient.item("thaumcraft:thaumium_ingot"), TcIngredient.item("thaumcraft:essentia_tube")
+                TcIngredient.item("thaumcraft:advanced_alchemical_construct"), TcIngredient.item("thaumcraft:crucible"),
+                TcIngredient.item("thaumcraft:alchemical_centrifuge"), TcIngredient.item("ae2:pattern_provider"),
+                TcIngredient.item("thaumcraft:advanced_alchemical_construct"), TcIngredient.item("thaumcraft:essentia_crystallizer"),
+                TcIngredient.item("ae2:engineering_processor"), TcIngredient.item("thaumcraft:alembic")
+            )
+        ));
+        TeRecipes.register(new InfusionRecipe(
+            CORE_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(CORE.getId().toString()), 3,
+            new AspectList().add(Aspect.WATER, 16).add(Aspect.FIRE, 16).add(Aspect.MIND, 16).add(Aspect.EXCHANGE, 8),
+            TcIngredient.item("thaumicenergistics:knowledge_core"),
+            List.of(
+                TcIngredient.item("thaumcraft:alembic"), TcIngredient.item("thaumcraft:salis_mundus"),
+                TcIngredient.item("thaumcraft:alchemical_construct"), TcIngredient.item("ae2:calculation_processor")
             )
         ));
         TeRecipes.arcane(
-            CORE_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(CORE.getId().toString()),
-            new AspectList().add(Aspect.WATER, 3).add(Aspect.ORDER, 3).add(Aspect.FIRE, 1),
-            new String[] {"VGV", "GAG", "VCV"},
-            'V', TcIngredient.item("ae2:quartz_vibrant_glass"), 'G', TcIngredient.item("minecraft:glowstone_dust"),
-            'A', TcIngredient.item("thaumcraft:alembic"), 'C', TcIngredient.item("ae2:calculation_processor")
-        );
-        TeRecipes.arcane(
             INSCRIBER_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(INSCRIBER.getId().toString()),
-            new AspectList().add(Aspect.WATER, 5).add(Aspect.ORDER, 5).add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(Aspect.FIRE, 5).add(Aspect.AIR, 5),
-            new String[] {"IPI", " T ", "ILI"},
-            'I', TcIngredient.item("thaumcraft:thaumium_ingot"),
+            new AspectList().add(Aspect.WATER, 10).add(Aspect.ORDER, 10).add(Aspect.EARTH, 10).add(Aspect.ENTROPY, 10).add(Aspect.FIRE, 10).add(Aspect.AIR, 10),
+            new String[] {"TPT", "CKC", "TLT"},
+            'T', TcIngredient.item("thaumcraft:thaumium_ingot"),
             'P', TcIngredient.anyOf(TcIngredient.item("ae2:monitor"), TcIngredient.item("ae2:semi_dark_monitor"), TcIngredient.item("ae2:dark_monitor")),
-            'T', TcIngredient.item("thaumcraft:crucible"), 'L', TcIngredient.item("ae2:logic_processor")
+            'C', TcIngredient.item("thaumcraft:alchemical_construct"), 'K', TcIngredient.item("thaumicenergistics:knowledge_inscriber"),
+            'L', TcIngredient.item("ae2:engineering_processor")
         );
     }
 
@@ -112,11 +115,11 @@ public final class AlchemyFeature {
                 TeResearch.text(key, 1),
                 ResearchPage.infusion(ASSEMBLER_RECIPE),
                 TeResearch.text(key, 2),
-                ResearchPage.arcane(CORE_RECIPE),
+                ResearchPage.infusion(CORE_RECIPE),
                 ResearchPage.arcane(INSCRIBER_RECIPE)
             )
             .setParents(TeResearch.ARCANE_ASSEMBLER)
-            .setParentsHidden("CRUCIBLE", TeResearch.DISTILESSENTIA)
+            .setParentsHidden("CRUCIBLE", TeResearch.DISTILESSENTIA, "ADVALCHEMYFURNACE", "CENTRIFUGE", "ESSENTIACRYSTAL")
             .setConcealed()
             .registerResearchItem();
     }

@@ -57,7 +57,13 @@ public final class InfusionGameTests {
     private static void researchAndRecipes(GameTestHelper helper) {
         ResearchItem research = ResearchCategories.getResearch(TeResearch.INFUSION_ASSEMBLER);
         helper.assertTrue(research != null && research.parents().contains(TeResearch.CRUCIBLE_ASSEMBLER), "infusion assembler research is wrong");
-        helper.assertTrue(TcRecipes.get(InfusionFeature.ASSEMBLER_RECIPE) != null, "assembler recipe is missing");
+        for (String key : new String[] {InfusionFeature.ASSEMBLER_RECIPE, InfusionFeature.CORE_RECIPE}) {
+            thaumcraft.crafting.InfusionRecipe recipe = (thaumcraft.crafting.InfusionRecipe) TcRecipes.get(key);
+            helper.assertTrue(recipe != null && recipe.central().exists(), key + " is missing or has no central item");
+            for (thaumcraft.crafting.TcIngredient component : recipe.components()) {
+                helper.assertTrue(component.exists(), key + " has a missing component " + component);
+            }
+        }
         helper.assertTrue(TcRecipes.get(InfusionFeature.CORE_RECIPE) != null, "core recipe is missing");
         helper.assertTrue(TcRecipes.get(InfusionFeature.INSCRIBER_RECIPE) != null, "inscriber recipe is missing");
         helper.succeed();

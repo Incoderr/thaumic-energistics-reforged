@@ -74,30 +74,33 @@ public final class InfusionFeature {
 
     public static void recipes() {
         TeRecipes.register(new InfusionRecipe(
-            ASSEMBLER_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 8,
-            new AspectList().add(Aspect.CRAFT, 64).add(Aspect.EXCHANGE, 48).add(Aspect.MAGIC, 32).add(Aspect.AURA, 16).add(Aspect.ORDER, 16),
-            TcIngredient.item("ae2:molecular_assembler"),
+            ASSEMBLER_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 10,
+            new AspectList().add(Aspect.CRAFT, 128).add(Aspect.EXCHANGE, 64).add(Aspect.MAGIC, 64).add(Aspect.AURA, 48).add(Aspect.ORDER, 48).add(Aspect.ELDRITCH, 16),
+            TcIngredient.item("thaumicenergistics:crucible_assembler"),
             List.of(
                 TcIngredient.item("thaumcraft:runic_matrix"), TcIngredient.item("thaumcraft:arcane_pedestal"),
-                TcIngredient.item("ae2:pattern_provider"), TcIngredient.item("thaumcraft:salis_mundus"),
-                TcIngredient.item("thaumcraft:arcane_pedestal"), TcIngredient.item("thaumcraft:thaumium_ingot"),
-                TcIngredient.item("ae2:pattern_provider"), TcIngredient.item("thaumcraft:thaumium_ingot")
+                TcIngredient.item("thaumcraft:void_metal_ingot"), TcIngredient.item("ae2:singularity"),
+                TcIngredient.item("thaumcraft:primordial_pearl"), TcIngredient.item("thaumcraft:arcane_pedestal"),
+                TcIngredient.item("thaumcraft:void_metal_ingot"), TcIngredient.item("ae2:pattern_provider")
+            )
+        ));
+        TeRecipes.register(new InfusionRecipe(
+            CORE_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(CORE.getId().toString()), 4,
+            new AspectList().add(Aspect.MAGIC, 24).add(Aspect.MIND, 24).add(Aspect.AURA, 16).add(Aspect.ORDER, 16),
+            TcIngredient.item("thaumicenergistics:alchemy_core"),
+            List.of(
+                TcIngredient.item("thaumcraft:amber"), TcIngredient.item("thaumcraft:salis_mundus"),
+                TcIngredient.item("thaumcraft:arcane_pedestal"), TcIngredient.item("ae2:engineering_processor")
             )
         ));
         TeRecipes.arcane(
-            CORE_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(CORE.getId().toString()),
-            new AspectList().add(Aspect.AIR, 3).add(Aspect.ORDER, 3).add(Aspect.ENTROPY, 1),
-            new String[] {"VGV", "GAG", "VCV"},
-            'V', TcIngredient.item("ae2:quartz_vibrant_glass"), 'G', TcIngredient.item("thaumcraft:salis_mundus"),
-            'A', TcIngredient.item("thaumcraft:amber"), 'C', TcIngredient.item("ae2:calculation_processor")
-        );
-        TeRecipes.arcane(
             INSCRIBER_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(INSCRIBER.getId().toString()),
-            new AspectList().add(Aspect.WATER, 5).add(Aspect.ORDER, 5).add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(Aspect.FIRE, 5).add(Aspect.AIR, 5),
-            new String[] {"IPI", " T ", "ILI"},
-            'I', TcIngredient.item("thaumcraft:thaumium_ingot"),
+            new AspectList().add(Aspect.WATER, 20).add(Aspect.ORDER, 20).add(Aspect.EARTH, 20).add(Aspect.ENTROPY, 20).add(Aspect.FIRE, 20).add(Aspect.AIR, 20),
+            new String[] {"VPV", "AKA", "VLV"},
+            'V', TcIngredient.item("thaumcraft:void_metal_ingot"),
             'P', TcIngredient.anyOf(TcIngredient.item("ae2:monitor"), TcIngredient.item("ae2:semi_dark_monitor"), TcIngredient.item("ae2:dark_monitor")),
-            'T', TcIngredient.item("thaumcraft:arcane_pedestal"), 'L', TcIngredient.item("ae2:logic_processor")
+            'A', TcIngredient.item("thaumcraft:arcane_pedestal"), 'K', TcIngredient.item("thaumicenergistics:alchemy_inscriber"),
+            'L', TcIngredient.item("ae2:engineering_processor")
         );
     }
 
@@ -112,11 +115,11 @@ public final class InfusionFeature {
                 TeResearch.text(key, 1),
                 ResearchPage.infusion(ASSEMBLER_RECIPE),
                 TeResearch.text(key, 2),
-                ResearchPage.arcane(CORE_RECIPE),
+                ResearchPage.infusion(CORE_RECIPE),
                 ResearchPage.arcane(INSCRIBER_RECIPE)
             )
             .setParents(TeResearch.CRUCIBLE_ASSEMBLER)
-            .setParentsHidden(TeResearch.INFUSION)
+            .setParentsHidden(TeResearch.INFUSION, "INFUSIONENCHANTMENT", "PRIMPEARL", "VOIDMETAL")
             .setConcealed()
             .registerResearchItem();
     }
