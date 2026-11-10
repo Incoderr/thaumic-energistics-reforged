@@ -2,6 +2,7 @@ package thaumicenergistics.crafting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.crafting.CraftingRecipeRef;
 import thaumcraft.crafting.ShapedArcaneRecipe;
@@ -10,6 +11,7 @@ import thaumcraft.crafting.TcIngredient;
 import thaumcraft.crafting.TcRecipe;
 import thaumcraft.crafting.TcRecipes;
 import thaumcraft.crafting.TcStack;
+import thaumicenergistics.Config;
 import thaumicenergistics.ThaumicEnergistics;
 
 public final class TeRecipes {
@@ -18,6 +20,22 @@ public final class TeRecipes {
 
     public static String key(String name) {
         return ThaumicEnergistics.MODID + "." + name;
+    }
+
+    private static final String GATE = "thaumicenergistics_gate";
+
+    static {
+        TcStack.registerDataHandler(GATE, (stack, value) -> {
+        });
+        TcStack.registerDataMatcher(GATE, (stack, value) -> switch (value) {
+            case "crucible" -> Config.crucibleAssembler();
+            case "infusion" -> Config.infusionAssembler();
+            default -> true;
+        });
+    }
+
+    public static TcIngredient gated(String item, String gate) {
+        return TcIngredient.of(TcStack.withData(item, 1, Map.of(GATE, gate)));
     }
 
     public static <T extends TcRecipe> T register(T recipe) {

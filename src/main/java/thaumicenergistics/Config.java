@@ -42,6 +42,14 @@ public final class Config {
         return SPEC.isLoaded() ? value.getAsDouble() : value.getDefault();
     }
 
+    public static boolean crucibleAssembler() {
+        return flag(CRUCIBLE_ASSEMBLER_ENABLED);
+    }
+
+    public static boolean infusionAssembler() {
+        return flag(INFUSION_ASSEMBLER_ENABLED);
+    }
+
     public static int ticksPerCraft(ModConfigSpec.IntValue base, int speedCards, int maxSpeedCards) {
         int ticks = number(base);
         return Math.max(1, ticks - ticks * speedCards / (maxSpeedCards + 1));

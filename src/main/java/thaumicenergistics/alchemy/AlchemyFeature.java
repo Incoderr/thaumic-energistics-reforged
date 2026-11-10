@@ -19,6 +19,7 @@ import thaumcraft.crafting.TcIngredient;
 import thaumcraft.crafting.TcStack;
 import thaumcraft.platform.Menus;
 import thaumcraft.research.ResearchPage;
+import thaumicenergistics.Config;
 import thaumicenergistics.crafting.TeRecipes;
 import thaumicenergistics.platform.TeCapabilities;
 import thaumicenergistics.platform.TeStackKey;
@@ -76,7 +77,7 @@ public final class AlchemyFeature {
         TeRecipes.register(new InfusionRecipe(
             ASSEMBLER_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 6,
             new AspectList().add(Aspect.CRAFT, 64).add(Aspect.EXCHANGE, 48).add(Aspect.WATER, 32).add(Aspect.FIRE, 32).add(Aspect.MECHANISM, 32).add(Aspect.MAGIC, 24),
-            TcIngredient.item("thaumicenergistics:arcane_assembler"),
+            TeRecipes.gated("thaumicenergistics:arcane_assembler", "crucible"),
             List.of(
                 TcIngredient.item("thaumcraft:advanced_alchemical_construct"), TcIngredient.item("thaumcraft:crucible"),
                 TcIngredient.item("thaumcraft:alchemical_centrifuge"), TcIngredient.item("ae2:pattern_provider"),
@@ -87,7 +88,7 @@ public final class AlchemyFeature {
         TeRecipes.register(new InfusionRecipe(
             CORE_RECIPE, TeResearch.CRUCIBLE_ASSEMBLER, TcStack.of(CORE.getId().toString()), 3,
             new AspectList().add(Aspect.WATER, 16).add(Aspect.FIRE, 16).add(Aspect.MIND, 16).add(Aspect.EXCHANGE, 8),
-            TcIngredient.item("thaumicenergistics:knowledge_core"),
+            TeRecipes.gated("thaumicenergistics:knowledge_core", "crucible"),
             List.of(
                 TcIngredient.item("thaumcraft:alembic"), TcIngredient.item("thaumcraft:salis_mundus"),
                 TcIngredient.item("thaumcraft:alchemical_construct"), TcIngredient.item("ae2:calculation_processor")
@@ -99,15 +100,15 @@ public final class AlchemyFeature {
             new String[] {"TPT", "CKC", "TLT"},
             'T', TcIngredient.item("thaumcraft:thaumium_ingot"),
             'P', TcIngredient.anyOf(TcIngredient.item("ae2:monitor"), TcIngredient.item("ae2:semi_dark_monitor"), TcIngredient.item("ae2:dark_monitor")),
-            'C', TcIngredient.item("thaumcraft:alchemical_construct"), 'K', TcIngredient.item("thaumicenergistics:knowledge_inscriber"),
+            'C', TcIngredient.item("thaumcraft:alchemical_construct"), 'K', TeRecipes.gated("thaumicenergistics:knowledge_inscriber", "crucible"),
             'L', TcIngredient.item("ae2:engineering_processor")
         );
     }
 
     public static void research() {
         String key = TeResearch.CRUCIBLE_ASSEMBLER;
-        TeResearch.item(
-                key,
+        TeResearch.gated(
+                Config::crucibleAssembler, key,
                 new AspectList().add(Aspect.CRAFT, 5).add(Aspect.EXCHANGE, 5).add(Aspect.MECHANISM, 3).add(Aspect.WATER, 3).add(Aspect.MAGIC, 3),
                 5, 1, TeResearch.COMPLEXITY_LARGE, TcStack.of(ASSEMBLER.getId().toString())
             )

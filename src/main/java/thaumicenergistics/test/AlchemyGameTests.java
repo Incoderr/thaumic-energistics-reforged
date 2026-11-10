@@ -55,6 +55,11 @@ public final class AlchemyGameTests {
     }
 
     private static void researchAndRecipes(GameTestHelper helper) {
+        thaumicenergistics.Config.CRUCIBLE_ASSEMBLER_ENABLED.set(false);
+        helper.assertTrue(ResearchCategories.getResearch(TeResearch.CRUCIBLE_ASSEMBLER) == null, "disabled research is visible");
+        helper.assertTrue(!((thaumcraft.crafting.InfusionRecipe) TcRecipes.get(AlchemyFeature.ASSEMBLER_RECIPE)).central().test(new ItemStack(thaumicenergistics.assembler.AssemblerFeature.BLOCK.get())), "disabled recipe accepts its central item");
+        thaumicenergistics.Config.CRUCIBLE_ASSEMBLER_ENABLED.set(true);
+        helper.assertTrue(((thaumcraft.crafting.InfusionRecipe) TcRecipes.get(AlchemyFeature.ASSEMBLER_RECIPE)).central().test(new ItemStack(thaumicenergistics.assembler.AssemblerFeature.BLOCK.get())), "enabled recipe rejects its central item");
         ResearchItem research = ResearchCategories.getResearch(TeResearch.CRUCIBLE_ASSEMBLER);
         helper.assertTrue(research != null && research.parents().contains(TeResearch.ARCANE_ASSEMBLER), "crucible assembler research is wrong");
         for (String key : new String[] {AlchemyFeature.ASSEMBLER_RECIPE, AlchemyFeature.CORE_RECIPE}) {

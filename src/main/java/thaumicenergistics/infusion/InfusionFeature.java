@@ -19,6 +19,7 @@ import thaumcraft.crafting.TcIngredient;
 import thaumcraft.crafting.TcStack;
 import thaumcraft.platform.Menus;
 import thaumcraft.research.ResearchPage;
+import thaumicenergistics.Config;
 import thaumicenergistics.crafting.TeRecipes;
 import thaumicenergistics.platform.TeCapabilities;
 import thaumicenergistics.platform.TeStackKey;
@@ -76,7 +77,7 @@ public final class InfusionFeature {
         TeRecipes.register(new InfusionRecipe(
             ASSEMBLER_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(ASSEMBLER.getId().toString()), 10,
             new AspectList().add(Aspect.CRAFT, 128).add(Aspect.EXCHANGE, 64).add(Aspect.MAGIC, 64).add(Aspect.AURA, 48).add(Aspect.ORDER, 48).add(Aspect.ELDRITCH, 16),
-            TcIngredient.item("thaumicenergistics:crucible_assembler"),
+            TeRecipes.gated("thaumicenergistics:crucible_assembler", "infusion"),
             List.of(
                 TcIngredient.item("thaumcraft:runic_matrix"), TcIngredient.item("thaumcraft:arcane_pedestal"),
                 TcIngredient.item("thaumcraft:void_metal_ingot"), TcIngredient.item("ae2:singularity"),
@@ -87,7 +88,7 @@ public final class InfusionFeature {
         TeRecipes.register(new InfusionRecipe(
             CORE_RECIPE, TeResearch.INFUSION_ASSEMBLER, TcStack.of(CORE.getId().toString()), 4,
             new AspectList().add(Aspect.MAGIC, 24).add(Aspect.MIND, 24).add(Aspect.AURA, 16).add(Aspect.ORDER, 16),
-            TcIngredient.item("thaumicenergistics:alchemy_core"),
+            TeRecipes.gated("thaumicenergistics:alchemy_core", "infusion"),
             List.of(
                 TcIngredient.item("thaumcraft:amber"), TcIngredient.item("thaumcraft:salis_mundus"),
                 TcIngredient.item("thaumcraft:arcane_pedestal"), TcIngredient.item("ae2:engineering_processor")
@@ -99,15 +100,15 @@ public final class InfusionFeature {
             new String[] {"VPV", "AKA", "VLV"},
             'V', TcIngredient.item("thaumcraft:void_metal_ingot"),
             'P', TcIngredient.anyOf(TcIngredient.item("ae2:monitor"), TcIngredient.item("ae2:semi_dark_monitor"), TcIngredient.item("ae2:dark_monitor")),
-            'A', TcIngredient.item("thaumcraft:arcane_pedestal"), 'K', TcIngredient.item("thaumicenergistics:alchemy_inscriber"),
+            'A', TcIngredient.item("thaumcraft:arcane_pedestal"), 'K', TeRecipes.gated("thaumicenergistics:alchemy_inscriber", "infusion"),
             'L', TcIngredient.item("ae2:engineering_processor")
         );
     }
 
     public static void research() {
         String key = TeResearch.INFUSION_ASSEMBLER;
-        TeResearch.item(
-                key,
+        TeResearch.gated(
+                Config::infusionAssembler, key,
                 new AspectList().add(Aspect.CRAFT, 5).add(Aspect.EXCHANGE, 5).add(Aspect.MECHANISM, 3).add(Aspect.MAGIC, 5).add(Aspect.AURA, 3),
                 6, 1, TeResearch.COMPLEXITY_LARGE, TcStack.of(ASSEMBLER.getId().toString())
             )

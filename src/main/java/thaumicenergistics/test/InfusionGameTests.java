@@ -55,6 +55,11 @@ public final class InfusionGameTests {
     }
 
     private static void researchAndRecipes(GameTestHelper helper) {
+        thaumicenergistics.Config.INFUSION_ASSEMBLER_ENABLED.set(false);
+        helper.assertTrue(ResearchCategories.getResearch(TeResearch.INFUSION_ASSEMBLER) == null, "disabled research is visible");
+        helper.assertTrue(!((thaumcraft.crafting.InfusionRecipe) TcRecipes.get(InfusionFeature.ASSEMBLER_RECIPE)).central().test(new ItemStack(thaumicenergistics.alchemy.AlchemyFeature.ASSEMBLER.get())), "disabled recipe accepts its central item");
+        thaumicenergistics.Config.INFUSION_ASSEMBLER_ENABLED.set(true);
+        helper.assertTrue(((thaumcraft.crafting.InfusionRecipe) TcRecipes.get(InfusionFeature.ASSEMBLER_RECIPE)).central().test(new ItemStack(thaumicenergistics.alchemy.AlchemyFeature.ASSEMBLER.get())), "enabled recipe rejects its central item");
         ResearchItem research = ResearchCategories.getResearch(TeResearch.INFUSION_ASSEMBLER);
         helper.assertTrue(research != null && research.parents().contains(TeResearch.CRUCIBLE_ASSEMBLER), "infusion assembler research is wrong");
         for (String key : new String[] {InfusionFeature.ASSEMBLER_RECIPE, InfusionFeature.CORE_RECIPE}) {

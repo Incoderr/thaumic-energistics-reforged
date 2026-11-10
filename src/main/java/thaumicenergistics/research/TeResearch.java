@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.crafting.TcRecipes;
 import thaumcraft.crafting.TcStack;
@@ -129,6 +130,15 @@ public final class TeResearch {
 
     public static ResearchItem item(String key, AspectList tags, int column, int row, int complexity, TcStack icon) {
         return new ResearchItem(key, CATEGORY, tags, column, row, complexity, icon);
+    }
+
+    public static ResearchItem gated(BooleanSupplier enabled, String key, AspectList tags, int column, int row, int complexity, TcStack icon) {
+        return new ResearchItem(key, CATEGORY, tags, column, row, complexity, icon) {
+            @Override
+            public boolean isAvailable() {
+                return enabled.getAsBoolean();
+            }
+        };
     }
 
     public static String pseudo(String realKey) {
