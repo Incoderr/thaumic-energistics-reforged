@@ -30,6 +30,14 @@
       "required": false
     },
     {
+      "id": "thaumicenergistics:infusion_assembler",
+      "required": false
+    },
+    {
+      "id": "thaumicenergistics:infusion_inscriber",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:infusion_provider",
       "required": false
     },

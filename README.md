@@ -24,6 +24,7 @@ Everything from Thaumic Energistics 1.1.3.0 is ported:
 ## Additions (not in the original)
 
 - Crucible assembler: crucible recipes as AE2 autocrafting. Recipes are written to an alchemy core in the alchemy inscriber; the network supplies the catalyst and the essentia.
+- Infusion assembler: infusion recipes as AE2 autocrafting through an infusion core and inscriber; instability is ignored.
 
 Deliberate differences from the original are listed in `CLAUDE.md` (missing AE2 1.21 content such as the grinder, security terminal and pure certus; fixed game-breaking TE bugs).
 

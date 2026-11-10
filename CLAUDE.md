@@ -192,3 +192,9 @@ python3 tools/check_seams.py
 - `alchemy/` is a new feature on top of TE: crucible recipes as AE2 autocrafting. An alchemy core (`alchemy_core_patterns`, 21 patterns, unique by result) is written in the alchemy inscriber: the catalyst slot lists the player's researched `CrucibleCrafting.available` recipes, a button cycles them. The pattern inputs are the catalyst plus one `EssentiaKey` input per aspect (amount as the multiplier), so AE2 pulls essentia from the network itself.
 - The assembler reuses the arcane assembler frame (`ArcaneAssemblerModel.render` with its own texture) and renders the base alchemical construct and crucible inside; 20 ticks per craft minus 4 per speed card, 1.5 AE/t.
 - `gen_alchemy.py` makes the orange textures by rotating the hue of the knowledge/assembler textures with `tools/pngtint.py` (no external dependencies).
+
+## Infusion assembler (not in TE)
+
+- `infusion/` mirrors `alchemy/` for infusion recipes: infusion core, infusion inscriber (central item slot, researched `InfusionRecipe`s without runic augment display recipes) and the assembler. The pattern keeps the central item, the first display stack of every component and the result from `InfusionCrafting.result`, so tag-changing recipes produce the right stack; equal item inputs are merged into one input with a multiplier.
+- Instability is ignored on purpose, like the reference server's instant infusion assembler: no failures, no flux.
+- The renderer draws the base `RunicMatrixRendering` at half scale inside the arcane assembler frame; `gen_infusion.py` tints the textures purple.

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "thaumicenergistics:block/infusion_assembler"
+    },
+    "facing=south": {
+      "model": "thaumicenergistics:block/infusion_assembler"
+    },
+    "facing=east": {
+      "model": "thaumicenergistics:block/infusion_assembler"
+    },
+    "facing=west": {
+      "model": "thaumicenergistics:block/infusion_assembler"
+    }
+  }
+}

@@ -4,6 +4,8 @@ import net.neoforged.bus.api.IEventBus;
 import thaumcraft.aspect.AspectRegistry;
 import thaumicenergistics.act.ActFeature;
 import thaumicenergistics.alchemy.AlchemyFeature;
+import thaumicenergistics.infusion.InfusionFeature;
+import thaumicenergistics.test.InfusionGameTests;
 import thaumicenergistics.assembler.AssemblerFeature;
 import thaumicenergistics.test.AlchemyGameTests;
 import thaumicenergistics.buses.BusesFeature;
@@ -68,6 +70,7 @@ public final class Features {
         WrenchFocusFeature.load();
         GolemBackpackFeature.load();
         AlchemyFeature.load();
+        InfusionFeature.load();
     }
 
     public static void setup() {
@@ -78,6 +81,7 @@ public final class Features {
         VibrationFeature.setup();
         GolemBackpackFeature.setup();
         AlchemyFeature.setup();
+        InfusionFeature.setup();
     }
 
     public static void research() {
@@ -96,6 +100,7 @@ public final class Features {
         WrenchFocusFeature.research();
         GolemBackpackFeature.research();
         AlchemyFeature.research();
+        InfusionFeature.research();
     }
 
     public static void recipes() {
@@ -118,6 +123,7 @@ public final class Features {
         WrenchFocusFeature.recipes();
         GolemBackpackFeature.recipes();
         AlchemyFeature.recipes();
+        InfusionFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -143,5 +149,6 @@ public final class Features {
         SmallFeaturesGameTests.register(modEventBus);
         GolemGameTests.register(modEventBus);
         AlchemyGameTests.register(modEventBus);
+        InfusionGameTests.register(modEventBus);
     }
 }

@@ -26,6 +26,7 @@ public final class TeResearch {
     public static final String ARCANE_ASSEMBLER = key("ARCANEASSEMBLER");
     public static final String KNOWLEDGE_INSCRIBER = key("KNOWLEDGEINSCRIBER");
     public static final String CRUCIBLE_ASSEMBLER = key("CRUCIBLEASSEMBLER");
+    public static final String INFUSION_ASSEMBLER = key("INFUSIONASSEMBLER");
     public static final String VIBRATION_CHAMBER = key("ESSVIBCMBR");
     public static final String DISTILLATION_ENCODER = key("DISTILLATIONPATTERNENCODER");
     public static final String IRON_GEARBOX = key("IRONGEARBOX");

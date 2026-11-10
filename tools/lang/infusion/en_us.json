@@ -1,0 +1,15 @@
+{
+  "block.thaumicenergistics.infusion_assembler": "Infusion Assembler",
+  "block.thaumicenergistics.infusion_inscriber": "Infusion Inscriber",
+  "item.thaumicenergistics.infusion_core": "Infusion Core",
+  "tc.research_name.thaumicenergistics.TEINFUSIONASSEMBLER": "Infusion Assembler",
+  "tc.research_text.thaumicenergistics.TEINFUSIONASSEMBLER": "A matrix in a box",
+  "thaumicenergistics.research_page.TEINFUSIONASSEMBLER.1": "Setting up pedestals for every infusion is slow work. You locked a runic matrix inside an assembler frame, so the network can infuse for you.<BR>The infusion assembler crafts infusion recipes as network autocrafting: the network supplies the central item, the components and the essentia, the assembler returns the result. Sealed inside the frame, the matrix never becomes unstable.",
+  "thaumicenergistics.research_page.TEINFUSIONASSEMBLER.2": "Recipes are written to an §linfusion core§r in the §linfusion inscriber§r. Put the central item into the slot, pick the recipe with the arrow if it has several, and save it. The core then goes into the assembler.<BR>Speed cards make the assembler work faster.",
+  "thaumicenergistics.tooltip.button.infusion.invalid": "No researched infusion recipe for this central item",
+  "thaumicenergistics.tooltip.button.infusion.full": "The infusion core is full",
+  "thaumicenergistics.tooltip.button.infusion.missing": "Insert an infusion core",
+  "thaumicenergistics.tooltip.button.infusion.save": "Save the recipe to the core",
+  "thaumicenergistics.tooltip.button.infusion.delete": "Delete the recipe from the core",
+  "thaumicenergistics.tooltip.button.infusion.next": "Next recipe for this central item"
+}

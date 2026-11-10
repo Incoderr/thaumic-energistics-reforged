@@ -2,6 +2,10 @@ package thaumicenergistics.client;
 
 import thaumicenergistics.client.golem.GolemBackpackRenderer;
 import thaumicenergistics.alchemy.AlchemyFeature;
+import thaumicenergistics.infusion.InfusionFeature;
+import thaumicenergistics.client.infusion.InfusionInscriberScreen;
+import thaumicenergistics.client.infusion.InfusionAssemblerRenderer;
+import thaumicenergistics.client.infusion.InfusionAssemblerScreen;
 import thaumicenergistics.client.alchemy.AlchemyInscriberScreen;
 import thaumicenergistics.client.alchemy.CrucibleAssemblerRenderer;
 import thaumicenergistics.client.alchemy.CrucibleAssemblerScreen;
@@ -69,6 +73,8 @@ public final class ClientFeatures {
         event.register(VibrationFeature.MENU.get(), VibrationChamberScreen::new);
         event.register(AlchemyFeature.INSCRIBER_MENU.get(), AlchemyInscriberScreen::new);
         event.register(AlchemyFeature.ASSEMBLER_MENU.get(), CrucibleAssemblerScreen::new);
+        event.register(InfusionFeature.INSCRIBER_MENU.get(), InfusionInscriberScreen::new);
+        event.register(InfusionFeature.ASSEMBLER_MENU.get(), InfusionAssemblerScreen::new);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
@@ -91,6 +97,7 @@ public final class ClientFeatures {
         event.registerBlockEntityRenderer(AssemblerFeature.ENTITY.get(), ArcaneAssemblerRenderer::new);
         event.registerBlockEntityRenderer(GearBoxFeature.ENTITY.get(), GearBoxRenderer::new);
         event.registerBlockEntityRenderer(AlchemyFeature.ASSEMBLER_ENTITY.get(), CrucibleAssemblerRenderer::new);
+        event.registerBlockEntityRenderer(InfusionFeature.ASSEMBLER_ENTITY.get(), InfusionAssemblerRenderer::new);
     }
 
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
@@ -127,5 +134,16 @@ public final class ClientFeatures {
                 return renderer;
             }
         }, AlchemyFeature.ASSEMBLER.asItem());
+        event.registerItem(new IClientItemExtensions() {
+            private BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) {
+                    renderer = new InfusionAssemblerRenderer.Item();
+                }
+                return renderer;
+            }
+        }, InfusionFeature.ASSEMBLER.asItem());
     }
 }

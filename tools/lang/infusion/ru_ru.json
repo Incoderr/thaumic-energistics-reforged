@@ -1,0 +1,15 @@
+{
+  "block.thaumicenergistics.infusion_assembler": "Сборщик инфузии",
+  "block.thaumicenergistics.infusion_inscriber": "Записыватель инфузии",
+  "item.thaumicenergistics.infusion_core": "Ядро инфузии",
+  "tc.research_name.thaumicenergistics.TEINFUSIONASSEMBLER": "Сборщик инфузии",
+  "tc.research_text.thaumicenergistics.TEINFUSIONASSEMBLER": "Матрица в коробке",
+  "thaumicenergistics.research_page.TEINFUSIONASSEMBLER.1": "Расставлять пьедесталы под каждую инфузию долго. Вы заключили руническую матрицу в раму сборщика, и теперь инфузией может заниматься сеть.<BR>Сборщик инфузии выполняет рецепты инфузии как автокрафт сети: сеть подаёт центральный предмет, компоненты и эссенцию, сборщик возвращает результат. Запечатанная в раме матрица никогда не становится нестабильной.",
+  "thaumicenergistics.research_page.TEINFUSIONASSEMBLER.2": "Рецепты записываются в §lядро инфузии§r с помощью §lзаписывателя инфузии§r. Положите центральный предмет в слот, если у него несколько рецептов, выберите нужный стрелкой, и сохраните. Затем вставьте ядро в сборщик.<BR>Карты ускорения ускоряют работу сборщика.",
+  "thaumicenergistics.tooltip.button.infusion.invalid": "Нет изученного рецепта инфузии для этого центрального предмета",
+  "thaumicenergistics.tooltip.button.infusion.full": "Ядро инфузии заполнено",
+  "thaumicenergistics.tooltip.button.infusion.missing": "Вставьте ядро инфузии",
+  "thaumicenergistics.tooltip.button.infusion.save": "Сохранить рецепт в ядро",
+  "thaumicenergistics.tooltip.button.infusion.delete": "Удалить рецепт из ядра",
+  "thaumicenergistics.tooltip.button.infusion.next": "Следующий рецепт для этого центрального предмета"
+}
