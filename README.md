@@ -35,7 +35,7 @@ Deliberate differences from the original are listed in `CLAUDE.md` (missing AE2 
 Versions match the base mod's `mc/1.21.1` branch:
 
 - Mod `1.0`
-- [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) `1.0`
+- [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) `1.1.3`
 - Minecraft `1.21.1`
 - NeoForge `21.1.256`
 - ModDevGradle `2.0.148`, Parchment `2024.11.17`
@@ -104,6 +104,6 @@ reference/                 original mod source (git ignored)
 
 - **Nividica** for the original Thaumic Energistics (MIT License)
 - **CyanideX** for the original textures; **Mrkwtkr, alvin137, puyo061, Wuestengecko, TheVizzy, Adaptivity, Joccob and Keridos** for the original translations; **MKoanga** and **M3gaFr3ak**, credited by the original mod
-- **incoder** for the port
+- **incoderr** for the port
 - **Azanor** for Thaumcraft
 - **AlgorithmX2** and the AppliedEnergistics team for Applied Energistics 2
