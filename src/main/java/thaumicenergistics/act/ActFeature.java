@@ -1,5 +1,6 @@
 package thaumicenergistics.act;
 
+import thaumicenergistics.platform.TeNetwork;
 import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
 import appeng.menu.implementations.MenuTypeBuilder;
@@ -29,6 +30,10 @@ public final class ActFeature {
     );
 
     private ActFeature() {
+    }
+
+    public static void payloads() {
+        TeNetwork.toServer(ActFillGridPayload.TYPE, ActFillGridPayload.STREAM_CODEC, ActFillGridPayload::handle);
     }
 
     public static void load() {

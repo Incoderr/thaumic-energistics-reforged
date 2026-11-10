@@ -1,6 +1,8 @@
 package thaumicenergistics.client.knowledge;
 
 import appeng.client.gui.Icon;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -19,6 +21,18 @@ public final class KnowledgeInscriberScreen extends AbstractContainerScreen<Know
     private static final int GUI_HEIGHT = 244;
     private static final int TITLE_X = 6;
     private static final int TITLE_Y = 6;
+    private static final ResourceLocation PARTICLES = ResourceLocation.fromNamespaceAndPath("thaumcraft", "textures/misc/particles.png");
+    private static final int GRID_SIZE = 3;
+    private static final int PARTICLE_SIZE = 16;
+    private static final int PARTICLE_V = 64;
+    private static final int PARTICLE_FRAMES = 4;
+    private static final long PARTICLE_TIME = 400L;
+    private static final long PARTICLE_DELAY = 50L;
+    private static final long FRAME_TIME = 1000L;
+
+    private final long[] particleEpochs = new long[GRID_SIZE * GRID_SIZE];
+    private int lastSaveCounter = -1;
+    private boolean hasParticlesToDraw;
 
     private SaveButton saveButton;
 
@@ -39,6 +53,15 @@ public final class KnowledgeInscriberScreen extends AbstractContainerScreen<Know
     protected void containerTick() {
         super.containerTick();
         saveButton.update(menu.saveState());
+        int counter = menu.saveCounter();
+        if (lastSaveCounter >= 0 && counter != lastSaveCounter) {
+            long now = System.currentTimeMillis();
+            for (int index = 0; index < particleEpochs.length; index++) {
+                particleEpochs[index] = now + index * PARTICLE_DELAY;
+            }
+            hasParticlesToDraw = true;
+        }
+        lastSaveCounter = counter;
     }
 
     @Override
@@ -60,6 +83,36 @@ public final class KnowledgeInscriberScreen extends AbstractContainerScreen<Know
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TITLE_X, TITLE_Y, 0, false);
+        if (hasParticlesToDraw) {
+            drawSaveParticles(graphics);
+        }
+    }
+
+    private void drawSaveParticles(GuiGraphics graphics) {
+        hasParticlesToDraw = false;
+        long now = System.currentTimeMillis();
+        int frame = (int) (now / FRAME_TIME % PARTICLE_FRAMES);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        graphics.setColor(0.2F, 0.5F, 1.0F, 0.9F);
+        for (int index = 0; index < particleEpochs.length; index++) {
+            double percent = (now - particleEpochs[index]) / (double) PARTICLE_TIME;
+            if (percent >= 1.0D) {
+                continue;
+            }
+            hasParticlesToDraw = true;
+            if (percent < 0) {
+                continue;
+            }
+            int startX = KnowledgeInscriberMenu.CRAFTING_SLOT_X + index % GRID_SIZE * KnowledgeInscriberMenu.SLOT_SPACING;
+            int startY = KnowledgeInscriberMenu.CRAFTING_SLOT_Y + index / GRID_SIZE * KnowledgeInscriberMenu.SLOT_SPACING;
+            int x = startX + (int) ((KnowledgeInscriberMenu.KCORE_SLOT_X - startX) * percent);
+            int y = startY + (int) ((KnowledgeInscriberMenu.KCORE_SLOT_Y - startY) * percent);
+            graphics.blit(PARTICLES, x, y, frame * PARTICLE_SIZE, PARTICLE_V, PARTICLE_SIZE, PARTICLE_SIZE);
+        }
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableBlend();
     }
 
     private void press(int id) {

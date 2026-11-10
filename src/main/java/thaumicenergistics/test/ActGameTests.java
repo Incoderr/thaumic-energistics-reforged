@@ -46,6 +46,7 @@ public final class ActGameTests {
             .add("vanilla_crafting_refills", ActGameTests::vanillaCraftingRefills)
             .add("arcane_cost_without_wand", ActGameTests::arcaneCostWithoutWand)
             .add("clear_grid_and_swap_armor", ActGameTests::clearGridAndSwapArmor)
+            .add("fill_grid_from_recipe", ActGameTests::fillGridFromRecipe)
             .register(bus);
     }
 
@@ -119,6 +120,33 @@ public final class ActGameTests {
             List<ArcaneCraftingTermMenu.Cost> costs = menu.clientCosts();
             helper.assertTrue(costs.size() == 6 && costs.stream().noneMatch(ArcaneCraftingTermMenu.Cost::enough), "costs are " + menu.costs);
             helper.assertTrue(costs.stream().anyMatch(cost -> cost.aspect() == Aspect.FIRE && cost.vis() == 10.0F), "fire cost is wrong: " + menu.costs);
+        });
+    }
+
+    private static void fillGridFromRecipe(GameTestHelper helper) {
+        network(helper, (part, grid) -> {
+            MEStorage storage = grid.getStorageService().getInventory();
+            storage.insert(AEItemKey.of(Items.OAK_PLANKS), 2, Actionable.MODULATE, SOURCE);
+            ArcaneCraftingTermMenu menu = menu(helper, part);
+            part.craftingGrid().setItemDirect(8, new ItemStack(Items.COBBLESTONE));
+            menu.getPlayer().getInventory().add(new ItemStack(Items.BIRCH_PLANKS, 2));
+            menu.getPlayer().getInventory().add(new ItemStack(Items.OAK_PLANKS, 2));
+            List<List<ItemStack>> slots = new java.util.ArrayList<>();
+            for (int index = 0; index < 9; index++) {
+                slots.add(List.of());
+            }
+            List<ItemStack> planks = List.of(new ItemStack(Items.SPRUCE_PLANKS), new ItemStack(Items.OAK_PLANKS));
+            for (int index : new int[] {0, 1, 3, 4}) {
+                slots.set(index, planks);
+            }
+            menu.fillGrid(menu.getPlayer(), slots);
+            for (int index : new int[] {0, 1, 3, 4}) {
+                helper.assertTrue(part.craftingGrid().getStackInSlot(index).is(Items.OAK_PLANKS), "slot " + index + " holds " + part.craftingGrid().getStackInSlot(index));
+            }
+            helper.assertTrue(part.craftingGrid().getStackInSlot(8).isEmpty(), "old grid item stayed");
+            helper.assertTrue(storage.extract(AEItemKey.of(Items.COBBLESTONE), 10, Actionable.SIMULATE, SOURCE) == 1, "old grid item was not returned");
+            helper.assertTrue(storage.extract(AEItemKey.of(Items.OAK_PLANKS), 10, Actionable.SIMULATE, SOURCE) == 0, "network planks were not used");
+            helper.assertTrue(menu.getPlayer().getInventory().countItem(Items.BIRCH_PLANKS) == 2, "unlisted planks were used");
         });
     }
 

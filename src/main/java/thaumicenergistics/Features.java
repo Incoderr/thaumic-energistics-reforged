@@ -10,6 +10,9 @@ import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.vibration.VibrationFeature;
 import thaumicenergistics.gearbox.GearBoxFeature;
+import thaumicenergistics.wrench.WrenchFocusFeature;
+import thaumicenergistics.aspects.AeAspectsFeature;
+import thaumicenergistics.dupe.QuartzDupeFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.monitor.MonitorFeature;
@@ -23,6 +26,7 @@ import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.DistillationGameTests;
 import thaumicenergistics.test.VibrationGameTests;
 import thaumicenergistics.test.GearBoxGameTests;
+import thaumicenergistics.test.SmallFeaturesGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.KnowledgeGameTests;
 import thaumicenergistics.test.MonitorGameTests;
@@ -55,6 +59,9 @@ public final class Features {
         DistillationFeature.load();
         VibrationFeature.load();
         GearBoxFeature.load();
+        QuartzDupeFeature.load();
+        AeAspectsFeature.load();
+        WrenchFocusFeature.load();
     }
 
     public static void setup() {
@@ -77,6 +84,8 @@ public final class Features {
         DistillationFeature.research();
         VibrationFeature.research();
         GearBoxFeature.research();
+        QuartzDupeFeature.research();
+        WrenchFocusFeature.research();
     }
 
     public static void recipes() {
@@ -95,9 +104,12 @@ public final class Features {
         DistillationFeature.recipes();
         VibrationFeature.recipes();
         GearBoxFeature.recipes();
+        QuartzDupeFeature.recipes();
+        WrenchFocusFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
+        AeAspectsFeature.aspects(registry);
     }
 
     public static void tests(IEventBus modEventBus) {
@@ -116,5 +128,6 @@ public final class Features {
         DistillationGameTests.register(modEventBus);
         VibrationGameTests.register(modEventBus);
         GearBoxGameTests.register(modEventBus);
+        SmallFeaturesGameTests.register(modEventBus);
     }
 }

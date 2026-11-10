@@ -29,6 +29,10 @@ public final class TeResearch {
     public static final String DISTILLATION_ENCODER = key("DISTILLATIONPATTERNENCODER");
     public static final String IRON_GEARBOX = key("IRONGEARBOX");
     public static final String THAUMIUM_GEARBOX = key("THAUMGBOX");
+    public static final String CERTUS_DUPE = key("CERTUSDUPE");
+    public static final String DUPE = "ALCHEMICALDUPLICATION";
+    public static final String FOCUS_WRENCH = key("FOCUSWRENCH");
+    public static final String FOCUSFIRE = "FOCUSFIRE";
     public static final String COREUSE = "COREUSE";
     public static final String DISTILESSENTIA = "DISTILESSENTIA";
     public static final String WARDED = "WARDEDARCANA";

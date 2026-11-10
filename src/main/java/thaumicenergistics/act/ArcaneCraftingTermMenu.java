@@ -362,6 +362,31 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
         updateResult();
     }
 
+    public void fillGrid(Player player, List<List<ItemStack>> slots) {
+        if (isClientSide() || !canInteractWithGrid()) {
+            return;
+        }
+        clearCraftingGrid();
+        for (int index = 0; index < grid.size(); index++) {
+            if (!grid.getStackInSlot(index).isEmpty()) {
+                return;
+            }
+        }
+        for (int index = 0; index < grid.size() && index < slots.size(); index++) {
+            for (ItemStack wanted : slots.get(index)) {
+                if (wanted.isEmpty()) {
+                    continue;
+                }
+                ItemStack found = replenish(player, wanted);
+                if (!found.isEmpty()) {
+                    grid.setItemDirect(index, found);
+                    break;
+                }
+            }
+        }
+        updateResult();
+    }
+
     public void swapArmor() {
         if (isClientSide()) {
             sendClientAction(ACTION_SWAP_ARMOR);

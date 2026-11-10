@@ -81,7 +81,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 ## Knowledge core and inscriber
 
 - A knowledge core keeps up to 21 `ArcanePattern`s (grid as placed, result, base aspect cost) in the `knowledge_core_patterns` data component; patterns are unique by result stack, as in TE. TE stored per-slot recipe ingredient lists; here the pattern keeps the placed items, and the arcane assembler accepts only those items (TE `canSubItem` rules), not other tag members.
-- The inscriber menu is a vanilla menu with fake grid, pattern and result slots handled in `clicked`; save/delete and clear are `clickMenuButton` ids, the save state and a save counter are `DataSlot`s. TE's save particles are not ported.
+- The inscriber menu is a vanilla menu with fake grid, pattern and result slots handled in `clicked`; save/delete and clear are `clickMenuButton` ids, the save state and a save counter are `DataSlot`s.
 - The arcane assembler research (`ARCANEASSEMBLER`) is registered with the knowledge feature because the inscriber research hangs off it; its recipe page comes from `AssemblerFeature.recipes()` through `TeResearch.existing`.
 
 ## Arcane assembler
@@ -111,6 +111,15 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Gear boxes crank AE2 `ICrankable`s (`ICrankable.get`, the charger in AE2 1.21; there is no grindstone any more) with TE's power split: 6 per crank divided between turnable sides, a turn every 18.
 - Iron and thaumium boxes share one block entity type; only the thaumium box takes clicks from the base golem fake player (`FakeThaumcraftGolem`). Nothing is saved, the crankable sides and the shaft spin go to clients in the update tag.
 - Rendering is a block entity renderer plus item renderer over TE's Techne cubes as `ModelPart`s; ModelRenderer offsets are applied before the 0.625 cube scale, as in 1.7. TE's `disableGearboxModel` config is not ported.
+
+## Small features
+
+- Quartz dupe: crucible recipes on `#c:gems/certus_quartz` and `#c:gems/quartz`; AE2 1.21 has no pure certus, so only the plain crystal is duplicated.
+- AE item aspects: `AeAspectsFeature` runs from the base `AspectSync` registrar with TE's `AEAspectRegister` rules: fixed tags for the TE base list, then every `ae2` item from its first inscriber or crafting recipe with the per-aspect maximum of its ingredients (not the base's 0.75 sum), TE bonuses and removals, at most 6 aspects. Items AE2 1.21 removed (pure crystals, seeds, grinder dusts) are skipped.
+- AE wrench focus: holds a certus quartz wrench in the main hand for one `useItemOn` (sneak + right click dismantles; sneak + left click rotates parts with sneak released, other blocks through `BlockState.rotate`). Costs 10 Ignis + 10 Aer only when something happened; TE's wrench beam particles are not ported.
+- Thaumcraft facades: TE forced AE facade config entries; here `gen_facades.py` adds the same blocks to `ae2:whitelisted/facades`.
+- REI transfer: `client/rei` registers a transfer handler for the arcane terminal (vanilla crafting and arcane displays). The client sends every option of each slot in `ActFillGridPayload`; the server clears the grid into the network and fills each slot from the first option it finds (player inventory, then network), TE's NEI overlay rules.
+- Inscriber save particles are drawn by the screen when the synced save counter changes, TE's `GuiParticleAnimator` timing (0.4 s, 50 ms stagger, additive blend, thaumcraft particle sheet row 64).
 
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
