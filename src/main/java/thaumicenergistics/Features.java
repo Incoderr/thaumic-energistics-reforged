@@ -7,6 +7,7 @@ import thaumicenergistics.assembler.AssemblerFeature;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
+import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.monitor.MonitorFeature;
@@ -17,6 +18,7 @@ import thaumicenergistics.test.AssemblerGameTests;
 import thaumicenergistics.test.BusesGameTests;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
+import thaumicenergistics.test.DistillationGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.KnowledgeGameTests;
 import thaumicenergistics.test.MonitorGameTests;
@@ -46,6 +48,7 @@ public final class Features {
         VisRelayFeature.load();
         KnowledgeFeature.load();
         AssemblerFeature.load();
+        DistillationFeature.load();
     }
 
     public static void setup() {
@@ -64,6 +67,7 @@ public final class Features {
         ActFeature.research();
         VisRelayFeature.research();
         KnowledgeFeature.research();
+        DistillationFeature.research();
     }
 
     public static void recipes() {
@@ -79,6 +83,7 @@ public final class Features {
         VisRelayFeature.recipes();
         KnowledgeFeature.recipes();
         AssemblerFeature.recipes();
+        DistillationFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -97,5 +102,6 @@ public final class Features {
         KnowledgeGameTests.register(modEventBus);
         VisRelayGameTests.register(modEventBus);
         AssemblerGameTests.register(modEventBus);
+        DistillationGameTests.register(modEventBus);
     }
 }

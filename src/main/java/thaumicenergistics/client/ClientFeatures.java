@@ -10,6 +10,8 @@ import appeng.init.client.InitScreens;
 import thaumicenergistics.act.ActFeature;
 import thaumicenergistics.assembler.AssemblerFeature;
 import thaumicenergistics.client.assembler.ArcaneAssemblerScreen;
+import thaumicenergistics.client.distillation.DistillationEncoderScreen;
+import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.client.act.ArcaneCraftingTermScreen;
 import thaumicenergistics.client.buses.EssentiaBusScreen;
@@ -49,6 +51,7 @@ public final class ClientFeatures {
         InitScreens.register(event, ActFeature.MENU.get(), ArcaneCraftingTermScreen::new, ArcaneCraftingTermScreen.STYLE);
         event.register(KnowledgeFeature.MENU.get(), KnowledgeInscriberScreen::new);
         event.register(AssemblerFeature.MENU.get(), ArcaneAssemblerScreen::new);
+        event.register(DistillationFeature.MENU.get(), DistillationEncoderScreen::new);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {

@@ -1,0 +1,9 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "thaumicenergistics:block/distillation.encoder.face",
+    "bottom": "thaumicenergistics:block/knowledge.inscriber.bottom",
+    "side": "thaumicenergistics:block/knowledge.inscriber.side"
+  }
+}

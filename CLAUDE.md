@@ -92,6 +92,12 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - The TE sceptre infusion component is `thaumcraft:wand` with data `cap`/`rod`/`sceptre`; the addon registers the `sceptre` data handler and matcher on `TcStack`. A crafted assembler starts with full vis (`arcane_assembler_vis` component), dismantling with a wrench keeps the stored vis.
 - Not ported: the network tool panel of the GUI, the AE2 assembler animation and rune particles while crafting, the AE2 security check.
 
+## Essentia autocrafting
+
+- TE crafted essentia through a placeholder `crafting.aspect` item watched by its grid cache; here essentia is an AE2 key, so the distillation pattern encoder writes a plain AE2 processing pattern (one source item in, `EssentiaKey` x aspect amount out). Patterns go into ordinary pattern providers, and the essentia terminal's craft requests use AE2's own crafting.
+- The encoder shows up to 6 aspects of the source item sorted by amount (`AspectHelper.getBonusTags`) only when the player has scanned the item; otherwise 6 unknown slots, TE 1:1. Aspects are recomputed on both sides from the synced source slot; only the selected index is a `DataSlot`.
+- The encoder block always faces up (TE default meta); TE's wrench rotation and the GUI orb particles are not ported.
+
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.

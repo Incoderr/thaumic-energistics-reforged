@@ -25,6 +25,7 @@ public final class TeResearch {
     public static final String VIS_RELAY_INTERFACE = key("VISINT");
     public static final String ARCANE_ASSEMBLER = key("ARCANEASSEMBLER");
     public static final String KNOWLEDGE_INSCRIBER = key("KNOWLEDGEINSCRIBER");
+    public static final String DISTILLATION_ENCODER = key("DISTILLATIONPATTERNENCODER");
     public static final String DISTILESSENTIA = "DISTILESSENTIA";
     public static final String WARDED = "WARDEDARCANA";
     public static final String TUBEFILTER = "TUBEFILTER";

@@ -6,6 +6,10 @@
       "required": false
     },
     {
+      "id": "thaumicenergistics:distillation_pattern_encoder",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:essentia_cell_workbench",
       "required": false
     },
