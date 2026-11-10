@@ -26,7 +26,15 @@
       "required": false
     },
     {
+      "id": "thaumicenergistics:iron_gear_box",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:knowledge_inscriber",
+      "required": false
+    },
+    {
+      "id": "thaumicenergistics:thaumium_gear_box",
       "required": false
     }
   ]

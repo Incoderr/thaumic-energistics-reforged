@@ -9,6 +9,7 @@ import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.vibration.VibrationFeature;
+import thaumicenergistics.gearbox.GearBoxFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.monitor.MonitorFeature;
@@ -21,6 +22,7 @@ import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.DistillationGameTests;
 import thaumicenergistics.test.VibrationGameTests;
+import thaumicenergistics.test.GearBoxGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.KnowledgeGameTests;
 import thaumicenergistics.test.MonitorGameTests;
@@ -52,6 +54,7 @@ public final class Features {
         AssemblerFeature.load();
         DistillationFeature.load();
         VibrationFeature.load();
+        GearBoxFeature.load();
     }
 
     public static void setup() {
@@ -73,6 +76,7 @@ public final class Features {
         KnowledgeFeature.research();
         DistillationFeature.research();
         VibrationFeature.research();
+        GearBoxFeature.research();
     }
 
     public static void recipes() {
@@ -90,6 +94,7 @@ public final class Features {
         AssemblerFeature.recipes();
         DistillationFeature.recipes();
         VibrationFeature.recipes();
+        GearBoxFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -110,5 +115,6 @@ public final class Features {
         AssemblerGameTests.register(modEventBus);
         DistillationGameTests.register(modEventBus);
         VibrationGameTests.register(modEventBus);
+        GearBoxGameTests.register(modEventBus);
     }
 }

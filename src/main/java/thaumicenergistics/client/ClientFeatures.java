@@ -18,6 +18,8 @@ import thaumicenergistics.client.distillation.DistillationEncoderScreen;
 import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.client.vibration.VibrationChamberScreen;
 import thaumicenergistics.vibration.VibrationFeature;
+import thaumicenergistics.client.gearbox.GearBoxRenderer;
+import thaumicenergistics.gearbox.GearBoxFeature;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.client.act.ArcaneCraftingTermScreen;
 import thaumicenergistics.client.buses.EssentiaBusScreen;
@@ -79,6 +81,7 @@ public final class ClientFeatures {
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(AssemblerFeature.ENTITY.get(), ArcaneAssemblerRenderer::new);
+        event.registerBlockEntityRenderer(GearBoxFeature.ENTITY.get(), GearBoxRenderer::new);
     }
 
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
@@ -93,5 +96,16 @@ public final class ClientFeatures {
                 return renderer;
             }
         }, AssemblerFeature.BLOCK.asItem());
+        event.registerItem(new IClientItemExtensions() {
+            private BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) {
+                    renderer = new GearBoxRenderer.Item();
+                }
+                return renderer;
+            }
+        }, GearBoxFeature.IRON_GEAR_BOX.asItem(), GearBoxFeature.THAUMIUM_GEAR_BOX.asItem());
     }
 }

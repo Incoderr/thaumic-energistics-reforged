@@ -106,6 +106,12 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - The chamber item is an essentia container for the terminal: `EssentiaContainers.registerRestricted` gives it 64 capacity and the Ignis/Potentia filter, contents live in the base `AspectKeys.ASPECTS` component and survive a wrench dismantle.
 - `IEnergyService.getStoredPower()` is cached; tests read the energy cell's `getAECurrentPower()` instead.
 
+## Gear boxes
+
+- Gear boxes crank AE2 `ICrankable`s (`ICrankable.get`, the charger in AE2 1.21; there is no grindstone any more) with TE's power split: 6 per crank divided between turnable sides, a turn every 18.
+- Iron and thaumium boxes share one block entity type; only the thaumium box takes clicks from the base golem fake player (`FakeThaumcraftGolem`). Nothing is saved, the crankable sides and the shaft spin go to clients in the update tag.
+- Rendering is a block entity renderer plus item renderer over TE's Techne cubes as `ModelPart`s; ModelRenderer offsets are applied before the 0.625 cube scale, as in 1.7. TE's `disableGearboxModel` config is not ported.
+
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.

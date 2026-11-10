@@ -12,3 +12,4 @@ knowledge
 assembler
 distillation
 vibration
+gearbox
