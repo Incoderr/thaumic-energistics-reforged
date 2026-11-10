@@ -6,6 +6,10 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import thaumicenergistics.client.assembler.ArcaneAssemblerRenderer;
 import appeng.init.client.InitScreens;
 import thaumicenergistics.act.ActFeature;
 import thaumicenergistics.assembler.AssemblerFeature;
@@ -71,5 +75,20 @@ public final class ClientFeatures {
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(AssemblerFeature.ENTITY.get(), ArcaneAssemblerRenderer::new);
+    }
+
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerItem(new IClientItemExtensions() {
+            private BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) {
+                    renderer = new ArcaneAssemblerRenderer.Item();
+                }
+                return renderer;
+            }
+        }, AssemblerFeature.BLOCK.asItem());
     }
 }

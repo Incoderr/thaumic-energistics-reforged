@@ -90,6 +90,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - Inputs are the placed grid items; a slot accepts the same item with equal components, damageable items with any damage (TE `canSubItem`). On completion the result and the ingredients' crafting remainders (and a primordial pearl, TE's eldritch object 3) go into the network.
 - TE quirk kept: crafting progresses even when the network gives less power than asked (`extracted - required <= 0`).
 - The TE sceptre infusion component is `thaumcraft:wand` with data `cap`/`rod`/`sceptre`; the addon registers the `sceptre` data handler and matcher on `TcStack`. A crafted assembler starts with full vis (`arcane_assembler_vis` component), dismantling with a wrench keeps the stored vis.
+- The assembler is drawn like TE: a block entity renderer (and a `BlockEntityWithoutLevelRenderer` for the item) builds TE's Techne cubes as vanilla `ModelPart`s with the same rotations; a JSON conversion of those rotated boxes mapped faces wrongly and z-fought.
 - Not ported: the network tool panel of the GUI, the AE2 assembler animation and rune particles while crafting, the AE2 security check.
 
 ## Essentia autocrafting
