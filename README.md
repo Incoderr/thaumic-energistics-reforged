@@ -39,7 +39,7 @@ Deliberate differences from the original are listed in `CLAUDE.md` (missing AE2 
 
 Versions match the base mod's `mc/1.21.1` branch:
 
-- Mod `1.0`
+- Mod `1.1`
 - [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) `1.1.3`
 - Minecraft `1.21.1`
 - NeoForge `21.1.256`

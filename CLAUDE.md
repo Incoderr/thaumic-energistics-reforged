@@ -18,7 +18,7 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 
 ## Environment
 
-- Mod `thaumicenergistics`, package `thaumicenergistics`, asset namespace `thaumicenergistics`, archive `thaumic-energistics-reforged`, version 1.0.
+- Mod `thaumicenergistics`, package `thaumicenergistics`, asset namespace `thaumicenergistics`, archive `thaumic-energistics-reforged`, version 1.1.
 - MC 1.21.1, NeoForge 21.1.256, ModDevGradle 2.0.148 with Parchment 2024.11.17, AE2 19.2.18, GuideME 21.1.22, REI 16.0.799, TerraBlender 1.21.1-4.1.0.1, Curios 9.5.1+1.21.1, Java 21. Versions in `gradle.properties` match the base `mc/1.21.1` branch.
 - 1.21.1 API differs from the 26.3 code in the base `main` and the other addons: `ResourceLocation` instead of `Identifier`, `ModConfig.Type.SERVER` instead of `SYNCED`, `Item.Properties` passed directly to `registerSimpleBlockItem`, no `DeferredRegister.createEntities`. Port 26.3 snippets from the other addons with the `mc/1.21.1` branch of `../thaumic-tinkerer-reforged` as the reference.
 - Python 3, `tools/` scripts have no external dependencies.
