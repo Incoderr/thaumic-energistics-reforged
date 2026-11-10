@@ -121,6 +121,14 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - REI transfer: `client/rei` registers a transfer handler for the arcane terminal (vanilla crafting and arcane displays). The client sends every option of each slot in `ActFillGridPayload`; the server clears the grid into the network and fills each slot from the first option it finds (player inventory, then network), TE's NEI overlay rules.
 - Inscriber save particles are drawn by the screen when the synced save counter changes, TE's `GuiParticleAnimator` timing (0.4 s, 50 ms stagger, additive blend, thaumcraft particle sheet row 64).
 
+## Golem wireless backpack
+
+- TE hooked `EntityGolemBase` through its coremod; here everything is NeoForge events on the base `GolemBase`: `EntityInteract` puts on the backpack (fill, gather, liquid, essentia cores only) or a facade, `AttackEntityEvent` with the golem bell drops the linked backpack and the facade before the bell removes the golem, and `EntityTickEvent` re-adds the network goal whenever `rebuildGoals` dropped it.
+- The backpack keeps the AE2 link (`WIRELESS_LINK_TARGET`, linked in the wireless access point slot through `GridLinkables`; AE2 1.21 has no security terminal) and the facade in a persistent entity attachment (`platform/TeEntityKey`); in-range state and skin go to clients through a synced attachment, TE's 18 tick refresh.
+- Deliberate fix of a TE bug: TE's `WirelessAELink` searched access points only after it already had one, so a fresh backpack never connected. The link now starts from the access point it was linked to and then follows the closest active one of that grid in range.
+- Network goals follow TE `AIAENetworkGolem`: 20 tick cooldown, rates by order upgrades (items 8/24/32, fluids 100/250/500 mB, essentia 4/12/16, doubled for advanced golems), fluids cost mB/100 AE, essentia goes through `EssentiaNetwork`. The fill goal asks the network for what the home container misses (TC4's `itemWatched` has no 1.21 counterpart).
+- The backpack is drawn in `RenderLivingEvent.Post` with TE's model, pearl quads and transforms.
+
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.

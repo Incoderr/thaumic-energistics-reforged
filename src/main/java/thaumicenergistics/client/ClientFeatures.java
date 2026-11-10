@@ -1,5 +1,6 @@
 package thaumicenergistics.client;
 
+import thaumicenergistics.client.golem.GolemBackpackRenderer;
 import appeng.api.util.AEColor;
 import appeng.client.render.StaticItemColor;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,6 +47,7 @@ public final class ClientFeatures {
     }
 
     public static void setup(FMLClientSetupEvent event) {
+        GolemBackpackRenderer.register();
         ClientEssentia.setup(event);
         EssentiaStorageMonitorPart.renderer = new EssentiaMonitorRenderer();
         VisRelayInterfacePart.renderer = new VisRelayInterfaceRenderer();

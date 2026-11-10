@@ -10,6 +10,7 @@ import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.distillation.DistillationFeature;
 import thaumicenergistics.vibration.VibrationFeature;
 import thaumicenergistics.gearbox.GearBoxFeature;
+import thaumicenergistics.golem.GolemBackpackFeature;
 import thaumicenergistics.wrench.WrenchFocusFeature;
 import thaumicenergistics.aspects.AeAspectsFeature;
 import thaumicenergistics.dupe.QuartzDupeFeature;
@@ -26,6 +27,7 @@ import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.DistillationGameTests;
 import thaumicenergistics.test.VibrationGameTests;
 import thaumicenergistics.test.GearBoxGameTests;
+import thaumicenergistics.test.GolemGameTests;
 import thaumicenergistics.test.SmallFeaturesGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.KnowledgeGameTests;
@@ -62,6 +64,7 @@ public final class Features {
         QuartzDupeFeature.load();
         AeAspectsFeature.load();
         WrenchFocusFeature.load();
+        GolemBackpackFeature.load();
     }
 
     public static void setup() {
@@ -70,6 +73,7 @@ public final class Features {
         ProviderFeature.setup();
         AssemblerFeature.setup();
         VibrationFeature.setup();
+        GolemBackpackFeature.setup();
     }
 
     public static void research() {
@@ -86,6 +90,7 @@ public final class Features {
         GearBoxFeature.research();
         QuartzDupeFeature.research();
         WrenchFocusFeature.research();
+        GolemBackpackFeature.research();
     }
 
     public static void recipes() {
@@ -106,6 +111,7 @@ public final class Features {
         GearBoxFeature.recipes();
         QuartzDupeFeature.recipes();
         WrenchFocusFeature.recipes();
+        GolemBackpackFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -129,5 +135,6 @@ public final class Features {
         VibrationGameTests.register(modEventBus);
         GearBoxGameTests.register(modEventBus);
         SmallFeaturesGameTests.register(modEventBus);
+        GolemGameTests.register(modEventBus);
     }
 }

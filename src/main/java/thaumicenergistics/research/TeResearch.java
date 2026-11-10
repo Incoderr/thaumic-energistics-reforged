@@ -33,6 +33,8 @@ public final class TeResearch {
     public static final String DUPE = "ALCHEMICALDUPLICATION";
     public static final String FOCUS_WRENCH = key("FOCUSWRENCH");
     public static final String FOCUSFIRE = "FOCUSFIRE";
+    public static final String GOLEM_BACKPACK = key("GOLEMWIFIBACKPACK");
+    public static final String COREGATHER = "COREGATHER";
     public static final String COREUSE = "COREUSE";
     public static final String DISTILESSENTIA = "DISTILESSENTIA";
     public static final String WARDED = "WARDEDARCANA";

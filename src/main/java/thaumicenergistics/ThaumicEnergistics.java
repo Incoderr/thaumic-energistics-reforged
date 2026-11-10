@@ -1,5 +1,6 @@
 package thaumicenergistics;
 
+import thaumicenergistics.platform.TeEntityKey;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -32,6 +33,7 @@ public class ThaumicEnergistics {
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         Features.load();
         TeStackData.register(modEventBus);
+        TeEntityKey.register(modEventBus);
         ModKeyTypes.register(modEventBus);
         ModEffects.register(modEventBus);
         ModBlocks.register(modEventBus);
