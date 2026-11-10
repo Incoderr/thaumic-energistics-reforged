@@ -54,7 +54,7 @@ public final class GearBoxRenderer implements BlockEntityRenderer<GearBoxBlockEn
         root.addOrReplaceChild("transmission", CubeListBuilder.create().texOffs(1, 0).mirror().addBox(0F, 0F, 0F, 7, 7, 7), PartPose.offset(-3.5F, -3.5F, -3.5F));
         root.addOrReplaceChild("shaft", CubeListBuilder.create().texOffs(1, 15).mirror().addBox(-1.5F, -0.5F, -0.5F, 3, 1, 1), PartPose.ZERO);
         root.addOrReplaceChild("spoke", CubeListBuilder.create().texOffs(1, 18).mirror().addBox(-0.5F, -3.5F, -0.5F, 1, 7, 1), PartPose.ZERO);
-        ModelPart baked = LayerDefinition.create(mesh, 64, 64).bakeRoot();
+        ModelPart baked = LayerDefinition.create(mesh, 32, 32).bakeRoot();
         transmission = baked.getChild("transmission");
         shaft = baked.getChild("shaft");
         spoke = baked.getChild("spoke");
