@@ -1,0 +1,11 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "thaumicenergistics:block/e.vibration.face.ignis",
+    "side": "thaumicenergistics:block/e.vibration.input",
+    "top": "thaumicenergistics:block/e.vibration.input",
+    "bottom": "thaumicenergistics:block/e.vibration.input",
+    "particle": "thaumicenergistics:block/e.vibration.input"
+  }
+}

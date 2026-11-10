@@ -99,6 +99,13 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 - The encoder shows up to 6 aspects of the source item sorted by amount (`AspectHelper.getBonusTags`) only when the player has scanned the item; otherwise 6 unknown slots, TE 1:1. Aspects are recomputed on both sides from the synced source slot; only the selected index is a `DataSlot`.
 - The encoder block always faces up (TE default meta); TE's wrench rotation and the GUI orb particles are not ported.
 
+## Essentia vibration chamber
+
+- The chamber is an `AENetworkedBlockEntity` (no channel) with an `IGridTickable` service, TE timing 10..40 ticks; it pulls Ignis/Potentia from neighbouring tubes like TE's `takeEssentiaFromTransportNeighbors` and injects power through the grid energy service.
+- The facing and the processed aspect are block state properties (`facing`, `processing`), which pick the front texture and the light level 12; TE's wrench rotation is not ported.
+- The chamber item is an essentia container for the terminal: `EssentiaContainers.registerRestricted` gives it 64 capacity and the Ignis/Potentia filter, contents live in the base `AspectKeys.ASPECTS` component and survive a wrench dismantle.
+- `IEnergyService.getStoredPower()` is cached; tests read the energy cell's `getAECurrentPower()` instead.
+
 ## Essentia buses
 - `essentia/EssentiaTileContainers` is TE's tile whitelist by exact block entity class with TE capacities (jar and void jar 64, reservoir 256, buffer 8, alembic 32). Later features add themselves with `extractOnly`/`injectOnly`/`both` (the vibration chamber is inject only).
 - Network transfers of buses go through `essentia/EssentiaNetwork`, which charges TE's 0.3 AE per essentia on top of AE2 storage; plain `MEStorage` calls skip that cost.

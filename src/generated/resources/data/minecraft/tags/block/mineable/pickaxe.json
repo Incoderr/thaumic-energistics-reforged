@@ -18,6 +18,10 @@
       "required": false
     },
     {
+      "id": "thaumicenergistics:essentia_vibration_chamber",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:infusion_provider",
       "required": false
     },

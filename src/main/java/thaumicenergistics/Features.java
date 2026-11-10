@@ -8,6 +8,7 @@ import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
 import thaumicenergistics.distillation.DistillationFeature;
+import thaumicenergistics.vibration.VibrationFeature;
 import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.essentia.EssentiaFeature;
 import thaumicenergistics.monitor.MonitorFeature;
@@ -19,6 +20,7 @@ import thaumicenergistics.test.BusesGameTests;
 import thaumicenergistics.test.CellsGameTests;
 import thaumicenergistics.test.CoreGameTests;
 import thaumicenergistics.test.DistillationGameTests;
+import thaumicenergistics.test.VibrationGameTests;
 import thaumicenergistics.test.EmitterGameTests;
 import thaumicenergistics.test.KnowledgeGameTests;
 import thaumicenergistics.test.MonitorGameTests;
@@ -49,6 +51,7 @@ public final class Features {
         KnowledgeFeature.load();
         AssemblerFeature.load();
         DistillationFeature.load();
+        VibrationFeature.load();
     }
 
     public static void setup() {
@@ -56,6 +59,7 @@ public final class Features {
         BusesFeature.setup();
         ProviderFeature.setup();
         AssemblerFeature.setup();
+        VibrationFeature.setup();
     }
 
     public static void research() {
@@ -68,6 +72,7 @@ public final class Features {
         VisRelayFeature.research();
         KnowledgeFeature.research();
         DistillationFeature.research();
+        VibrationFeature.research();
     }
 
     public static void recipes() {
@@ -84,6 +89,7 @@ public final class Features {
         KnowledgeFeature.recipes();
         AssemblerFeature.recipes();
         DistillationFeature.recipes();
+        VibrationFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -103,5 +109,6 @@ public final class Features {
         VisRelayGameTests.register(modEventBus);
         AssemblerGameTests.register(modEventBus);
         DistillationGameTests.register(modEventBus);
+        VibrationGameTests.register(modEventBus);
     }
 }

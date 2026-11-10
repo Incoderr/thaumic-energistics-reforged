@@ -1,6 +1,8 @@
 package thaumicenergistics.essentia;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -30,6 +32,15 @@ public final class EssentiaContainers {
     );
 
     public record Result(int amount, ItemStack stack) {
+    }
+
+    private record Restricted(int capacity, Predicate<Aspect> accepts) {
+    }
+
+    private static final Map<ResourceLocation, Restricted> RESTRICTED = new ConcurrentHashMap<>();
+
+    public static void registerRestricted(ResourceLocation item, int capacity, Predicate<Aspect> accepts) {
+        RESTRICTED.put(item, new Restricted(capacity, accepts));
     }
 
     private EssentiaContainers() {
@@ -68,11 +79,15 @@ public final class EssentiaContainers {
         if (isPhial(stack)) {
             return PHIAL_CAPACITY;
         }
+        Restricted restricted = RESTRICTED.get(id(stack));
+        if (restricted != null) {
+            return restricted.capacity();
+        }
         return isJar(stack) ? JAR_CAPACITY : 0;
     }
 
     private static boolean holdsPartial(ItemStack stack) {
-        return isJar(stack);
+        return isJar(stack) || RESTRICTED.containsKey(id(stack));
     }
 
     public static @Nullable Aspect storedAspect(ItemStack stack) {
@@ -123,7 +138,10 @@ public final class EssentiaContainers {
         }
         ItemStack result;
         if (drained == stored || drained == capacity) {
-            if (isPhial(container)) {
+            if (RESTRICTED.containsKey(id(container))) {
+                result = container.copyWithCount(1);
+                AspectKeys.ASPECTS.remove(result);
+            } else if (isPhial(container)) {
                 result = create(GLASS_PHIAL);
             } else if (jarLabel(container) != null) {
                 result = create(id(container));
@@ -141,6 +159,10 @@ public final class EssentiaContainers {
     public static @Nullable Result fill(ItemStack container, Aspect aspect, int amount) {
         int capacity = capacity(container);
         if (capacity == 0) {
+            return null;
+        }
+        Restricted restricted = RESTRICTED.get(id(container));
+        if (restricted != null && !restricted.accepts().test(aspect)) {
             return null;
         }
         Aspect label = jarLabel(container);
