@@ -18,3 +18,4 @@ aspects
 wrench
 facades
 golem
+alchemy

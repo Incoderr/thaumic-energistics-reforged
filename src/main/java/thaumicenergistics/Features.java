@@ -3,7 +3,9 @@ package thaumicenergistics;
 import net.neoforged.bus.api.IEventBus;
 import thaumcraft.aspect.AspectRegistry;
 import thaumicenergistics.act.ActFeature;
+import thaumicenergistics.alchemy.AlchemyFeature;
 import thaumicenergistics.assembler.AssemblerFeature;
+import thaumicenergistics.test.AlchemyGameTests;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.cells.CellsFeature;
 import thaumicenergistics.core.CoreFeature;
@@ -65,6 +67,7 @@ public final class Features {
         AeAspectsFeature.load();
         WrenchFocusFeature.load();
         GolemBackpackFeature.load();
+        AlchemyFeature.load();
     }
 
     public static void setup() {
@@ -74,6 +77,7 @@ public final class Features {
         AssemblerFeature.setup();
         VibrationFeature.setup();
         GolemBackpackFeature.setup();
+        AlchemyFeature.setup();
     }
 
     public static void research() {
@@ -91,6 +95,7 @@ public final class Features {
         QuartzDupeFeature.research();
         WrenchFocusFeature.research();
         GolemBackpackFeature.research();
+        AlchemyFeature.research();
     }
 
     public static void recipes() {
@@ -112,6 +117,7 @@ public final class Features {
         QuartzDupeFeature.recipes();
         WrenchFocusFeature.recipes();
         GolemBackpackFeature.recipes();
+        AlchemyFeature.recipes();
     }
 
     public static void aspects(AspectRegistry registry) {
@@ -136,5 +142,6 @@ public final class Features {
         GearBoxGameTests.register(modEventBus);
         SmallFeaturesGameTests.register(modEventBus);
         GolemGameTests.register(modEventBus);
+        AlchemyGameTests.register(modEventBus);
     }
 }

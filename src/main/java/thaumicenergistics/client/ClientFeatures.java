@@ -1,6 +1,10 @@
 package thaumicenergistics.client;
 
 import thaumicenergistics.client.golem.GolemBackpackRenderer;
+import thaumicenergistics.alchemy.AlchemyFeature;
+import thaumicenergistics.client.alchemy.AlchemyInscriberScreen;
+import thaumicenergistics.client.alchemy.CrucibleAssemblerRenderer;
+import thaumicenergistics.client.alchemy.CrucibleAssemblerScreen;
 import appeng.api.util.AEColor;
 import appeng.client.render.StaticItemColor;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -63,6 +67,8 @@ public final class ClientFeatures {
         event.register(AssemblerFeature.MENU.get(), ArcaneAssemblerScreen::new);
         event.register(DistillationFeature.MENU.get(), DistillationEncoderScreen::new);
         event.register(VibrationFeature.MENU.get(), VibrationChamberScreen::new);
+        event.register(AlchemyFeature.INSCRIBER_MENU.get(), AlchemyInscriberScreen::new);
+        event.register(AlchemyFeature.ASSEMBLER_MENU.get(), CrucibleAssemblerScreen::new);
     }
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
@@ -84,6 +90,7 @@ public final class ClientFeatures {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(AssemblerFeature.ENTITY.get(), ArcaneAssemblerRenderer::new);
         event.registerBlockEntityRenderer(GearBoxFeature.ENTITY.get(), GearBoxRenderer::new);
+        event.registerBlockEntityRenderer(AlchemyFeature.ASSEMBLER_ENTITY.get(), CrucibleAssemblerRenderer::new);
     }
 
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
@@ -109,5 +116,16 @@ public final class ClientFeatures {
                 return renderer;
             }
         }, GearBoxFeature.IRON_GEAR_BOX.asItem(), GearBoxFeature.THAUMIUM_GEAR_BOX.asItem());
+        event.registerItem(new IClientItemExtensions() {
+            private BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) {
+                    renderer = new CrucibleAssemblerRenderer.Item();
+                }
+                return renderer;
+            }
+        }, AlchemyFeature.ASSEMBLER.asItem());
     }
 }

@@ -2,7 +2,15 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumicenergistics:alchemy_inscriber",
+      "required": false
+    },
+    {
       "id": "thaumicenergistics:arcane_assembler",
+      "required": false
+    },
+    {
+      "id": "thaumicenergistics:crucible_assembler",
       "required": false
     },
     {

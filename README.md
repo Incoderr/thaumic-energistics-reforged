@@ -21,6 +21,10 @@ Everything from Thaumic Energistics 1.1.3.0 is ported:
 - AE wrench wand focus, certus and nether quartz duplication, aspects for AE2 items, AE2 facades of Thaumcraft blocks
 - Thaumonomicon tab with TE research and pages in English and Russian
 
+## Additions (not in the original)
+
+- Crucible assembler: crucible recipes as AE2 autocrafting. Recipes are written to an alchemy core in the alchemy inscriber; the network supplies the catalyst and the essentia.
+
 Deliberate differences from the original are listed in `CLAUDE.md` (missing AE2 1.21 content such as the grinder, security terminal and pure certus; fixed game-breaking TE bugs).
 
 > **Personal use only.** The original Thaumic Energistics is licensed under the MIT License (Copyright (c) 2014 Chris). This port is not intended for redistribution.

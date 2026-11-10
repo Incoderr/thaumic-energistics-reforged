@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "thaumicenergistics:block/crucible_assembler"
+    },
+    "facing=south": {
+      "model": "thaumicenergistics:block/crucible_assembler"
+    },
+    "facing=east": {
+      "model": "thaumicenergistics:block/crucible_assembler"
+    },
+    "facing=west": {
+      "model": "thaumicenergistics:block/crucible_assembler"
+    }
+  }
+}

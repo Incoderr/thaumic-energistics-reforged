@@ -65,17 +65,21 @@ public final class ArcaneAssemblerModel {
     }
 
     public static void render(PoseStack pose, MultiBufferSource buffers, int light) {
+        render(pose, buffers, light, TEXTURE);
+    }
+
+    public static void render(PoseStack pose, MultiBufferSource buffers, int light, ResourceLocation texture) {
         if (root == null) {
             build();
         }
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
         pose.scale(SCALE, SCALE, SCALE);
-        VertexConsumer solid = buffers.getBuffer(RenderType.entityCutout(TEXTURE));
+        VertexConsumer solid = buffers.getBuffer(RenderType.entityCutout(texture));
         for (ModelPart part : frames) {
             part.render(pose, solid, light, OverlayTexture.NO_OVERLAY);
         }
-        VertexConsumer translucent = buffers.getBuffer(RenderType.entityTranslucent(TEXTURE));
+        VertexConsumer translucent = buffers.getBuffer(RenderType.entityTranslucent(texture));
         for (ModelPart part : glass) {
             part.render(pose, translucent, light, OverlayTexture.NO_OVERLAY);
         }

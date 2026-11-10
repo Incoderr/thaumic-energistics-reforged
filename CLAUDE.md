@@ -186,3 +186,9 @@ python3 tools/check_seams.py
 - Java: 4 spaces, no comments.
 - Python: 4 spaces, double quotes, no comments, `pathlib`.
 - Commits in English `feat:`/`fix:`, no co-author lines.
+
+## Crucible assembler (not in TE)
+
+- `alchemy/` is a new feature on top of TE: crucible recipes as AE2 autocrafting. An alchemy core (`alchemy_core_patterns`, 21 patterns, unique by result) is written in the alchemy inscriber: the catalyst slot lists the player's researched `CrucibleCrafting.available` recipes, a button cycles them. The pattern inputs are the catalyst plus one `EssentiaKey` input per aspect (amount as the multiplier), so AE2 pulls essentia from the network itself.
+- The assembler reuses the arcane assembler frame (`ArcaneAssemblerModel.render` with its own texture) and renders the base alchemical construct and crucible inside; 20 ticks per craft minus 4 per speed card, 1.5 AE/t.
+- `gen_alchemy.py` makes the orange textures by rotating the hue of the knowledge/assembler textures with `tools/pngtint.py` (no external dependencies).

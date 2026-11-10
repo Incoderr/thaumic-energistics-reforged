@@ -1,0 +1,15 @@
+{
+  "block.thaumicenergistics.crucible_assembler": "Crucible Assembler",
+  "block.thaumicenergistics.alchemy_inscriber": "Alchemy Inscriber",
+  "item.thaumicenergistics.alchemy_core": "Alchemy Core",
+  "tc.research_name.thaumicenergistics.TECRUCIBLEASSEMBLER": "Crucible Assembler",
+  "tc.research_text.thaumicenergistics.TECRUCIBLEASSEMBLER": "Alchemy on demand",
+  "thaumicenergistics.research_page.TECRUCIBLEASSEMBLER.1": "Standing over a crucible and dropping in one item after another is tedious work. You sealed a crucible on an alchemical construct inside the frame of an assembler, so the network can do alchemy for you.<BR>The crucible assembler crafts crucible recipes as network autocrafting: the network supplies the catalyst and the essentia, the assembler returns the result.",
+  "thaumicenergistics.research_page.TECRUCIBLEASSEMBLER.2": "Recipes are written to an §lalchemy core§r in the §lalchemy inscriber§r. Put the catalyst into the slot, pick the recipe with the arrow if the catalyst has several, and save it. The core then goes into the assembler.<BR>Speed cards make the assembler work faster.",
+  "thaumicenergistics.tooltip.button.alchemy.invalid": "No researched crucible recipe for this catalyst",
+  "thaumicenergistics.tooltip.button.alchemy.full": "The alchemy core is full",
+  "thaumicenergistics.tooltip.button.alchemy.missing": "Insert an alchemy core",
+  "thaumicenergistics.tooltip.button.alchemy.save": "Save the recipe to the core",
+  "thaumicenergistics.tooltip.button.alchemy.delete": "Delete the recipe from the core",
+  "thaumicenergistics.tooltip.button.alchemy.next": "Next recipe for this catalyst"
+}

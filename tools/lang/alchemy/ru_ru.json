@@ -1,0 +1,15 @@
+{
+  "block.thaumicenergistics.crucible_assembler": "Сборщик тигля",
+  "block.thaumicenergistics.alchemy_inscriber": "Алхимический записыватель",
+  "item.thaumicenergistics.alchemy_core": "Алхимическое ядро",
+  "tc.research_name.thaumicenergistics.TECRUCIBLEASSEMBLER": "Сборщик тигля",
+  "tc.research_text.thaumicenergistics.TECRUCIBLEASSEMBLER": "Алхимия по запросу",
+  "thaumicenergistics.research_page.TECRUCIBLEASSEMBLER.1": "Стоять над тиглем и бросать в него предмет за предметом утомительно. Вы запечатали тигель на алхимической конструкции внутри рамы сборщика, и теперь алхимией может заниматься сеть.<BR>Сборщик тигля выполняет рецепты тигля как автокрафт сети: сеть подаёт катализатор и эссенцию, сборщик возвращает результат.",
+  "thaumicenergistics.research_page.TECRUCIBLEASSEMBLER.2": "Рецепты записываются в §lалхимическое ядро§r с помощью §lалхимического записывателя§r. Положите катализатор в слот, если у него несколько рецептов, выберите нужный стрелкой, и сохраните. Затем вставьте ядро в сборщик.<BR>Карты ускорения ускоряют работу сборщика.",
+  "thaumicenergistics.tooltip.button.alchemy.invalid": "Нет изученного рецепта тигля для этого катализатора",
+  "thaumicenergistics.tooltip.button.alchemy.full": "Алхимическое ядро заполнено",
+  "thaumicenergistics.tooltip.button.alchemy.missing": "Вставьте алхимическое ядро",
+  "thaumicenergistics.tooltip.button.alchemy.save": "Сохранить рецепт в ядро",
+  "thaumicenergistics.tooltip.button.alchemy.delete": "Удалить рецепт из ядра",
+  "thaumicenergistics.tooltip.button.alchemy.next": "Следующий рецепт для этого катализатора"
+}
