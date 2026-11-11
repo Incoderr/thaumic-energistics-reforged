@@ -1,12 +1,22 @@
 package thaumicenergistics.client.distillation;
 
 import appeng.client.gui.Icon;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +31,7 @@ import thaumicenergistics.distillation.DistillationEncoderMenu;
 
 public final class DistillationEncoderScreen extends AbstractContainerScreen<DistillationEncoderMenu> {
     private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/distillation.encoder.png");
+    private static final ResourceLocation PARTICLES = ResourceLocation.fromNamespaceAndPath("thaumcraft", "textures/misc/particles.png");
     private static final int GUI_WIDTH = 176;
     private static final int GUI_HEIGHT = 234;
     private static final int TITLE_X = 6;
@@ -28,8 +39,15 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
     private static final int BUTTON_ENCODE_X = 146;
     private static final int BUTTON_ENCODE_Y = 94;
     private static final float THAUMOMETER_SCALE = 2.8F;
+    private static final float THAUMOMETER_Z = 50.0F;
+    private static final int PARTICLE_SIZE = 16;
+    private static final int PARTICLE_V = 128;
+    private static final int PARTICLE_FRAMES = 16;
+    private static final long PARTICLE_TIME = 300L;
+    private static final long FRAME_TIME = 1000L / 30L;
 
     private final ItemStack thaumometer = new ItemStack(ModItems.THAUMOMETER.get());
+    private final List<Particle> particles = new ArrayList<>();
     private ItemStack lastSource = ItemStack.EMPTY;
 
     public DistillationEncoderScreen(DistillationEncoderMenu menu, Inventory inventory, Component title) {
@@ -51,12 +69,28 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
         ItemStack source = menu.sourceItem();
         if (!ItemStack.matches(source, lastSource)) {
             lastSource = source.copy();
-            if (!source.isEmpty()) {
-                List<DistillationAspects.Entry> aspects = menu.sourceAspects();
-                boolean scanned = aspects != null && !aspects.isEmpty() && aspects.get(0).aspect() != null;
-                minecraft.getSoundManager().play(SimpleSoundInstance.forUI((scanned ? ModSounds.HHON : ModSounds.HHOFF).get(), 1.0F));
+            checkSourceItem(source);
+        }
+    }
+
+    private void checkSourceItem(ItemStack source) {
+        particles.clear();
+        if (source.isEmpty()) {
+            return;
+        }
+        boolean scanned = false;
+        List<DistillationAspects.Entry> aspects = menu.sourceAspects();
+        if (aspects != null) {
+            long now = System.currentTimeMillis();
+            for (int index = 0; index < aspects.size(); index++) {
+                DistillationAspects.Entry entry = aspects.get(index);
+                if (entry.aspect() != null) {
+                    scanned = true;
+                    particles.add(new Particle(slotY(index), entry.aspect().getColor(), now));
+                }
             }
         }
+        minecraft.getSoundManager().play(SimpleSoundInstance.forUI((scanned ? ModSounds.HHON : ModSounds.HHOFF).get(), 1.0F));
     }
 
     @Override
@@ -75,7 +109,7 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
 
     private void drawEntry(GuiGraphics graphics, int x, int y, DistillationAspects.Entry entry) {
         if (entry.aspect() != null && DistillationAspects.canSee(minecraft.player, entry.aspect())) {
-            AspectRenderer.drawTag(graphics, x, y, entry.aspect(), entry.amount());
+            AspectRenderer.drawTag(graphics, x, y, entry.aspect(), 0.0F);
         } else {
             AspectRenderer.drawUnknown(graphics, x, y);
         }
@@ -86,12 +120,7 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         float rotation = System.currentTimeMillis() % 36000 * 0.02F;
         float scale = THAUMOMETER_SCALE + (float) Math.sin(rotation * 0.15F) * 0.1F;
-        graphics.pose().pushPose();
-        graphics.pose().translate(leftPos + DistillationEncoderMenu.SLOT_SOURCE_ITEM_X + 8.0F, topPos + DistillationEncoderMenu.SLOT_SOURCE_ITEM_Y - 0.25F + 8.0F, -150.0F);
-        graphics.pose().scale(scale, scale, 1.0F);
-        graphics.pose().mulPose(com.mojang.math.Axis.ZP.rotationDegrees(rotation));
-        graphics.renderItem(thaumometer, -8, -8);
-        graphics.pose().popPose();
+        renderThaumometer(graphics, rotation, scale);
         List<DistillationAspects.Entry> aspects = menu.sourceAspects();
         if (aspects != null) {
             for (int index = 0; index < aspects.size(); index++) {
@@ -104,9 +133,51 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
         }
     }
 
+    private void renderThaumometer(GuiGraphics graphics, float rotation, float scale) {
+        PoseStack pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(leftPos + DistillationEncoderMenu.SLOT_SOURCE_ITEM_X + 8.0F, topPos + DistillationEncoderMenu.SLOT_SOURCE_ITEM_Y - 0.25F + 8.0F, THAUMOMETER_Z);
+        pose.scale(scale, scale, scale);
+        pose.mulPose(Axis.ZP.rotationDegrees(rotation));
+        pose.scale(16.0F, -16.0F, 16.0F);
+        BakedModel model = minecraft.getItemRenderer().getModel(thaumometer, minecraft.level, minecraft.player, 0);
+        graphics.flush();
+        Lighting.setupForFlatItems();
+        minecraft.getItemRenderer().render(thaumometer, ItemDisplayContext.GUI, false, pose, graphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
+        graphics.flush();
+        Lighting.setupFor3DItems();
+        pose.popPose();
+    }
+
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TITLE_X, TITLE_Y, 0, false);
+        if (!particles.isEmpty()) {
+            drawParticles(graphics);
+        }
+    }
+
+    private void drawParticles(GuiGraphics graphics) {
+        long now = System.currentTimeMillis();
+        int frame = (int) (now / FRAME_TIME % PARTICLE_FRAMES);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 300.0F);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        particles.removeIf(particle -> now - particle.epoch >= PARTICLE_TIME);
+        for (Particle particle : particles) {
+            double percent = (now - particle.epoch) / (double) PARTICLE_TIME;
+            int startX = DistillationEncoderMenu.SLOT_SOURCE_ITEM_X;
+            int startY = DistillationEncoderMenu.SLOT_SOURCE_ITEM_Y;
+            int x = startX + (int) ((DistillationEncoderMenu.SLOT_SOURCE_ASPECTS_X - startX) * percent);
+            int y = startY + (int) ((particle.destY - startY) * percent);
+            graphics.setColor((particle.color >> 16 & 0xFF) / 255.0F, (particle.color >> 8 & 0xFF) / 255.0F, (particle.color & 0xFF) / 255.0F, 0.9F);
+            graphics.blit(PARTICLES, x, y, frame * PARTICLE_SIZE, PARTICLE_V, PARTICLE_SIZE, PARTICLE_SIZE);
+        }
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableBlend();
+        graphics.pose().popPose();
     }
 
     @Override
@@ -146,6 +217,9 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
         }
     }
 
+    private record Particle(int destY, int color, long epoch) {
+    }
+
     private final class EncodeButton extends AbstractButton {
         EncodeButton(int x, int y) {
             super(x, y, 16, 16, Component.empty());
@@ -158,8 +232,12 @@ public final class DistillationEncoderScreen extends AbstractContainerScreen<Dis
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter().dest(getX(), getY()).blit(graphics);
-            Icon.WHITE_ARROW_DOWN.getBlitter().dest(getX(), getY()).blit(graphics);
+            int x = getX();
+            int y = getY();
+            graphics.fill(x, y, x + 16, y + 16, 0xFF373737);
+            graphics.fill(x, y, x + 15, y + 15, 0xFFFFFFFF);
+            graphics.fill(x + 1, y + 1, x + 15, y + 15, 0xFF8B8B8B);
+            Icon.WHITE_ARROW_DOWN.getBlitter().dest(x, y).blit(graphics);
         }
 
         @Override

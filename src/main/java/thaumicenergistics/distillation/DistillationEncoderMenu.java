@@ -88,10 +88,6 @@ public final class DistillationEncoderMenu extends AbstractContainerMenu {
         }
         addDataSlot(selected);
         selected.set(-1);
-        if (encoder != null && !player.level().isClientSide()) {
-            cachedSource = sourceSlot.getItem();
-            cachedPattern = encodedSlot.getItem();
-        }
     }
 
     public ItemStack sourceItem() {

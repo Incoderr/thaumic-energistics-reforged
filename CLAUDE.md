@@ -97,7 +97,8 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 
 - TE crafted essentia through a placeholder `crafting.aspect` item watched by its grid cache; here essentia is an AE2 key, so the distillation pattern encoder writes a plain AE2 processing pattern (one source item in, `EssentiaKey` x aspect amount out). Patterns go into ordinary pattern providers, and the essentia terminal's craft requests use AE2's own crafting.
 - The encoder shows up to 6 aspects of the source item sorted by amount (`AspectHelper.getBonusTags`) only when the player has scanned the item; otherwise 6 unknown slots, TE 1:1. Aspects are recomputed on both sides from the synced source slot; only the selected index is a `DataSlot`.
-- The encoder block always faces up (TE default meta); TE's wrench rotation and the GUI orb particles are not ported.
+- The encoder block always faces up (TE default meta); TE's wrench rotation is not ported. Aspect slots show icons without amounts (TE fake slots); amounts are shown only in the essentia terminal. The thaumometer is drawn through `ItemRenderer.render` with `Lighting.setupForFlatItems` and a uniform scale: `GuiGraphics.renderItem` picks the 3D GUI lighting for it, which darkens its face-on frame, and a scale without z breaks its normals.
+- The encode button is TE's 16x16 AE rv3 button drawn by hand; AE2 1.21 `TOOLBAR_BUTTON_BACKGROUND` is 18x20 and overlaps the encoded pattern slot.
 
 ## Essentia vibration chamber
 
