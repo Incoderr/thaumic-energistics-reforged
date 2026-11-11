@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "thaumicenergistics.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MEStorageMenuMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -12,6 +12,9 @@ description='''
 Addon for Thaumcraft 4: Reforged. Unofficial port of Thaumic Energistics 1.1.3.0.
 '''
 
+[[mixins]]
+config="${mod_id}.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
