@@ -92,6 +92,9 @@ public final class CrucibleAssemblerPattern implements IPatternDetails {
 
         @Override
         public @Nullable IPatternDetails decodePattern(AEItemKey what, Level level) {
+            if (what == null) {
+                return null;
+            }
             CruciblePattern stored = AlchemyFeature.PATTERN.get(what.toStack());
             return stored != null && stored.isValid() ? new CrucibleAssemblerPattern(stored) : null;
         }

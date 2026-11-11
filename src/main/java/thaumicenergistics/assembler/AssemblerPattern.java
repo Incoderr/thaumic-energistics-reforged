@@ -148,6 +148,9 @@ public final class AssemblerPattern implements IPatternDetails {
 
         @Override
         public @Nullable IPatternDetails decodePattern(AEItemKey what, Level level) {
+            if (what == null) {
+                return null;
+            }
             ArcanePattern stored = AssemblerFeature.PATTERN.get(what.toStack());
             return stored != null && isValid(stored) ? new AssemblerPattern(stored) : null;
         }

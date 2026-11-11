@@ -99,6 +99,9 @@ public final class InfusionAssemblerPattern implements IPatternDetails {
 
         @Override
         public @Nullable IPatternDetails decodePattern(AEItemKey what, Level level) {
+            if (what == null) {
+                return null;
+            }
             InfusionPattern stored = InfusionFeature.PATTERN.get(what.toStack());
             return stored != null && stored.isValid() ? new InfusionAssemblerPattern(stored) : null;
         }
