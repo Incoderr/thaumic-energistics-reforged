@@ -1,5 +1,7 @@
 package thaumicenergistics.test;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import java.util.List;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.neoforged.bus.api.IEventBus;
@@ -90,7 +92,7 @@ public final class CoreGameTests {
 
     private static void vanillaRecipesLoaded(GameTestHelper helper) {
         for (String name : List.of("essentia_cell_housing", "essentia_cell_1k", "essentia_cell_64k_shapeless")) {
-            helper.assertTrue(helper.getLevel().getRecipeManager().byKey(ThaumicEnergistics.id(name)).isPresent(), "vanilla recipe " + name + " is not loaded");
+            helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, ThaumicEnergistics.id(name))).isPresent(), "vanilla recipe " + name + " is not loaded");
         }
         helper.succeed();
     }

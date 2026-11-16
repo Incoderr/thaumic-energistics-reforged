@@ -1,5 +1,7 @@
 package thaumicenergistics.golem;
 
+import net.minecraft.world.item.component.SwingAnimation;
+import net.minecraft.server.level.ServerLevel;
 import appeng.api.features.GridLinkables;
 import appeng.api.ids.AEComponents;
 import appeng.items.parts.FacadeItem;
@@ -21,7 +23,7 @@ import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.crafting.TcIngredient;
@@ -100,7 +102,7 @@ public final class GolemBackpackFeature {
                 golem.level().playSound(null, golem, ModSounds.UPGRADE.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
                 player.setItemInHand(event.getHand(), ItemStack.EMPTY);
             } else if (!server) {
-                player.swing(event.getHand());
+                player.swing(event.getHand(), SwingAnimation.DEFAULT, false);
             }
             finish(event);
             return;
@@ -110,13 +112,13 @@ public final class GolemBackpackFeature {
             return;
         }
         if (!server) {
-            player.swing(event.getHand());
+            player.swing(event.getHand(), SwingAnimation.DEFAULT, false);
             finish(event);
             return;
         }
         BackpackData data = DATA.get(golem);
         if (!data.facade().isEmpty() && !player.getAbilities().instabuild) {
-            golem.spawnAtLocation(data.facade(), 0.5F);
+            golem.spawnAtLocation((ServerLevel) golem.level(), data.facade(), 0.5F);
         }
         DATA.set(golem, new BackpackData(data.link(), held.copyWithCount(1)));
         if (!player.getAbilities().instabuild) {
@@ -145,9 +147,9 @@ public final class GolemBackpackFeature {
         }
         ItemStack backpack = BACKPACK.toStack();
         backpack.set(AEComponents.WIRELESS_LINK_TARGET, data.link());
-        golem.spawnAtLocation(backpack, 0.5F);
+        golem.spawnAtLocation((ServerLevel) golem.level(), backpack, 0.5F);
         if (!data.facade().isEmpty()) {
-            golem.spawnAtLocation(data.facade(), 0.5F);
+            golem.spawnAtLocation((ServerLevel) golem.level(), data.facade(), 0.5F);
         }
         DATA.remove(golem);
         GOALS.remove(golem);

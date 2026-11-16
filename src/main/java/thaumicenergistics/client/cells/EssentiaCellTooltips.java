@@ -1,5 +1,6 @@
 package thaumicenergistics.client.cells;
 
+import net.minecraft.client.Minecraft;
 import appeng.core.localization.GuiText;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +39,7 @@ public final class EssentiaCellTooltips {
             lines.add(GuiText.Partitioned.text());
         }
         if (cell.getUsedTypes() > 0) {
-            if (Screen.hasShiftDown()) {
+            if (Minecraft.getInstance().hasShiftDown()) {
                 List<Map.Entry<Aspect, Long>> stored = new ArrayList<>(cell.getStoredEssentia().entrySet());
                 stored.sort(Comparator.comparing(entry -> entry.getKey().getName()));
                 for (Map.Entry<Aspect, Long> entry : stored) {

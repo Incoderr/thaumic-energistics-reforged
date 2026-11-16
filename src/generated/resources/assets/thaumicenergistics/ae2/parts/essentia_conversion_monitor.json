@@ -1,0 +1,22 @@
+{
+  "model": {
+    "type": "ae2:composite",
+    "models": [
+      {
+        "type": "ae2:model",
+        "model": "thaumicenergistics:part/essentia_monitor_base"
+      },
+      {
+        "type": "ae2:status_indicator",
+        "active": "thaumicenergistics:part/essentia_conversion_monitor_on",
+        "powered": "thaumicenergistics:part/essentia_conversion_monitor_off",
+        "unpowered": "thaumicenergistics:part/essentia_conversion_monitor_off"
+      },
+      {
+        "type": "thaumicenergistics:monitor_empty",
+        "on": "thaumicenergistics:part/essentia_monitor_empty_on",
+        "off": "thaumicenergistics:part/essentia_monitor_empty_off"
+      }
+    ]
+  }
+}

@@ -52,4 +52,5 @@ def generate(ctx):
         "textures": textures,
         "elements": geometry(ITEM_SHIFT) + [lights({"texture": "#light", "tintindex": 1, **glow(13)}, ITEM_SHIFT)],
     })
-    ctx.item_definition("vis_relay_interface", ctx.ref("vis_relay_interface", "item"))
+    ctx.item_definition("vis_relay_interface", ctx.ref("vis_relay_interface", "item"), ctx.ae2_part_tints())
+    ctx.part_definition("vis_relay_interface", "thaumicenergistics:part/vis_relay_interface_base", ctx.part_status("thaumicenergistics:part/vis_relay_interface_on", "thaumicenergistics:part/vis_relay_interface_off"))

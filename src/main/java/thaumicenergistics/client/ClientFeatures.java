@@ -1,52 +1,60 @@
 package thaumicenergistics.client;
 
-import thaumicenergistics.client.golem.GolemBackpackRenderer;
-import thaumicenergistics.alchemy.AlchemyFeature;
-import thaumicenergistics.infusion.InfusionFeature;
-import thaumicenergistics.client.infusion.InfusionInscriberScreen;
-import thaumicenergistics.client.infusion.InfusionAssemblerRenderer;
-import thaumicenergistics.client.infusion.InfusionAssemblerScreen;
-import thaumicenergistics.client.alchemy.AlchemyInscriberScreen;
-import thaumicenergistics.client.alchemy.CrucibleAssemblerRenderer;
-import thaumicenergistics.client.alchemy.CrucibleAssemblerScreen;
 import appeng.api.util.AEColor;
-import appeng.client.render.StaticItemColor;
+import appeng.client.InitScreens;
+import appeng.client.api.model.parts.RegisterPartModelsEvent;
+import appeng.client.api.renderer.parts.RegisterPartRendererEvent;
+import java.util.List;
+import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import thaumicenergistics.client.assembler.ArcaneAssemblerRenderer;
-import appeng.init.client.InitScreens;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
+import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.act.ActFeature;
+import thaumicenergistics.alchemy.AlchemyFeature;
 import thaumicenergistics.assembler.AssemblerFeature;
-import thaumicenergistics.client.assembler.ArcaneAssemblerScreen;
-import thaumicenergistics.client.distillation.DistillationEncoderScreen;
-import thaumicenergistics.distillation.DistillationFeature;
-import thaumicenergistics.client.vibration.VibrationChamberScreen;
-import thaumicenergistics.vibration.VibrationFeature;
-import thaumicenergistics.client.gearbox.GearBoxRenderer;
-import thaumicenergistics.gearbox.GearBoxFeature;
 import thaumicenergistics.buses.BusesFeature;
 import thaumicenergistics.client.act.ArcaneCraftingTermScreen;
+import thaumicenergistics.client.alchemy.AlchemyInscriberScreen;
+import thaumicenergistics.client.alchemy.CrucibleAssemblerRenderer;
+import thaumicenergistics.client.alchemy.CrucibleAssemblerScreen;
+import thaumicenergistics.client.assembler.ArcaneAssemblerModel;
+import thaumicenergistics.client.assembler.ArcaneAssemblerRenderer;
+import thaumicenergistics.client.assembler.ArcaneAssemblerScreen;
 import thaumicenergistics.client.buses.EssentiaBusScreen;
+import thaumicenergistics.client.distillation.DistillationEncoderScreen;
 import thaumicenergistics.client.emitter.EssentiaLevelEmitterScreen;
-import thaumicenergistics.emitter.EmitterFeature;
 import thaumicenergistics.client.essentia.ClientEssentia;
+import thaumicenergistics.client.gearbox.GearBoxRenderer;
+import thaumicenergistics.client.golem.GolemBackpackRenderer;
+import thaumicenergistics.client.infusion.InfusionAssemblerRenderer;
+import thaumicenergistics.client.infusion.InfusionAssemblerScreen;
+import thaumicenergistics.client.infusion.InfusionInscriberScreen;
+import thaumicenergistics.client.knowledge.KnowledgeInscriberScreen;
 import thaumicenergistics.client.monitor.EssentiaMonitorRenderer;
+import thaumicenergistics.client.monitor.MonitorEmptyPartModel;
+import thaumicenergistics.client.platform.TeItemRenderer;
+import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
+import thaumicenergistics.client.vibration.VibrationChamberScreen;
+import thaumicenergistics.client.visrelay.VisRelayInterfaceRenderer;
+import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
+import thaumicenergistics.distillation.DistillationFeature;
+import thaumicenergistics.emitter.EmitterFeature;
+import thaumicenergistics.gearbox.GearBoxFeature;
+import thaumicenergistics.infusion.InfusionFeature;
+import thaumicenergistics.knowledge.KnowledgeFeature;
 import thaumicenergistics.monitor.EssentiaStorageMonitorPart;
-import thaumicenergistics.monitor.MonitorFeature;
 import thaumicenergistics.provider.ProviderBlockEntity;
 import thaumicenergistics.provider.ProviderFeature;
-import thaumicenergistics.client.terminal.EssentiaTerminalScreen;
-import thaumicenergistics.client.workbench.EssentiaCellWorkbenchScreen;
-import thaumicenergistics.client.visrelay.VisRelayInterfaceRenderer;
 import thaumicenergistics.terminal.TerminalFeature;
-import thaumicenergistics.client.knowledge.KnowledgeInscriberScreen;
-import thaumicenergistics.knowledge.KnowledgeFeature;
-import thaumicenergistics.visrelay.VisRelayFeature;
+import thaumicenergistics.vibration.VibrationFeature;
 import thaumicenergistics.visrelay.VisRelayInterfacePart;
 import thaumicenergistics.workbench.WorkbenchFeature;
 
@@ -57,8 +65,6 @@ public final class ClientFeatures {
     public static void setup(FMLClientSetupEvent event) {
         GolemBackpackRenderer.register();
         ClientEssentia.setup(event);
-        EssentiaStorageMonitorPart.renderer = new EssentiaMonitorRenderer();
-        VisRelayInterfacePart.renderer = new VisRelayInterfaceRenderer();
     }
 
     public static void registerScreens(RegisterMenuScreensEvent event) {
@@ -77,20 +83,17 @@ public final class ClientFeatures {
         event.register(InfusionFeature.ASSEMBLER_MENU.get(), InfusionAssemblerScreen::new);
     }
 
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register(new StaticItemColor(AEColor.TRANSPARENT), TerminalFeature.TERMINAL.get());
-        event.register(new StaticItemColor(AEColor.TRANSPARENT), BusesFeature.IMPORT_BUS.get(), BusesFeature.EXPORT_BUS.get(), BusesFeature.STORAGE_BUS.get());
-        event.register(new StaticItemColor(AEColor.TRANSPARENT), MonitorFeature.STORAGE_MONITOR.get(), MonitorFeature.CONVERSION_MONITOR.get());
-        event.register(new StaticItemColor(AEColor.TRANSPARENT), ActFeature.TERMINAL.get(), VisRelayFeature.INTERFACE.get());
+    public static void registerPartModels(RegisterPartModelsEvent event) {
+        event.registerModelType(MonitorEmptyPartModel.ID, MonitorEmptyPartModel.Unbaked.MAP_CODEC);
     }
 
-    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-        event.register((state, level, pos, tint) -> {
-            if (level != null && pos != null && level.getBlockEntity(pos) instanceof ProviderBlockEntity provider) {
-                return provider.isActive() ? provider.getColor().mediumVariant : 0;
-            }
-            return AEColor.TRANSPARENT.mediumVariant;
-        }, ProviderFeature.ESSENTIA_PROVIDER.get(), ProviderFeature.INFUSION_PROVIDER.get());
+    public static void registerPartRenderers(RegisterPartRendererEvent event) {
+        event.register(EssentiaStorageMonitorPart.class, new EssentiaMonitorRenderer());
+        event.register(VisRelayInterfacePart.class, new VisRelayInterfaceRenderer());
+    }
+
+    public static void registerBlockTints(RegisterColorHandlersEvent.BlockTintSources event) {
+        event.register(List.of(new ProviderTint()), ProviderFeature.ESSENTIA_PROVIDER.get(), ProviderFeature.INFUSION_PROVIDER.get());
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -100,50 +103,30 @@ public final class ClientFeatures {
         event.registerBlockEntityRenderer(InfusionFeature.ASSEMBLER_ENTITY.get(), InfusionAssemblerRenderer::new);
     }
 
-    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(new IClientItemExtensions() {
-            private BlockEntityWithoutLevelRenderer renderer;
+    public static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
+        event.register(ThaumicEnergistics.id("arcane_assembler"), TeItemRenderer.codec(ArcaneAssemblerModel::render));
+        event.register(ThaumicEnergistics.id("crucible_assembler"), TeItemRenderer.codec((collector, pose, light) -> CrucibleAssemblerRenderer.renderAll(collector, pose, light, Direction.NORTH)));
+        event.register(ThaumicEnergistics.id("infusion_assembler"), TeItemRenderer.codec((collector, pose, light) -> InfusionAssemblerRenderer.renderAll(collector, pose, light, false, 0.0F)));
+        event.register(ThaumicEnergistics.id("iron_gear_box"), TeItemRenderer.codec((collector, pose, light) -> GearBoxRenderer.render(collector, false, new boolean[6], 0.0F, pose, light)));
+        event.register(ThaumicEnergistics.id("thaumium_gear_box"), TeItemRenderer.codec((collector, pose, light) -> GearBoxRenderer.render(collector, true, new boolean[6], 0.0F, pose, light)));
+    }
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) {
-                    renderer = new ArcaneAssemblerRenderer.Item();
-                }
-                return renderer;
-            }
-        }, AssemblerFeature.BLOCK.asItem());
-        event.registerItem(new IClientItemExtensions() {
-            private BlockEntityWithoutLevelRenderer renderer;
+    public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        GolemBackpackRenderer.registerModifiers(event);
+    }
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) {
-                    renderer = new GearBoxRenderer.Item();
-                }
-                return renderer;
-            }
-        }, GearBoxFeature.IRON_GEAR_BOX.asItem(), GearBoxFeature.THAUMIUM_GEAR_BOX.asItem());
-        event.registerItem(new IClientItemExtensions() {
-            private BlockEntityWithoutLevelRenderer renderer;
+    private static final class ProviderTint implements BlockTintSource {
+        @Override
+        public int color(BlockState state) {
+            return 0xFF000000 | AEColor.TRANSPARENT.mediumVariant;
+        }
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) {
-                    renderer = new CrucibleAssemblerRenderer.Item();
-                }
-                return renderer;
+        @Override
+        public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
+            if (level.getBlockEntity(pos) instanceof ProviderBlockEntity provider) {
+                return 0xFF000000 | (provider.isActive() ? provider.getColor().mediumVariant : 0);
             }
-        }, AlchemyFeature.ASSEMBLER.asItem());
-        event.registerItem(new IClientItemExtensions() {
-            private BlockEntityWithoutLevelRenderer renderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) {
-                    renderer = new InfusionAssemblerRenderer.Item();
-                }
-                return renderer;
-            }
-        }, InfusionFeature.ASSEMBLER.asItem());
+            return color(state);
+        }
     }
 }

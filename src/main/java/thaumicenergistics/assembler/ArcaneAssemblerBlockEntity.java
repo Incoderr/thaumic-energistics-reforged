@@ -1,5 +1,7 @@
 package thaumicenergistics.assembler;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.crafting.IPatternDetails;
@@ -32,7 +34,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.item.gear.WarpingGear;
@@ -402,27 +404,25 @@ public final class ArcaneAssemblerBlockEntity extends AENetworkedBlockEntity imp
     }
 
     @Override
-    public void loadTag(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadTag(tag, registries);
+    public void loadTag(ValueInput tag) {
+        super.loadTag(tag);
         visSourceInfo.readFromTag(tag, VIS_INTERFACE_KEY);
         storedVis = readVis(tag);
-        upgrades.readFromNBT(tag, UPGRADES_KEY, registries);
+        upgrades.readFromNBT(tag, UPGRADES_KEY);
         inventory.clearContent();
-        if (tag.contains(ITEMS_KEY)) {
+        if (tag.child(ITEMS_KEY).isPresent()) {
             var items = NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
-            ContainerHelper.loadAllItems(tag.getCompound(ITEMS_KEY), items, registries);
+            ContainerHelper.loadAllItems(tag.childOrEmpty(ITEMS_KEY), items);
             for (int index = 0; index < items.size(); index++) {
                 inventory.getItems().set(index, items.get(index));
             }
         }
-        crafting = tag.getBoolean(CRAFTING_KEY);
-        craftTickCounter = tag.getInt(PROGRESS_KEY);
+        crafting = tag.getBooleanOr(CRAFTING_KEY, false);
+        craftTickCounter = tag.getIntOr(PROGRESS_KEY, 0);
         currentPattern = null;
-        if (tag.contains(PATTERN_KEY)) {
-            ArcanePattern.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get(PATTERN_KEY)).result()
-                .filter(AssemblerPattern::isValid)
-                .ifPresent(pattern -> currentPattern = new AssemblerPattern(pattern));
-        }
+        tag.read(PATTERN_KEY, ArcanePattern.CODEC)
+            .filter(AssemblerPattern::isValid)
+            .ifPresent(pattern -> currentPattern = new AssemblerPattern(pattern));
         if (currentPattern == null) {
             crafting = false;
         }
@@ -431,33 +431,32 @@ public final class ArcaneAssemblerBlockEntity extends AENetworkedBlockEntity imp
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         visSourceInfo.writeToTag(tag, VIS_INTERFACE_KEY);
         writeVis(tag, storedVis);
-        upgrades.writeToNBT(tag, UPGRADES_KEY, registries);
-        CompoundTag items = new CompoundTag();
-        ContainerHelper.saveAllItems(items, inventory.getItems(), registries);
-        tag.put(ITEMS_KEY, items);
+        upgrades.writeToNBT(tag, UPGRADES_KEY);
+        ContainerHelper.saveAllItems(tag.child(ITEMS_KEY), inventory.getItems());
         tag.putBoolean(CRAFTING_KEY, crafting);
         tag.putInt(PROGRESS_KEY, craftTickCounter);
         if (currentPattern != null) {
-            ArcanePattern.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), currentPattern.pattern()).result()
-                .ifPresent(encoded -> tag.put(PATTERN_KEY, encoded));
+            tag.store(PATTERN_KEY, ArcanePattern.CODEC, currentPattern.pattern());
         }
     }
 
-    public static AspectList readVis(CompoundTag tag) {
-        if (!tag.contains(STORED_VIS_KEY, Tag.TAG_COMPOUND)) {
-            return new AspectList();
-        }
-        return AspectList.CODEC.parse(NbtOps.INSTANCE, tag.get(STORED_VIS_KEY)).result().orElseGet(AspectList::new);
+    public static AspectList readVis(ValueInput tag) {
+        return tag.read(STORED_VIS_KEY, AspectList.CODEC).orElseGet(AspectList::new);
     }
 
-    public static void writeVis(CompoundTag tag, AspectList vis) {
+    public static void writeVis(ValueOutput tag, AspectList vis) {
         if (vis.size() > 0) {
-            AspectList.CODEC.encodeStart(NbtOps.INSTANCE, vis).result().ifPresent(encoded -> tag.put(STORED_VIS_KEY, encoded));
+            tag.store(STORED_VIS_KEY, AspectList.CODEC, vis);
         }
     }
 
+    @Override
+    public void addAdditionalDrops(Level level, BlockPos pos, List<ItemStack> drops) {
+        super.addAdditionalDrops(level, pos, drops);
+        drops.addAll(drops());
+    }
 }

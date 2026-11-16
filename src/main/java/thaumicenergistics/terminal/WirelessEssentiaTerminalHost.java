@@ -1,5 +1,6 @@
 package thaumicenergistics.terminal;
 
+import net.minecraft.util.Prediction;
 import appeng.api.config.ViewItems;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGrid;
@@ -11,7 +12,7 @@ import appeng.util.inv.AppEngInternalInventory;
 import java.util.function.BiConsumer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 
 public final class WirelessEssentiaTerminalHost extends WirelessTerminalMenuHost<WirelessEssentiaTerminalItem> implements EssentiaTerminalHost {
@@ -81,7 +82,7 @@ public final class WirelessEssentiaTerminalHost extends WirelessTerminalMenuHost
         for (int slot = 0; slot < workInventory.size(); slot++) {
             ItemStack stack = workInventory.getStackInSlot(slot);
             if (!stack.isEmpty()) {
-                player.getInventory().placeItemBackInInventory(stack);
+                player.getInventory().placeItemBackInInventory(stack, Prediction.SERVER_ONLY);
                 workInventory.setItemDirect(slot, ItemStack.EMPTY);
             }
         }

@@ -1,12 +1,12 @@
 package thaumicenergistics.client.vibration;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import thaumicenergistics.client.platform.TeGuiBlit;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
@@ -14,8 +14,8 @@ import thaumicenergistics.vibration.VibrationChamberBlockEntity;
 import thaumicenergistics.vibration.VibrationChamberMenu;
 
 public final class VibrationChamberScreen extends AbstractContainerScreen<VibrationChamberMenu> {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.vibration.chamber.png");
-    private static final ResourceLocation FURNACE = ResourceLocation.fromNamespaceAndPath("thaumcraft", "textures/gui/gui_alchemyfurnace.png");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.vibration.chamber.png");
+    private static final Identifier FURNACE = Identifier.fromNamespaceAndPath("thaumcraft", "textures/gui/gui_alchemyfurnace.png");
     private static final int GUI_WIDTH = 176;
     private static final int GUI_HEIGHT = 82;
     private static final int POWER_POS_X = 96;
@@ -45,9 +45,7 @@ public final class VibrationChamberScreen extends AbstractContainerScreen<Vibrat
     private int averageTicksRemaining;
 
     public VibrationChamberScreen(VibrationChamberMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        imageWidth = GUI_WIDTH;
-        imageHeight = GUI_HEIGHT;
+        super(menu, inventory, title, GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
@@ -65,8 +63,8 @@ public final class VibrationChamberScreen extends AbstractContainerScreen<Vibrat
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         List<Component> tooltip = new ArrayList<>();
         if (isHovering(VIAL_POS_X, VIAL_POS_Y, VIAL_WIDTH, VIAL_HEIGHT, mouseX, mouseY)) {
             Aspect aspect = menu.storedAspect();
@@ -82,32 +80,30 @@ public final class VibrationChamberScreen extends AbstractContainerScreen<Vibrat
             tooltip.add(Component.literal(String.format("%.0f AE/t", menu.powerPerTick())));
         }
         if (!tooltip.isEmpty()) {
-            graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+            graphics.setComponentTooltipForNextFrame(font, tooltip, mouseX, mouseY);
         } else {
-            renderTooltip(graphics, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos, topPos, (float) (0), (float) (0), imageWidth, imageHeight, 256, 256);
         float maxPower = menu.maxPowerPerTick();
         float powerPercent = 1.0F - (maxPower > 0 ? menu.powerPerTick() / maxPower : 0);
         int powerOffset = (int) (POWER_HEIGHT * powerPercent);
-        graphics.blit(TEXTURE, leftPos + POWER_POS_X, topPos + POWER_POS_Y + powerOffset, POWER_TEX_U, POWER_TEX_V + powerOffset, POWER_WIDTH, POWER_HEIGHT - powerOffset);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos + POWER_POS_X, topPos + POWER_POS_Y + powerOffset, (float) (POWER_TEX_U), (float) (POWER_TEX_V + powerOffset), POWER_WIDTH, POWER_HEIGHT - powerOffset, 256, 256);
         float storedPercent = 1.0F - menu.storedAmount() / (float) VibrationChamberBlockEntity.MAX_ESSENTIA_STORED;
         int storedOffset = (int) (STORED_HEIGHT * storedPercent);
-        graphics.blit(FURNACE, leftPos + STORED_POS_X, topPos + STORED_POS_Y + storedOffset, STORED_TEX_X, storedOffset, STORED_WIDTH, STORED_HEIGHT - storedOffset);
-        RenderSystem.enableBlend();
-        graphics.blit(FURNACE, leftPos + VIAL_POS_X, topPos + VIAL_POS_Y, VIAL_TEX_X, 0, VIAL_WIDTH, VIAL_HEIGHT);
+        TeGuiBlit.blit(graphics, FURNACE, leftPos + STORED_POS_X, topPos + STORED_POS_Y + storedOffset, (float) (STORED_TEX_X), (float) (storedOffset), STORED_WIDTH, STORED_HEIGHT - storedOffset, 256, 256);
+        TeGuiBlit.blit(graphics, FURNACE, leftPos + VIAL_POS_X, topPos + VIAL_POS_Y, (float) (VIAL_TEX_X), (float) (0), VIAL_WIDTH, VIAL_HEIGHT, 256, 256);
         int totalTicks = menu.totalTicks();
         float ticksPercent = 1.0F - (totalTicks > 0 ? menu.ticksRemaining() / (float) totalTicks : 0);
         int fireOffset = (int) (FIRE_HEIGHT * ticksPercent);
-        graphics.blit(FURNACE, leftPos + FIRE_POS_X, topPos + FIRE_POS_Y + fireOffset, FIRE_TEX_X, fireOffset, FIRE_WIDTH, FIRE_HEIGHT - fireOffset);
-        RenderSystem.disableBlend();
+        TeGuiBlit.blit(graphics, FURNACE, leftPos + FIRE_POS_X, topPos + FIRE_POS_Y + fireOffset, (float) (FIRE_TEX_X), (float) (fireOffset), FIRE_WIDTH, FIRE_HEIGHT - fireOffset, 256, 256);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     }
 }

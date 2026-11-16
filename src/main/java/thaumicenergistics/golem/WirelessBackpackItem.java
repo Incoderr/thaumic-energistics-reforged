@@ -1,5 +1,7 @@
 package thaumicenergistics.golem;
 
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 import appeng.api.ids.AEComponents;
 import java.util.List;
 import net.minecraft.network.chat.Component;
@@ -17,7 +19,7 @@ public final class WirelessBackpackItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(isLinked(stack) ? "gui.ae2.Linked" : "gui.ae2.Unlinked"));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(isLinked(stack) ? "gui.ae2.Linked" : "gui.ae2.Unlinked"));
     }
 }

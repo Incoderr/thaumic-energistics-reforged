@@ -1,5 +1,8 @@
 package thaumicenergistics.act;
 
+import thaumicenergistics.platform.TeStacks;
+import net.minecraft.util.Prediction;
+import appeng.menu.guisync.ClientActionKey;
 import appeng.api.config.Actionable;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.stacks.AEItemKey;
@@ -26,7 +29,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.EventHooks;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.crafting.ArcaneCrafting;
@@ -36,8 +39,8 @@ import thaumcraft.wand.Wands;
 public final class ArcaneCraftingTermMenu extends MEStorageMenu {
     public static final SlotSemantic WAND = SlotSemantics.register("THAUMICENERGISTICS_WAND", false);
     public static final SlotSemantic ARMOR = SlotSemantics.register("THAUMICENERGISTICS_ARMOR", false);
-    private static final String ACTION_CLEAR = "clearGrid";
-    private static final String ACTION_SWAP_ARMOR = "swapArmor";
+    private static final ClientActionKey<Void> ACTION_CLEAR = new ClientActionKey<>("clearGrid");
+    private static final ClientActionKey<Void> ACTION_SWAP_ARMOR = new ClientActionKey<>("swapArmor");
     private static final int MAX_SHIFT_CRAFT = 64;
     private static final int COST_REFRESH_TICKS = 20;
 
@@ -146,7 +149,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
         if (!(getPlayer().level() instanceof ServerLevel level)) {
             return Optional.empty();
         }
-        return level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
+        return level.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, level);
     }
 
     private void updateResult() {
@@ -160,7 +163,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
         ItemStack result = ItemStack.EMPTY;
         Optional<RecipeHolder<CraftingRecipe>> vanilla = vanillaRecipe(input);
         if (vanilla.isPresent()) {
-            result = vanilla.get().value().assemble(input, getPlayer().level().registryAccess());
+            result = vanilla.get().value().assemble(input);
         } else {
             ArcaneCrafting.Match match = ArcaneCrafting.find(stacks, getPlayer());
             if (match != null && match.aspects().size() > 0) {
@@ -196,7 +199,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
 
     private void onCrafted(Player player, ItemStack crafted) {
         List<ItemStack> stacks = gridStacks();
-        crafted.onCraftedBy(player.level(), player, crafted.getCount());
+        crafted.onCraftedBy(player, crafted.getCount());
         EventHooks.firePlayerCraftingEvent(player, crafted, grid.toContainer());
         if (requiredAspects != null && wand.getStackInSlot(0).getItem() instanceof WandItem wandItem) {
             ItemStack wandStack = wand.getStackInSlot(0).copy();
@@ -207,7 +210,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
         CraftingInput input = positioned.input();
         NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int index = 0; index < input.size(); index++) {
-            remaining.set(index, input.getItem(index).getCraftingRemainingItem());
+            remaining.set(index, TeStacks.remainder(input.getItem(index)));
         }
         Optional<RecipeHolder<CraftingRecipe>> vanilla = vanillaRecipe(input);
         if (vanilla.isPresent()) {
@@ -241,7 +244,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
                         replacement.grow(current.getCount());
                         grid.setItemDirect(slot, replacement);
                     } else if (!player.getInventory().add(replacement)) {
-                        player.drop(replacement, false);
+                        player.drop(replacement, false, Prediction.SERVER_ONLY);
                     }
                 }
             }
@@ -251,11 +254,11 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
 
     private ItemStack replenish(Player player, ItemStack wanted) {
         Inventory inventory = player.getInventory();
-        for (int index = 0; index < inventory.items.size(); index++) {
+        for (int index = 0; index < inventory.getNonEquipmentItems().size(); index++) {
             if (isPlayerInventorySlotLocked(index)) {
                 continue;
             }
-            ItemStack stack = inventory.items.get(index);
+            ItemStack stack = inventory.getNonEquipmentItems().get(index);
             if (!stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, wanted)) {
                 return stack.split(1);
             }
@@ -326,7 +329,7 @@ public final class ArcaneCraftingTermMenu extends MEStorageMenu {
 
     private static boolean canFit(Inventory inventory, ItemStack stack) {
         int room = 0;
-        for (ItemStack existing : inventory.items) {
+        for (ItemStack existing : inventory.getNonEquipmentItems()) {
             if (existing.isEmpty()) {
                 room += stack.getMaxStackSize();
             } else if (ItemStack.isSameItemSameComponents(existing, stack)) {

@@ -1,5 +1,7 @@
 package thaumicenergistics.buses;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
 import appeng.api.networking.IGrid;
@@ -23,7 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumicenergistics.essentia.EssentiaTileContainers;
@@ -220,16 +222,16 @@ public abstract class EssentiaIOBusPart extends UpgradeablePart implements IGrid
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
         for (int index = 0; index < FILTER_SIZE; index++) {
-            filters[index] = tag.contains(FILTER_KEY + index) ? Aspect.getAspect(tag.getString(FILTER_KEY + index)) : null;
+            filters[index] = tag.getString(FILTER_KEY + index).map(Aspect::getAspect).orElse(null);
         }
     }
 
     @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
         for (int index = 0; index < FILTER_SIZE; index++) {
             if (filters[index] != null) {
                 tag.putString(FILTER_KEY + index, filters[index].getTag());

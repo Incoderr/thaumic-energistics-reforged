@@ -1,7 +1,12 @@
 package thaumicenergistics.client.terminal;
 
+import thaumicenergistics.client.platform.TeGuiBlit;
+import net.minecraft.client.input.MouseButtonInfo;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import appeng.api.config.ViewItems;
-import appeng.client.gui.Icon;
+import appeng.util.Icon;
 import appeng.client.gui.widgets.IconButton;
 import appeng.core.localization.ButtonToolTips;
 import appeng.util.ReadableNumberConverter;
@@ -12,19 +17,18 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import org.lwjgl.glfw.GLFW;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.client.essentia.AspectWidgets;
@@ -33,9 +37,9 @@ import thaumicenergistics.terminal.EssentiaSortMode;
 import thaumicenergistics.terminal.EssentiaTerminalMenu;
 
 public final class EssentiaTerminalScreen extends AbstractContainerScreen<EssentiaTerminalMenu> {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.terminal.png");
-    private static final ResourceLocation SCROLLER = ResourceLocation.withDefaultNamespace("container/creative_inventory/scroller");
-    private static final ResourceLocation SCROLLER_DISABLED = ResourceLocation.withDefaultNamespace("container/creative_inventory/scroller_disabled");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.terminal.png");
+    private static final Identifier SCROLLER = Identifier.withDefaultNamespace("container/creative_inventory/scroller");
+    private static final Identifier SCROLLER_DISABLED = Identifier.withDefaultNamespace("container/creative_inventory/scroller_disabled");
     private static final int GUI_WIDTH = 195;
     private static final int GUI_HEIGHT = 204;
     private static final int WIDGET_X = 7;
@@ -64,9 +68,7 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
     private boolean draggingScroller;
 
     public EssentiaTerminalScreen(EssentiaTerminalMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        imageWidth = GUI_WIDTH;
-        imageHeight = GUI_HEIGHT;
+        super(menu, inventory, title, GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
@@ -149,27 +151,27 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         EssentiaListPayload.Entry hovered = entryAt(widgetAt(mouseX, mouseY));
         if (hovered != null && menu.getCarried().isEmpty()) {
-            graphics.renderComponentTooltip(font, AspectWidgets.tooltip(hovered.aspect()), mouseX, mouseY);
+            graphics.setComponentTooltipForNextFrame(font, AspectWidgets.tooltip(hovered.aspect()), mouseX, mouseY);
         } else {
-            renderTooltip(graphics, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos, topPos, (float) (0), (float) (0), imageWidth, imageHeight, 256, 256);
         int max = maxScroll();
         int scrollerY = topPos + SCROLLBAR_Y + (max == 0 ? 0 : (SCROLLBAR_HEIGHT - SCROLLER_HEIGHT) * scroll / max);
-        graphics.blitSprite(max == 0 ? SCROLLER_DISABLED : SCROLLER, leftPos + SCROLLBAR_X, scrollerY, 12, SCROLLER_HEIGHT);
+        TeGuiBlit.blitSprite(graphics, max == 0 ? SCROLLER_DISABLED : SCROLLER, leftPos + SCROLLBAR_X, scrollerY, 12, SCROLLER_HEIGHT);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, 7, 6, 0, false);
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        graphics.text(font, title, 7, 6, 0, false);
         Aspect selected = menu.selected();
         for (int widget = 0; widget < WIDGETS_PER_PAGE; widget++) {
             EssentiaListPayload.Entry entry = entryAt(widget);
@@ -187,24 +189,24 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         if (selected != null) {
             for (EssentiaListPayload.Entry entry : menu.clientList()) {
                 if (entry.aspect() == selected) {
-                    graphics.drawString(font, Component.translatable("thaumicenergistics.gui.selected.aspect").append(": ").append(AspectWidgets.name(selected)), SELECTED_INFO_X, SELECTED_NAME_Y, 0, false);
-                    graphics.drawString(font, Component.translatable("thaumicenergistics.gui.selected.amount").append(": " + entry.amount()), SELECTED_INFO_X, SELECTED_AMOUNT_Y, 0, false);
+                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.aspect").append(": ").append(AspectWidgets.name(selected)), SELECTED_INFO_X, SELECTED_NAME_Y, 0, false);
+                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.amount").append(": " + entry.amount()), SELECTED_INFO_X, SELECTED_AMOUNT_Y, 0, false);
                     break;
                 }
             }
         }
     }
 
-    private void drawSelector(GuiGraphics graphics, int x, int y, int aspectColor) {
+    private void drawSelector(GuiGraphicsExtractor graphics, int x, int y, int aspectColor) {
         int time = (int) (System.currentTimeMillis() / 45L);
         int index = Math.abs(Math.abs(time % (GRADIENT_COUNT * 2)) - GRADIENT_COUNT);
         float delta = index / (float) GRADIENT_COUNT;
         int alpha = Math.round(Mth.lerp(delta, 0x70, 0x20));
-        graphics.fill(x, y, x + WIDGET_SIZE, y + WIDGET_SIZE, FastColor.ARGB32.color(alpha, aspectColor));
-        graphics.renderOutline(x, y, WIDGET_SIZE, WIDGET_SIZE, SELECTOR_BORDER_COLOR);
+        graphics.fill(x, y, x + WIDGET_SIZE, y + WIDGET_SIZE, ARGB.color(alpha, aspectColor));
+        graphics.outline(x, y, WIDGET_SIZE, WIDGET_SIZE, SELECTOR_BORDER_COLOR);
     }
 
-    private void drawAmount(GuiGraphics graphics, int x, int y, EssentiaListPayload.Entry entry) {
+    private void drawAmount(GuiGraphicsExtractor graphics, int x, int y, EssentiaListPayload.Entry entry) {
         boolean hideAmount = menu.viewMode == ViewItems.CRAFTABLE;
         String text;
         if (entry.amount() > 0 && !hideAmount) {
@@ -214,17 +216,20 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         } else {
             return;
         }
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 300);
-        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(0, 0);
+        graphics.pose().scale(0.5F, 0.5F);
         float right = (x + WIDGET_SIZE - 1) * 2;
         float bottom = (y + WIDGET_SIZE - 2) * 2;
-        graphics.drawString(font, text, (int) (right - font.width(text)), (int) (bottom - font.lineHeight + 1), 0xFFFFFF, true);
-        graphics.pose().popPose();
+        graphics.text(font, text, (int) (right - font.width(text)), (int) (bottom - font.lineHeight + 1), 0xFFFFFF, true);
+        graphics.pose().popMatrix();
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         int widget = widgetAt(mouseX, mouseY);
         if (widget >= 0) {
             EssentiaListPayload.Entry entry = entryAt(widget);
@@ -235,9 +240,9 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
                 menu.interactWithHeldItem(entry.aspect().getTag());
                 return true;
             }
-            boolean left = button == GLFW.GLFW_MOUSE_BUTTON_LEFT;
-            boolean right = button == GLFW.GLFW_MOUSE_BUTTON_RIGHT;
-            boolean middle = button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
+            boolean left = button == InputConstants.MOUSE_BUTTON_LEFT;
+            boolean right = button == InputConstants.MOUSE_BUTTON_RIGHT;
+            boolean middle = button == InputConstants.MOUSE_BUTTON_MIDDLE;
             if (!right && entry.craftable() && (menu.viewMode == ViewItems.CRAFTABLE || middle || left && entry.amount() == 0)) {
                 menu.requestCraft(entry.aspect().getTag());
             }
@@ -247,7 +252,7 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
             return true;
         }
         if (isOverSearch(mouseX, mouseY)) {
-            if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
                 searchBar.setValue("");
                 return true;
             }
@@ -259,27 +264,33 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
             scrollTo(mouseY);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         if (draggingScroller) {
             scrollTo(mouseY);
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         draggingScroller = false;
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(event);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (mouseX <= leftPos + GUI_WIDTH && !Screen.hasShiftDown() && scrollY != 0) {
+        if (mouseX <= leftPos + GUI_WIDTH && !Minecraft.getInstance().hasShiftDown() && scrollY != 0) {
             scroll = Mth.clamp(scroll - (int) Math.signum(scrollY), 0, maxScroll());
             return true;
         }
@@ -287,16 +298,17 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key();
+        if (keyCode == InputConstants.KEY_ESCAPE) {
             onClose();
             return true;
         }
         if (searchBar.isFocused()) {
-            searchBar.keyPressed(keyCode, scanCode, modifiers);
+            searchBar.keyPressed(event);
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     private boolean isOverSearch(double mouseX, double mouseY) {
@@ -330,25 +342,28 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         }
 
         @Override
-        protected boolean isValidClickButton(int button) {
-            return button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT;
+        protected boolean isValidClickButton(MouseButtonInfo info) {
+            return info.button() == InputConstants.MOUSE_BUTTON_LEFT || info.button() == InputConstants.MOUSE_BUTTON_RIGHT;
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (active && visible && isValidClickButton(button) && clicked(mouseX, mouseY)) {
+        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
+            if (active && visible && isValidClickButton(event.buttonInfo()) && isMouseOver(mouseX, mouseY)) {
                 playDownSound(Minecraft.getInstance().getSoundManager());
-                action.accept(button == GLFW.GLFW_MOUSE_BUTTON_RIGHT);
+                action.accept(button == InputConstants.MOUSE_BUTTON_RIGHT);
                 return true;
             }
             return false;
         }
 
         @Override
-        public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
             List<Component> lines = message.get();
             setTooltip(Tooltip.create(lines.get(0).copy().append("\n").append(lines.get(1))));
-            super.renderWidget(graphics, mouseX, mouseY, partialTick);
+            super.extractContents(graphics, mouseX, mouseY, partialTick);
         }
 
         @Override

@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -56,12 +56,12 @@ public final class EmitterGameTests {
 
     @SuppressWarnings("unchecked")
     private static EssentiaLevelEmitterPart emitter(GameTestHelper helper, Player player) {
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
         BlockPos cable = helper.absolutePos(CABLE);
-        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
+        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable")));
         EssentiaLevelEmitterPart part = PartHelper.setPart(helper.getLevel(), cable, Direction.EAST, player, EmitterFeature.LEVEL_EMITTER.get());
         helper.assertTrue(part != null, "level emitter was not placed");
         return part;
@@ -103,7 +103,7 @@ public final class EmitterGameTests {
             helper.assertTrue(part.getThresholdLevel() == 0, "threshold went below zero");
             menu.setThreshold(Long.MAX_VALUE);
             helper.assertTrue(part.getThresholdLevel() == EssentiaLevelEmitterPart.MAX_THRESHOLD, "threshold is not clamped");
-            ItemStack phial = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("thaumcraft:essentia_phial")));
+            ItemStack phial = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("thaumcraft:essentia_phial")));
             AspectKeys.ASPECTS.set(phial, new AspectList().add(Aspect.ORDER, 8));
             menu.setCarried(phial);
             menu.clickAspect(true);

@@ -1,31 +1,31 @@
 package thaumicenergistics.monitor;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.neoforged.neoforge.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelProperty;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNodeListener;
 import appeng.api.networking.IStackWatcher;
 import appeng.api.networking.storage.IStorageWatcherNode;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
 import appeng.api.stacks.AEKey;
 import appeng.api.util.AECableType;
 import appeng.parts.AEBasePart;
-import appeng.parts.PartModel;
 import appeng.util.InteractionUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.function.Consumer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.essentia.EssentiaContainers;
@@ -33,26 +33,19 @@ import thaumicenergistics.essentia.EssentiaItems;
 import thaumicenergistics.essentia.EssentiaKey;
 
 public class EssentiaStorageMonitorPart extends AEBasePart {
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/essentia_monitor_base");
-    public static final ResourceLocation MODEL_EMPTY_OFF = ThaumicEnergistics.id("part/essentia_monitor_empty_off");
-    public static final ResourceLocation MODEL_EMPTY_ON = ThaumicEnergistics.id("part/essentia_monitor_empty_on");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_storage_monitor_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_storage_monitor_on");
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/essentia_monitor_base");
+    public static final Identifier MODEL_EMPTY_OFF = ThaumicEnergistics.id("part/essentia_monitor_empty_off");
+    public static final Identifier MODEL_EMPTY_ON = ThaumicEnergistics.id("part/essentia_monitor_empty_on");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_storage_monitor_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_storage_monitor_on");
     public static final int ACTIVE_LIGHT_LEVEL = 9;
     private static final double IDLE_DRAIN = 0.0625;
     private static final String LOCKED_KEY = "Locked";
     private static final String TRACKED_KEY = "TrackedAspect";
 
-    public static @Nullable Renderer renderer;
+    public static final ModelProperty<Boolean> EMPTY = new ModelProperty<>();
 
-    public interface Renderer {
-        void render(EssentiaStorageMonitorPart part, PoseStack poseStack, MultiBufferSource buffers, int light);
-    }
 
-    private final IPartModel modelsOff;
-    private final IPartModel modelsOn;
-    private final IPartModel modelsEmptyOff;
-    private final IPartModel modelsEmptyOn;
     private @Nullable Aspect trackedAspect;
     private long trackedAmount;
     private boolean locked;
@@ -62,12 +55,8 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
         this(partItem, MODEL_OFF, MODEL_ON);
     }
 
-    protected EssentiaStorageMonitorPart(IPartItem<?> partItem, ResourceLocation off, ResourceLocation on) {
+    protected EssentiaStorageMonitorPart(IPartItem<?> partItem, Identifier off, Identifier on) {
         super(partItem);
-        modelsOff = new PartModel(MODEL_BASE, off);
-        modelsOn = new PartModel(MODEL_BASE, on);
-        modelsEmptyOff = new PartModel(MODEL_BASE, off, MODEL_EMPTY_OFF);
-        modelsEmptyOn = new PartModel(MODEL_BASE, on, MODEL_EMPTY_ON);
         getMainNode().setIdlePowerUsage(IDLE_DRAIN).addService(IStorageWatcherNode.class, new IStorageWatcherNode() {
             @Override
             public void updateWatcher(IStackWatcher newWatcher) {
@@ -151,7 +140,7 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
         }
         if (!player.isShiftKeyDown() && InteractionUtil.canWrenchRotate(heldItem)) {
             locked = !locked;
-            player.displayClientMessage(Component.translatable(locked ? "chat.ae2.isNowLocked" : "chat.ae2.isNowUnlocked"), false);
+            player.sendSystemMessage(Component.translatable(locked ? "chat.ae2.isNowLocked" : "chat.ae2.isNowUnlocked"));
             getHost().markForUpdate();
             getHost().markForSave();
             return true;
@@ -193,25 +182,13 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
         return true;
     }
 
-    @Override
-    public boolean requireDynamicRender() {
-        return true;
-    }
+
+
 
     @Override
-    public void renderDynamic(float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
-        if (renderer != null && isActive() && trackedAspect != null) {
-            renderer.render(this, poseStack, buffers, combinedLight);
-        }
-    }
-
-    @Override
-    public IPartModel getStaticModels() {
-        boolean active = isActive();
-        if (trackedAspect == null) {
-            return active ? modelsEmptyOn : modelsEmptyOff;
-        }
-        return active ? modelsOn : modelsOff;
+    public void collectModelData(ModelData.Builder builder) {
+        super.collectModelData(builder);
+        builder.with(EMPTY, trackedAspect == null);
     }
 
     @Override
@@ -252,15 +229,15 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
-        locked = tag.getBoolean(LOCKED_KEY);
-        trackedAspect = tag.contains(TRACKED_KEY) ? Aspect.getAspect(tag.getString(TRACKED_KEY)) : null;
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
+        locked = tag.getBooleanOr(LOCKED_KEY, false);
+        trackedAspect = tag.getString(TRACKED_KEY).map(Aspect::getAspect).orElse(null);
     }
 
     @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
         if (locked) {
             tag.putBoolean(LOCKED_KEY, true);
         }

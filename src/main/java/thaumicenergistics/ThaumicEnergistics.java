@@ -2,7 +2,7 @@ package thaumicenergistics;
 
 import thaumicenergistics.platform.TeEntityKey;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -30,7 +30,7 @@ public class ThaumicEnergistics {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public ThaumicEnergistics(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
         Features.load();
         TeStackData.register(modEventBus);
         TeEntityKey.register(modEventBus);
@@ -53,7 +53,7 @@ public class ThaumicEnergistics {
         modEventBus.addListener(FMLCommonSetupEvent.class, event -> event.enqueueWork(Features::setup));
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 }

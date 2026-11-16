@@ -3,7 +3,7 @@ package thaumicenergistics.client.essentia;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
 import thaumcraft.aspect.Aspect;
@@ -14,7 +14,7 @@ public final class AspectWidgets {
     private AspectWidgets() {
     }
 
-    public static void draw(GuiGraphics graphics, int x, int y, Aspect aspect) {
+    public static void draw(GuiGraphicsExtractor graphics, int x, int y, Aspect aspect) {
         if (AspectTooltips.isDiscovered(aspect)) {
             AspectRenderer.drawTag(graphics, x, y, aspect, 0.0F, 0, 1.0F, false);
         } else {

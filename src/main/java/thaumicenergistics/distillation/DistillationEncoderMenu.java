@@ -12,11 +12,11 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumicenergistics.essentia.EssentiaKey;
 
 public final class DistillationEncoderMenu extends AbstractContainerMenu {
@@ -102,7 +102,7 @@ public final class DistillationEncoderMenu extends AbstractContainerMenu {
         return selected.get();
     }
 
-    public @Nullable DistillationAspects.Entry selectedAspect() {
+    public DistillationAspects.@Nullable Entry selectedAspect() {
         List<DistillationAspects.Entry> aspects = sourceAspects();
         int index = selected.get();
         return aspects == null || index < 0 || index >= aspects.size() ? null : aspects.get(index);
@@ -188,7 +188,7 @@ public final class DistillationEncoderMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType clickType, Player clicker) {
+    public void clicked(int slotIndex, int button, ContainerInput clickType, Player clicker) {
         if (slotIndex == sourceSlot.index) {
             ItemStack carried = getCarried();
             sourceSlot.set(carried.isEmpty() ? ItemStack.EMPTY : carried.copyWithCount(1));

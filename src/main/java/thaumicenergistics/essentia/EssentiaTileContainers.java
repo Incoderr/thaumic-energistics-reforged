@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.alchemy.AdvancedAlchemicalFurnaceNozzleBlockEntity;
 import thaumcraft.alchemy.AlembicBlockEntity;
 import thaumcraft.aspect.Aspect;

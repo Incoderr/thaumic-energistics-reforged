@@ -1,5 +1,7 @@
 package thaumicenergistics.act;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.ids.AEComponents;
 import appeng.api.implementations.items.IMemoryCard;
@@ -9,20 +11,18 @@ import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
-import appeng.parts.PartModel;
 import appeng.parts.reporting.AbstractTerminalPart;
 import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.filter.IAEItemFilter;
 import java.util.List;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Equipable;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.aspect.Aspect;
@@ -35,15 +35,13 @@ import thaumicenergistics.visrelay.VisRelayFeature;
 import thaumicenergistics.visrelay.VisSourceLink;
 
 public final class ArcaneCraftingTerminalPart extends AbstractTerminalPart implements IGridTickable {
-    public static final ResourceLocation INV_CRAFTING = ThaumicEnergistics.id("arcane_crafting_grid");
-    public static final ResourceLocation INV_WAND = ThaumicEnergistics.id("arcane_crafting_wand");
-    public static final ResourceLocation INV_ARMOR = ThaumicEnergistics.id("arcane_crafting_armor");
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/arcane_crafting_terminal_base");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/arcane_crafting_terminal_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/arcane_crafting_terminal_on");
+    public static final Identifier INV_CRAFTING = ThaumicEnergistics.id("arcane_crafting_grid");
+    public static final Identifier INV_WAND = ThaumicEnergistics.id("arcane_crafting_wand");
+    public static final Identifier INV_ARMOR = ThaumicEnergistics.id("arcane_crafting_armor");
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/arcane_crafting_terminal_base");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/arcane_crafting_terminal_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/arcane_crafting_terminal_on");
     public static final List<EquipmentSlot> ARMOR_SLOTS = List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
-    private static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE, MODEL_OFF);
-    private static final IPartModel MODELS_ON = new PartModel(MODEL_BASE, MODEL_ON);
     private static final double IDLE_POWER_DRAIN = 0.5;
     private static final String NBT_KEY_VIS_INTERFACE = "VisInterface";
     private static final TickingRequest TICKING = new TickingRequest(2, 20, false);
@@ -74,8 +72,8 @@ public final class ArcaneCraftingTerminalPart extends AbstractTerminalPart imple
     }
 
     public static boolean isArmorFor(ItemStack stack, int slot) {
-        Equipable equipable = Equipable.get(stack);
-        return equipable != null && equipable.getEquipmentSlot() == ARMOR_SLOTS.get(slot);
+        var equippable = stack.get(DataComponents.EQUIPPABLE);
+        return equippable != null && equippable.slot() == ARMOR_SLOTS.get(slot);
     }
 
     public InternalInventory craftingGrid() {
@@ -175,13 +173,9 @@ public final class ArcaneCraftingTerminalPart extends AbstractTerminalPart imple
         return TickRateModulation.URGENT;
     }
 
-    @Override
-    public IPartModel getStaticModels() {
-        return isActive() ? MODELS_ON : MODELS_OFF;
-    }
 
     @Override
-    public InternalInventory getSubInventory(ResourceLocation id) {
+    public InternalInventory getSubInventory(Identifier id) {
         if (id.equals(INV_CRAFTING)) {
             return craftingGrid;
         }
@@ -229,20 +223,20 @@ public final class ArcaneCraftingTerminalPart extends AbstractTerminalPart imple
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
-        craftingGrid.readFromNBT(tag, "craftingGrid", registries);
-        wand.readFromNBT(tag, "wand", registries);
-        armor.readFromNBT(tag, "armor", registries);
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
+        craftingGrid.readFromNBT(tag, "craftingGrid");
+        wand.readFromNBT(tag, "wand");
+        armor.readFromNBT(tag, "armor");
         visSourceInfo.readFromTag(tag, NBT_KEY_VIS_INTERFACE);
     }
 
     @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
-        craftingGrid.writeToNBT(tag, "craftingGrid", registries);
-        wand.writeToNBT(tag, "wand", registries);
-        armor.writeToNBT(tag, "armor", registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
+        craftingGrid.writeToNBT(tag, "craftingGrid");
+        wand.writeToNBT(tag, "wand");
+        armor.writeToNBT(tag, "armor");
         visSourceInfo.writeToTag(tag, NBT_KEY_VIS_INTERFACE);
     }
 }

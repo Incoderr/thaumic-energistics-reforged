@@ -101,6 +101,36 @@ def item_definition(name, model, tints=None):
     write(ASSETS / "items" / f"{name}.json", {"model": definition})
 
 
+def special_parent():
+    return "minecraft:block/block" if profile.modern else "minecraft:builtin/entity"
+
+
+def special_item(name, model_type, **fields):
+    write(ASSETS / "items" / f"{name}.json", {"model": {
+        "type": "minecraft:special",
+        "base": ref(name, "item"),
+        "model": {"type": model_type, **fields},
+    }})
+
+
+def ae2_part_tints():
+    return [{"type": "minecraft:constant", "value": -1}] + [
+        {"type": "ae2:color", "color": "fluix", "variant": variant}
+        for variant in ("dark", "medium", "bright", "medium_bright")
+    ]
+
+
+def part_status(on, off, active=None):
+    return {"type": "ae2:status_indicator", "active": active or on, "powered": off, "unpowered": off}
+
+
+def part_definition(name, *models):
+    if not profile.modern:
+        return
+    entries = [{"type": "ae2:model", "model": model} if isinstance(model, str) else model for model in models]
+    write(ASSETS / "ae2" / "parts" / f"{name}.json", {"model": {"type": "ae2:composite", "models": entries}})
+
+
 def blockstate(name, content):
     write(ASSETS / "blockstates" / f"{name}.json", content)
 

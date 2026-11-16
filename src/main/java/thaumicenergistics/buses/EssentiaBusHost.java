@@ -4,7 +4,7 @@ import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.util.IConfigurableObject;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.essentia.EssentiaItems;
 

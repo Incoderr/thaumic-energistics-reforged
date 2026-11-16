@@ -1,5 +1,8 @@
 package thaumicenergistics.distillation;
 
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -84,15 +87,28 @@ public final class DistillationEncoderBlockEntity extends BlockEntity implements
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         items.clear();
-        ContainerHelper.loadAllItems(tag.getCompound(INVENTORY_KEY), items, registries);
+        ContainerHelper.loadAllItems(tag.childOrEmpty(INVENTORY_KEY), items);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put(INVENTORY_KEY, ContainerHelper.saveAllItems(new CompoundTag(), items, registries));
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
+        ContainerHelper.saveAllItems(tag.child(INVENTORY_KEY), items);
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            for (int slot : new int[] {SLOT_BLANK_PATTERNS, SLOT_ENCODED_PATTERN}) {
+                ItemStack stack = getItem(slot);
+                if (!stack.isEmpty()) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+                }
+            }
+        }
     }
 }

@@ -8,11 +8,11 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.crafting.ArcaneCrafting;
 
 public final class KnowledgeInscriberMenu extends AbstractContainerMenu {
@@ -45,7 +45,7 @@ public final class KnowledgeInscriberMenu extends AbstractContainerMenu {
     private final List<Slot> gridSlots = new ArrayList<>();
     private final DataSlot saveState = DataSlot.standalone();
     private final DataSlot saveCounter = DataSlot.standalone();
-    private @Nullable ArcaneCrafting.Match match;
+    private ArcaneCrafting.@Nullable Match match;
     private List<ArcanePattern> shownPatterns = List.of();
 
     public KnowledgeInscriberMenu(int containerId, Inventory inventory, BlockPos pos) {
@@ -174,7 +174,7 @@ public final class KnowledgeInscriberMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType clickType, Player clicker) {
+    public void clicked(int slotIndex, int button, ContainerInput clickType, Player clicker) {
         if (slotIndex >= 0 && slotIndex < slots.size()) {
             Slot slot = slots.get(slotIndex);
             if (gridSlots.contains(slot)) {

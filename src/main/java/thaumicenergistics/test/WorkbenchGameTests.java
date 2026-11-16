@@ -1,5 +1,7 @@
 package thaumicenergistics.test;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import java.util.List;
@@ -7,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +52,7 @@ public final class WorkbenchGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static ItemStack label(Aspect aspect) {
@@ -65,7 +67,7 @@ public final class WorkbenchGameTests {
 
     private static EssentiaCellWorkbenchBlockEntity place(GameTestHelper helper) {
         helper.setBlock(POS, WorkbenchFeature.BLOCK.get());
-        return (EssentiaCellWorkbenchBlockEntity) helper.getBlockEntity(POS);
+        return helper.getBlockEntity(POS, EssentiaCellWorkbenchBlockEntity.class);
     }
 
     private static EssentiaCellWorkbenchMenu menu(GameTestHelper helper, Player player) {
@@ -179,7 +181,7 @@ public final class WorkbenchGameTests {
     }
 
     private static void recipeLoaded(GameTestHelper helper) {
-        helper.assertTrue(helper.getLevel().getRecipeManager().byKey(ThaumicEnergistics.id("essentia_cell_workbench")).isPresent(), "workbench recipe is not loaded");
+        helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, ThaumicEnergistics.id("essentia_cell_workbench"))).isPresent(), "workbench recipe is not loaded");
         helper.succeed();
     }
 }

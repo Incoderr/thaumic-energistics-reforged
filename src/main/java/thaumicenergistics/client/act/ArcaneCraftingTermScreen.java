@@ -1,17 +1,20 @@
 package thaumicenergistics.client.act;
 
+import thaumicenergistics.client.platform.TeGuiBlit;
+import net.minecraft.client.input.InputWithModifiers;
+import appeng.client.gui.style.Blitter;
 import appeng.api.config.ActionItems;
-import appeng.client.gui.Icon;
+import appeng.util.Icon;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.ActionButton;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import thaumcraft.client.aspect.AspectRenderer;
 import thaumicenergistics.ThaumicEnergistics;
@@ -19,7 +22,7 @@ import thaumicenergistics.act.ArcaneCraftingTermMenu;
 
 public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCraftingTermMenu> {
     public static final String STYLE = "/screens/thaumicenergistics/arcane_crafting_terminal.json";
-    private static final ResourceLocation STATES = ThaumicEnergistics.id("textures/gui/states.png");
+    private static final Identifier STATES = ThaumicEnergistics.id("textures/gui/states.png");
     private static final int GUI_HEIGHT = 243;
     private static final int ASPECT_COST_POS_X = 136;
     private static final int ASPECT_COST_POS_Y = 90;
@@ -38,7 +41,7 @@ public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCrafti
     }
 
     @Override
-    public void drawFG(GuiGraphics graphics, int offsetX, int offsetY, int mouseX, int mouseY) {
+    public void drawFG(GuiGraphicsExtractor graphics, int offsetX, int offsetY, int mouseX, int mouseY) {
         super.drawFG(graphics, offsetX, offsetY, mouseX, mouseY);
         int lowerOffset = imageHeight - GUI_HEIGHT;
         int column = 0;
@@ -71,14 +74,14 @@ public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCrafti
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             menu.swapArmor();
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter().dest(getX(), getY(), width, height).blit(graphics);
-            graphics.blit(STATES, getX(), getY(), width, height, 0, 0, 16, 16, 256, 256);
+        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            Blitter.icon(Icon.TOOLBAR_BUTTON_BACKGROUND).dest(getX(), getY(), width, height).blit(graphics);
+            TeGuiBlit.blit(graphics, STATES, getX(), getY(), (float) (0), (float) (0), width, height, 16, 16, 256, 256);
         }
 
         @Override

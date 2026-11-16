@@ -1,5 +1,7 @@
 package thaumicenergistics.alchemy;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.crafting.IPatternDetails;
@@ -30,7 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class CrucibleAssemblerBlockEntity extends AENetworkedBlockEntity implements ICraftingProvider, IUpgradeableObject {
     public static final int MAX_SPEED_UPGRADES = 4;
@@ -240,23 +242,21 @@ public final class CrucibleAssemblerBlockEntity extends AENetworkedBlockEntity i
     }
 
     @Override
-    public void loadTag(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadTag(tag, registries);
-        upgrades.readFromNBT(tag, UPGRADES_KEY, registries);
+    public void loadTag(ValueInput tag) {
+        super.loadTag(tag);
+        upgrades.readFromNBT(tag, UPGRADES_KEY);
         inventory.clearContent();
-        if (tag.contains(ITEMS_KEY)) {
+        if (tag.child(ITEMS_KEY).isPresent()) {
             var items = NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
-            ContainerHelper.loadAllItems(tag.getCompound(ITEMS_KEY), items, registries);
+            ContainerHelper.loadAllItems(tag.childOrEmpty(ITEMS_KEY), items);
             inventory.getItems().set(CORE_SLOT, items.get(CORE_SLOT));
         }
-        crafting = tag.getBoolean(CRAFTING_KEY);
-        craftTickCounter = tag.getInt(PROGRESS_KEY);
+        crafting = tag.getBooleanOr(CRAFTING_KEY, false);
+        craftTickCounter = tag.getIntOr(PROGRESS_KEY, 0);
         currentPattern = null;
-        if (tag.contains(PATTERN_KEY)) {
-            CruciblePattern.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get(PATTERN_KEY)).result()
-                .filter(CruciblePattern::isValid)
-                .ifPresent(pattern -> currentPattern = new CrucibleAssemblerPattern(pattern));
-        }
+        tag.read(PATTERN_KEY, CruciblePattern.CODEC)
+            .filter(CruciblePattern::isValid)
+            .ifPresent(pattern -> currentPattern = new CrucibleAssemblerPattern(pattern));
         if (currentPattern == null) {
             crafting = false;
         }
@@ -264,17 +264,20 @@ public final class CrucibleAssemblerBlockEntity extends AENetworkedBlockEntity i
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        upgrades.writeToNBT(tag, UPGRADES_KEY, registries);
-        CompoundTag items = new CompoundTag();
-        ContainerHelper.saveAllItems(items, inventory.getItems(), registries);
-        tag.put(ITEMS_KEY, items);
+    public void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
+        upgrades.writeToNBT(tag, UPGRADES_KEY);
+        ContainerHelper.saveAllItems(tag.child(ITEMS_KEY), inventory.getItems());
         tag.putBoolean(CRAFTING_KEY, crafting);
         tag.putInt(PROGRESS_KEY, craftTickCounter);
         if (currentPattern != null) {
-            CruciblePattern.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), currentPattern.pattern()).result()
-                .ifPresent(encoded -> tag.put(PATTERN_KEY, encoded));
+            tag.store(PATTERN_KEY, CruciblePattern.CODEC, currentPattern.pattern());
         }
+    }
+
+    @Override
+    public void addAdditionalDrops(Level level, BlockPos pos, List<ItemStack> drops) {
+        super.addAdditionalDrops(level, pos, drops);
+        drops.addAll(drops());
     }
 }

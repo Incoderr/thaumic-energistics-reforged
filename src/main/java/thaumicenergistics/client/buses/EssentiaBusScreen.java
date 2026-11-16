@@ -1,20 +1,24 @@
 package thaumicenergistics.client.buses;
 
+import thaumicenergistics.client.platform.TeGuiBlit;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.MouseButtonEvent;
+import appeng.client.gui.style.Blitter;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
-import appeng.client.gui.Icon;
+import appeng.util.Icon;
 import appeng.client.gui.widgets.ServerSettingToggleButton;
 import appeng.client.gui.widgets.TabButton;
 import appeng.core.localization.GuiText;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.aspect.Aspect;
@@ -24,8 +28,8 @@ import thaumicenergistics.buses.EssentiaBusMenu;
 import thaumicenergistics.client.essentia.AspectWidgets;
 
 public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBusMenu> {
-    private static final ResourceLocation IO_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.io.bus.png");
-    private static final ResourceLocation STORAGE_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.storage.bus.png");
+    private static final Identifier IO_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.io.bus.png");
+    private static final Identifier STORAGE_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.storage.bus.png");
     private static final int GUI_HEIGHT = 184;
     private static final int GUI_MAIN_WIDTH = 176;
     private static final int IO_WIDTH_NO_TOOL = 211;
@@ -45,10 +49,8 @@ public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBus
     private VoidButton voidButton;
 
     public EssentiaBusScreen(EssentiaBusMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
+        super(menu, inventory, title, menu.hasToolbox() ? WIDTH_WITH_TOOL : menu.getHost().isStorageBus() ? STORAGE_WIDTH_NO_TOOL : IO_WIDTH_NO_TOOL, GUI_HEIGHT);
         storageBus = menu.getHost().isStorageBus();
-        imageWidth = menu.hasToolbox() ? WIDTH_WITH_TOOL : storageBus ? STORAGE_WIDTH_NO_TOOL : IO_WIDTH_NO_TOOL;
-        imageHeight = GUI_HEIGHT;
     }
 
     @Override
@@ -105,24 +107,25 @@ public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBus
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
         if (storageBus) {
-            graphics.blit(STORAGE_TEXTURE, leftPos, topPos, 0, 0, GUI_MAIN_WIDTH, GUI_HEIGHT);
-            graphics.blit(STORAGE_TEXTURE, leftPos + 179, topPos, 179, 0, 32, 32);
+            TeGuiBlit.blit(graphics, STORAGE_TEXTURE, leftPos, topPos, (float) (0), (float) (0), GUI_MAIN_WIDTH, GUI_HEIGHT, 256, 256);
+            TeGuiBlit.blit(graphics, STORAGE_TEXTURE, leftPos + 179, topPos, (float) (179), (float) (0), 32, 32, 256, 256);
             if (menu.hasToolbox()) {
-                graphics.blit(STORAGE_TEXTURE, leftPos + 179, topPos + 93, 178, 93, 68, 68);
+                TeGuiBlit.blit(graphics, STORAGE_TEXTURE, leftPos + 179, topPos + 93, (float) (178), (float) (93), 68, 68, 256, 256);
             }
         } else if (menu.hasToolbox()) {
-            graphics.blit(IO_TEXTURE, leftPos, topPos, 0, 0, WIDTH_WITH_TOOL, GUI_HEIGHT);
+            TeGuiBlit.blit(graphics, IO_TEXTURE, leftPos, topPos, (float) (0), (float) (0), WIDTH_WITH_TOOL, GUI_HEIGHT, 256, 256);
         } else {
-            graphics.blit(IO_TEXTURE, leftPos, topPos, 0, 0, GUI_MAIN_WIDTH, GUI_HEIGHT);
-            graphics.blit(IO_TEXTURE, leftPos + GUI_MAIN_WIDTH, topPos, GUI_MAIN_WIDTH, 0, IO_UPGRADES_WIDTH, IO_UPGRADES_HEIGHT);
+            TeGuiBlit.blit(graphics, IO_TEXTURE, leftPos, topPos, (float) (0), (float) (0), GUI_MAIN_WIDTH, GUI_HEIGHT, 256, 256);
+            TeGuiBlit.blit(graphics, IO_TEXTURE, leftPos + GUI_MAIN_WIDTH, topPos, (float) (GUI_MAIN_WIDTH), (float) (0), IO_UPGRADES_WIDTH, IO_UPGRADES_HEIGHT, 256, 256);
         }
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, TITLE_X, TITLE_Y, 0, false);
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        graphics.text(font, title, TITLE_X, TITLE_Y, 0, false);
         int hovered = widgetAt(mouseX, mouseY);
         for (int index = 0; index < EssentiaBusHost.FILTER_SIZE; index++) {
             if (!isWidgetVisible(index)) {
@@ -130,7 +133,7 @@ public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBus
             }
             int x = WIDGET_X + index % 3 * WIDGET_SIZE;
             int y = WIDGET_Y + index / 3 * WIDGET_SIZE;
-            graphics.blit(IO_TEXTURE, x, y, 79, 39, WIDGET_SIZE, WIDGET_SIZE);
+            TeGuiBlit.blit(graphics, IO_TEXTURE, x, y, (float) (79), (float) (39), WIDGET_SIZE, WIDGET_SIZE, 256, 256);
             if (index == hovered) {
                 graphics.fill(x + 1, y + 1, x + WIDGET_SIZE - 1, y + WIDGET_SIZE - 1, HOVER_COLOR);
             }
@@ -142,29 +145,31 @@ public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBus
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         int hovered = widgetAt(mouseX, mouseY);
         Aspect aspect = hovered >= 0 && isWidgetVisible(hovered) ? menu.filter(hovered) : null;
         if (aspect != null && menu.getCarried().isEmpty()) {
-            graphics.renderComponentTooltip(font, AspectWidgets.tooltip(aspect), mouseX, mouseY);
+            graphics.setComponentTooltipForNextFrame(font, AspectWidgets.tooltip(aspect), mouseX, mouseY);
         } else {
-            renderTooltip(graphics, mouseX, mouseY);
         }
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         int widget = widgetAt(mouseX, mouseY);
         if (widget >= 0 && isWidgetVisible(widget)) {
             menu.clickFilter(widget);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     private final class VoidButton extends AbstractButton {
-        private static final ItemStack VOID_JAR = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("thaumcraft:void_jar")));
+        private static final ItemStack VOID_JAR = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("thaumcraft:void_jar")));
 
         VoidButton(int x, int y) {
             super(x, y, 18, 18, Component.empty());
@@ -179,19 +184,19 @@ public final class EssentiaBusScreen extends AbstractContainerScreen<EssentiaBus
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             menu.toggleVoid(true);
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            super.renderWidget(graphics, mouseX, mouseY, partialTick);
-            graphics.renderItem(VOID_JAR, getX() + 1, getY() + 1);
+        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            extractDefaultSprite(graphics);
+            graphics.item(VOID_JAR, getX() + 1, getY() + 1);
             if (!menu.voidAllowed) {
-                graphics.pose().pushPose();
-                graphics.pose().translate(0, 0, 200);
-                Icon.INVALID.getBlitter().dest(getX() + 1, getY() + 1).blit(graphics);
-                graphics.pose().popPose();
+                graphics.pose().pushMatrix();
+                graphics.pose().translate(0, 0);
+                Blitter.icon(Icon.INVALID).dest(getX() + 1, getY() + 1).blit(graphics);
+                graphics.pose().popMatrix();
             }
         }
 

@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import thaumcraft.crafting.TcRecipes;
 import thaumcraft.research.ResearchCategories;
@@ -42,12 +42,12 @@ public final class GearBoxGameTests {
 
     private static void cranksCharger(GameTestHelper helper) {
         helper.setBlock(GEARBOX, GearBoxFeature.IRON_GEAR_BOX.get());
-        helper.setBlock(CHARGER, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:charger")));
+        helper.setBlock(CHARGER, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:charger")));
         helper.runAfterDelay(2, () -> {
-            GearBoxBlockEntity gearbox = (GearBoxBlockEntity) helper.getBlockEntity(GEARBOX);
+            GearBoxBlockEntity gearbox = helper.getBlockEntity(GEARBOX, GearBoxBlockEntity.class);
             gearbox.updateCrankables();
             helper.assertTrue(gearbox.isSideFacingCrankable(Direction.UP), "gearbox does not see the charger");
-            ChargerBlockEntity charger = (ChargerBlockEntity) helper.getBlockEntity(CHARGER);
+            ChargerBlockEntity charger = helper.getBlockEntity(CHARGER, ChargerBlockEntity.class);
             double before = charger.getAECurrentPower();
             for (int turn = 0; turn < 3; turn++) {
                 helper.assertTrue(gearbox.crankGearbox(), "gearbox did not turn");

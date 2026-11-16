@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -51,7 +51,7 @@ public final class VibrationGameTests {
 
     private static void containerRules(GameTestHelper helper) {
         helper.setBlock(CHAMBER, VibrationFeature.CHAMBER.get());
-        VibrationChamberBlockEntity chamber = (VibrationChamberBlockEntity) helper.getBlockEntity(CHAMBER);
+        VibrationChamberBlockEntity chamber = helper.getBlockEntity(CHAMBER, VibrationChamberBlockEntity.class);
         helper.assertTrue(EssentiaTileContainers.inject(chamber, 10, Aspect.WATER, true) == 0, "chamber took aqua");
         helper.assertTrue(EssentiaTileContainers.inject(chamber, 100, Aspect.FIRE, true) == 64 && chamber.storedAmount() == 64, "chamber did not take 64 ignis");
         helper.assertTrue(EssentiaTileContainers.inject(chamber, 10, Aspect.ENERGY, true) == 0, "chamber mixed aspects");
@@ -71,14 +71,14 @@ public final class VibrationGameTests {
 
     private static void producesPower(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:energy_cell")));
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:energy_cell")));
         helper.setBlock(CHAMBER, VibrationFeature.CHAMBER.get());
-        VibrationChamberBlockEntity chamber = (VibrationChamberBlockEntity) helper.getBlockEntity(CHAMBER);
+        VibrationChamberBlockEntity chamber = helper.getBlockEntity(CHAMBER, VibrationChamberBlockEntity.class);
         chamber.setStored(Aspect.ENERGY, 2);
-        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable"))));
+        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable"))));
         helper.runAfterDelay(80, () -> {
             IGrid grid = chamber.getMainNode().getGrid();
-            double cell = ((appeng.blockentity.networking.EnergyCellBlockEntity) helper.getBlockEntity(ENERGY)).getAECurrentPower();
+            double cell = (helper.getBlockEntity(ENERGY, appeng.blockentity.networking.EnergyCellBlockEntity.class)).getAECurrentPower();
             helper.assertTrue(grid != null && cell > 0, "network got no power, cell " + cell + " ticks " + chamber.ticksRemaining());
             helper.assertTrue(chamber.storedAmount() == 1, "chamber stored " + chamber.storedAmount());
             helper.assertTrue(helper.getBlockState(CHAMBER).getValue(VibrationChamberBlock.PROCESSING) == VibrationChamberBlock.Processing.POTENTIA, "chamber face is not potentia");

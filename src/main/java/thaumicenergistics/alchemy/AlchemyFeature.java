@@ -45,7 +45,7 @@ public final class AlchemyFeature {
         "alchemy_inscriber", AlchemyInscriberBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlchemyInscriberBlockEntity>> INSCRIBER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "alchemy_inscriber", () -> BlockEntityType.Builder.of(AlchemyInscriberBlockEntity::new, INSCRIBER.get()).build(null)
+        "alchemy_inscriber", () -> new BlockEntityType<>(AlchemyInscriberBlockEntity::new, INSCRIBER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<AlchemyInscriberMenu>> INSCRIBER_MENU = ModMenus.MENUS.register(
         "alchemy_inscriber", () -> Menus.withPos(AlchemyInscriberMenu::new)
@@ -54,7 +54,7 @@ public final class AlchemyFeature {
         "crucible_assembler", CrucibleAssemblerBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL).noOcclusion()
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleAssemblerBlockEntity>> ASSEMBLER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "crucible_assembler", () -> BlockEntityType.Builder.of(CrucibleAssemblerBlockEntity::new, ASSEMBLER.get()).build(null)
+        "crucible_assembler", () -> new BlockEntityType<>(CrucibleAssemblerBlockEntity::new, ASSEMBLER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<CrucibleAssemblerMenu>> ASSEMBLER_MENU = ModMenus.MENUS.register(
         "crucible_assembler", () -> Menus.withPos(CrucibleAssemblerMenu::new)

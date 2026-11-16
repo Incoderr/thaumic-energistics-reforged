@@ -3,7 +3,7 @@ package thaumicenergistics.wrench;
 import appeng.api.parts.IPartHost;
 import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.wand.WandItem;
@@ -40,7 +40,7 @@ public final class AeWrenchFocusItem extends FocusItem {
     }
 
     @Override
-    public @Nullable ResourceLocation getFocusTexture(ItemStack focus) {
+    public @Nullable Identifier getFocusTexture(ItemStack focus) {
         return ThaumicEnergistics.id("item/foci.aewrench");
     }
 
@@ -62,7 +62,7 @@ public final class AeWrenchFocusItem extends FocusItem {
     @Override
     public InteractionResult onFocusRightClick(ItemStack wand, Level level, Player player, @Nullable HitResult hit) {
         if (hit instanceof BlockHitResult blockHit && hit.getType() == HitResult.Type.BLOCK) {
-            return use(level, player, blockHit, wand, false) ? InteractionResult.sidedSuccess(level.isClientSide()) : InteractionResult.PASS;
+            return use(level, player, blockHit, wand, false) ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         return InteractionResult.PASS;
     }
@@ -134,7 +134,7 @@ public final class AeWrenchFocusItem extends FocusItem {
             return false;
         }
         level.setBlock(pos, rotated, Block.UPDATE_ALL);
-        rotated.handleNeighborChanged(level, pos, state.getBlock(), pos, false);
+        rotated.handleNeighborChanged(level, pos, state.getBlock(), null, false);
         return true;
     }
 }

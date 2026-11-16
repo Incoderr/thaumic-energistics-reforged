@@ -1,5 +1,6 @@
 package thaumicenergistics.provider;
 
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumicenergistics.block.AeWrenchableBlock;
 
 public abstract class ProviderBlock extends AeWrenchableBlock implements EntityBlock {
@@ -38,8 +39,8 @@ public abstract class ProviderBlock extends AeWrenchableBlock implements EntityB
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, BlockPos neighborPos, boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbor, neighborPos, movedByPiston);
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, @Nullable Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighbor, orientation, movedByPiston);
         if (level.getBlockEntity(pos) instanceof ProviderBlockEntity provider) {
             provider.checkGridConnectionColor();
         }

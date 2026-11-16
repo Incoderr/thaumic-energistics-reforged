@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumicenergistics:item/arcane_assembler",
+    "model": {
+      "type": "thaumicenergistics:arcane_assembler"
+    }
+  }
+}

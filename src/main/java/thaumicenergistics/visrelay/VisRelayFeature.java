@@ -1,6 +1,5 @@
 package thaumicenergistics.visrelay;
 
-import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -31,7 +30,6 @@ public final class VisRelayFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(VisRelayInterfacePart.MODEL_BASE, VisRelayInterfacePart.MODEL_OFF, VisRelayInterfacePart.MODEL_ON);
     }
 
     public static void recipes() {

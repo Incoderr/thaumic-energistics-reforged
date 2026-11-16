@@ -75,13 +75,14 @@ def generate(ctx):
                 lights(lit_light(), ITEM_SHIFT),
             ],
         })
-        ctx.item_definition(f"essentia_{name}_monitor", ctx.ref(f"essentia_{name}_monitor", "item"))
+        ctx.item_definition(f"essentia_{name}_monitor", ctx.ref(f"essentia_{name}_monitor", "item"), ctx.ae2_part_tints())
+        ctx.part_definition(f"essentia_{name}_monitor", "thaumicenergistics:part/essentia_monitor_base", ctx.part_status(f"thaumicenergistics:part/essentia_{name}_monitor_on", f"thaumicenergistics:part/essentia_{name}_monitor_off"), {"type": "thaumicenergistics:monitor_empty", "on": "thaumicenergistics:part/essentia_monitor_empty_on", "off": "thaumicenergistics:part/essentia_monitor_empty_off"})
     level_emitter = "thaumicenergistics:essentia_level_emitter"
     storage_monitor = "thaumicenergistics:essentia_storage_monitor"
     ctx.recipe("essentia_storage_monitor", {
         "type": "minecraft:crafting_shapeless",
         "category": "misc",
-        "ingredients": [{"item": level_emitter}, [{"item": panel} for panel in PANELS]],
+        "ingredients": [ctx.profile.recipe_ingredient(level_emitter), [ctx.profile.recipe_ingredient(panel) for panel in PANELS]] if not ctx.profile.modern else [level_emitter, list(PANELS)],
         "result": {"id": storage_monitor},
     }, [storage_monitor, level_emitter])
     ctx.shapeless("essentia_conversion_monitor", "thaumicenergistics:essentia_conversion_monitor", 1, [

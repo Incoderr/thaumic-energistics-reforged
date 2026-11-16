@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumicenergistics:item/thaumium_gear_box",
+    "model": {
+      "type": "thaumicenergistics:thaumium_gear_box"
+    }
+  }
+}

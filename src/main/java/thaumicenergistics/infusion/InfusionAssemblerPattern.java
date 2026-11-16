@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.essentia.EssentiaKey;
 

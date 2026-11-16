@@ -4,7 +4,7 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class EssentiaCellHandler implements ICellHandler {
     public static final EssentiaCellHandler INSTANCE = new EssentiaCellHandler();

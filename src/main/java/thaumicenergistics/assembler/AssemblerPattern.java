@@ -1,5 +1,6 @@
 package thaumicenergistics.assembler;
 
+import thaumicenergistics.platform.TeStacks;
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.crafting.IPatternDetailsDecoder;
 import appeng.api.stacks.AEItemKey;
@@ -9,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumicenergistics.knowledge.ArcanePattern;
 import thaumicenergistics.knowledge.KnowledgeFeature;
 
 public final class AssemblerPattern implements IPatternDetails {
-    private static final ResourceLocation PRIMORDIAL_PEARL = ResourceLocation.parse("thaumcraft:primordial_pearl");
+    private static final Identifier PRIMORDIAL_PEARL = Identifier.parse("thaumcraft:primordial_pearl");
 
     private final ArcanePattern pattern;
     private final AEItemKey definition;
@@ -63,10 +64,11 @@ public final class AssemblerPattern implements IPatternDetails {
     }
 
     static ItemStack remainder(ItemStack ingredient) {
-        if (ingredient.hasCraftingRemainingItem()) {
-            return ingredient.getCraftingRemainingItem();
+        ItemStack remainder = TeStacks.remainder(ingredient);
+        if (!remainder.isEmpty()) {
+            return remainder;
         }
-        if (ingredient.is(BuiltInRegistries.ITEM.get(PRIMORDIAL_PEARL))) {
+        if (ingredient.is(BuiltInRegistries.ITEM.getValue(PRIMORDIAL_PEARL))) {
             return ingredient.copyWithCount(1);
         }
         return ItemStack.EMPTY;

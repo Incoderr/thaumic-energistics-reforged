@@ -1,5 +1,8 @@
 package thaumicenergistics.terminal;
 
+import net.minecraft.util.Prediction;
+import net.minecraft.network.codec.ByteBufCodecs;
+import appeng.menu.guisync.ClientActionKey;
 import appeng.api.config.Actionable;
 import appeng.api.config.ViewItems;
 import appeng.api.networking.IGrid;
@@ -22,10 +25,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.registry.ModSounds;
 import thaumicenergistics.essentia.EssentiaContainers;
@@ -42,11 +45,11 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
     private static final int WORK_TICK_RATE = 3;
     private static final int TRANSFER_PER_WORK_CYCLE = 64;
     private static final long MINIMUM_SOUND_WAIT = 900;
-    private static final String ACTION_SELECT = "select";
-    private static final String ACTION_SORT = "sort";
-    private static final String ACTION_VIEW = "view";
-    private static final String ACTION_INTERACT = "interact";
-    private static final String ACTION_CRAFT = "craft";
+    private static final ClientActionKey<String> ACTION_SELECT = new ClientActionKey<>("select");
+    private static final ClientActionKey<Boolean> ACTION_SORT = new ClientActionKey<>("sort");
+    private static final ClientActionKey<Boolean> ACTION_VIEW = new ClientActionKey<>("view");
+    private static final ClientActionKey<String> ACTION_INTERACT = new ClientActionKey<>("interact");
+    private static final ClientActionKey<String> ACTION_CRAFT = new ClientActionKey<>("craft");
 
     private final EssentiaTerminalHost host;
     private final Slot inputSlot;
@@ -89,11 +92,11 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
         for (int column = 0; column < 9; column++) {
             addSlot(playerSlot(inventory, column, 8 + column * 18, HOTBAR_Y), SlotSemantics.PLAYER_HOTBAR);
         }
-        registerClientAction(ACTION_SELECT, String.class, this::selectAspect);
-        registerClientAction(ACTION_SORT, Boolean.class, this::cycleSortMode);
-        registerClientAction(ACTION_VIEW, Boolean.class, this::cycleViewMode);
-        registerClientAction(ACTION_INTERACT, String.class, this::interactWithHeldItem);
-        registerClientAction(ACTION_CRAFT, String.class, this::requestCraft);
+        registerClientAction(ACTION_SELECT, ByteBufCodecs.STRING_UTF8, this::selectAspect);
+        registerClientAction(ACTION_SORT, ByteBufCodecs.BOOL, this::cycleSortMode);
+        registerClientAction(ACTION_VIEW, ByteBufCodecs.BOOL, this::cycleViewMode);
+        registerClientAction(ACTION_INTERACT, ByteBufCodecs.STRING_UTF8, this::interactWithHeldItem);
+        registerClientAction(ACTION_CRAFT, ByteBufCodecs.STRING_UTF8, this::requestCraft);
     }
 
     private Slot playerSlot(Inventory inventory, int index, int x, int y) {
@@ -112,8 +115,8 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
-        if (clickType == ClickType.SWAP && button == host.lockedPlayerSlot()) {
+    public void clicked(int slotIndex, int button, ContainerInput clickType, Player player) {
+        if (clickType == ContainerInput.SWAP && button == host.lockedPlayerSlot()) {
             return;
         }
         super.clicked(slotIndex, button, clickType, player);
@@ -210,7 +213,7 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
         if (carried.getCount() > 1) {
             carried.shrink(1);
             if (!player.getInventory().add(result)) {
-                player.drop(result, false);
+                player.drop(result, false, Prediction.SERVER_ONLY);
             }
         } else {
             setCarried(result);
@@ -328,7 +331,7 @@ public final class EssentiaTerminalMenu extends AEBaseMenu {
         }
         lastSoundTime = now;
         SoundEvent sound = label ? ModSounds.PAGE.get() : SoundEvents.GENERIC_SWIM;
-        player.playNotifySound(sound, SoundSource.PLAYERS, 0.5F, 1.0F);
+        player.level().playSound(null, player.blockPosition(), sound, SoundSource.PLAYERS, 0.5F, 1.0F);
     }
 
     @Override

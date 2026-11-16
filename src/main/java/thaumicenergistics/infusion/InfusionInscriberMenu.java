@@ -8,11 +8,11 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.crafting.InfusionCrafting;
 import thaumcraft.crafting.InfusionRecipe;
 import thaumcraft.crafting.InfusionRunicAugmentRecipe;
@@ -206,7 +206,7 @@ public final class InfusionInscriberMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType clickType, Player clicker) {
+    public void clicked(int slotIndex, int button, ContainerInput clickType, Player clicker) {
         if (slotIndex >= 0 && slotIndex < slots.size()) {
             Slot slot = slots.get(slotIndex);
             if (slot == catalystSlot) {

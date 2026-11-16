@@ -38,7 +38,7 @@ public final class DistillationFeature {
         "distillation_pattern_encoder", EncoderBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DistillationEncoderBlockEntity>> ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "distillation_pattern_encoder", () -> BlockEntityType.Builder.of(DistillationEncoderBlockEntity::new, ENCODER.get()).build(null)
+        "distillation_pattern_encoder", () -> new BlockEntityType<>(DistillationEncoderBlockEntity::new, ENCODER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<DistillationEncoderMenu>> MENU = ModMenus.MENUS.register(
         "distillation_pattern_encoder", () -> Menus.withPos(DistillationEncoderMenu::new)
@@ -97,20 +97,8 @@ public final class DistillationFeature {
                     Component.translatable("block.thaumicenergistics.distillation_pattern_encoder")
                 ), pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
-        @Override
-        protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-            if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof DistillationEncoderBlockEntity encoder) {
-                for (int slot : new int[] {DistillationEncoderBlockEntity.SLOT_BLANK_PATTERNS, DistillationEncoderBlockEntity.SLOT_ENCODED_PATTERN}) {
-                    ItemStack stack = encoder.getItem(slot);
-                    if (!stack.isEmpty()) {
-                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
-                    }
-                }
-            }
-            super.onRemove(state, level, pos, newState, movedByPiston);
-        }
     }
 }

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumicenergistics:item/infusion_assembler",
+    "model": {
+      "type": "thaumicenergistics:infusion_assembler"
+    }
+  }
+}

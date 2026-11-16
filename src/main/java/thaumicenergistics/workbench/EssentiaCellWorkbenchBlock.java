@@ -38,14 +38,7 @@ public final class EssentiaCellWorkbenchBlock extends AeWrenchableBlock implemen
                 Component.translatable("thaumicenergistics.gui.essentia.cell.workbench.title")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof EssentiaCellWorkbenchBlockEntity workbench) {
-            Containers.dropContents(level, pos, workbench);
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
 }

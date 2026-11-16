@@ -1,5 +1,7 @@
 package thaumicenergistics.buses;
 
+import net.minecraft.network.codec.ByteBufCodecs;
+import appeng.menu.guisync.ClientActionKey;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
 import appeng.api.inventories.InternalInventory;
@@ -14,10 +16,10 @@ import java.util.List;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.essentia.EssentiaItems;
 
@@ -29,9 +31,9 @@ public final class EssentiaBusMenu extends AEBaseMenu {
     private static final int PLAYER_INVENTORY_Y = 102;
     private static final int HOTBAR_Y = 160;
     private static final int SLOT_SIZE = 18;
-    private static final String ACTION_FILTER = "filter";
-    private static final String ACTION_VOID = "void";
-    private static final String ACTION_PRIORITY = "priority";
+    private static final ClientActionKey<Integer> ACTION_FILTER = new ClientActionKey<>("filter");
+    private static final ClientActionKey<Boolean> ACTION_VOID = new ClientActionKey<>("void");
+    private static final ClientActionKey<Boolean> ACTION_PRIORITY = new ClientActionKey<>("priority");
 
     private final EssentiaBusHost host;
     private final @Nullable NetworkToolMenuHost<?> toolbox;
@@ -94,9 +96,9 @@ public final class EssentiaBusMenu extends AEBaseMenu {
         for (int column = 0; column < 9; column++) {
             playerSlots.add(addSlot(playerSlot(inventory, column, 8 + column * SLOT_SIZE, HOTBAR_Y), SlotSemantics.PLAYER_HOTBAR));
         }
-        registerClientAction(ACTION_FILTER, Integer.class, this::clickFilter);
-        registerClientAction(ACTION_VOID, Boolean.class, this::toggleVoid);
-        registerClientAction(ACTION_PRIORITY, Boolean.class, this::openPriority);
+        registerClientAction(ACTION_FILTER, ByteBufCodecs.VAR_INT, this::clickFilter);
+        registerClientAction(ACTION_VOID, ByteBufCodecs.BOOL, this::toggleVoid);
+        registerClientAction(ACTION_PRIORITY, ByteBufCodecs.BOOL, this::openPriority);
     }
 
     private Slot playerSlot(Inventory inventory, int index, int x, int y) {
@@ -205,8 +207,8 @@ public final class EssentiaBusMenu extends AEBaseMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
-        if (clickType == ClickType.SWAP && button == lockedSlot) {
+    public void clicked(int slotIndex, int button, ContainerInput clickType, Player player) {
+        if (clickType == ContainerInput.SWAP && button == lockedSlot) {
             return;
         }
         super.clicked(slotIndex, button, clickType, player);

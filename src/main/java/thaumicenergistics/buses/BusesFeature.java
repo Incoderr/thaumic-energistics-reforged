@@ -1,6 +1,5 @@
 package thaumicenergistics.buses;
 
-import appeng.api.parts.PartModels;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartItem;
@@ -45,11 +44,6 @@ public final class BusesFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(
-            EssentiaImportBusPart.MODEL_BASE, EssentiaImportBusPart.MODEL_OFF, EssentiaImportBusPart.MODEL_ON,
-            EssentiaExportBusPart.MODEL_BASE, EssentiaExportBusPart.MODEL_OFF, EssentiaExportBusPart.MODEL_ON,
-            EssentiaStorageBusPart.MODEL_BASE, EssentiaStorageBusPart.MODEL_OFF, EssentiaStorageBusPart.MODEL_ON
-        );
     }
 
     public static void setup() {

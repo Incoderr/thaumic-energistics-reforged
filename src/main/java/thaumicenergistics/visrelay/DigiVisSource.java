@@ -3,7 +3,7 @@ package thaumicenergistics.visrelay;
 import appeng.api.networking.IGrid;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 
 /**

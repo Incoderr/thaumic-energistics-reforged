@@ -10,7 +10,7 @@ import appeng.blockentity.storage.DriveBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -46,7 +46,7 @@ public final class InfusionGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static InfusionPattern shardPattern() {
@@ -90,16 +90,16 @@ public final class InfusionGameTests {
     private static void crafting(GameTestHelper helper) {
         thaumicenergistics.Config.INFUSION_ASSEMBLER_ENABLED.set(true);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, item("ae2:item_storage_cell_4k"), false);
         helper.setBlock(ASSEMBLER, InfusionFeature.ASSEMBLER.get());
-        InfusionAssemblerBlockEntity assembler = (InfusionAssemblerBlockEntity) helper.getBlockEntity(ASSEMBLER);
+        InfusionAssemblerBlockEntity assembler = helper.getBlockEntity(ASSEMBLER, InfusionAssemblerBlockEntity.class);
         ItemStack core = new ItemStack(InfusionFeature.CORE.get());
         InfusionCore.add(core, shardPattern());
         assembler.inventory().setItem(InfusionAssemblerBlockEntity.CORE_SLOT, core);
-        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable"))));
+        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable"))));
         helper.runAfterDelay(25, () -> {
             helper.assertTrue(assembler.getMainNode().isActive(), "assembler is not active");
             IGrid grid = assembler.getMainNode().getGrid();

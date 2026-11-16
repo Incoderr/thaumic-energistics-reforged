@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumicenergistics:item/crucible_assembler",
+    "model": {
+      "type": "thaumicenergistics:crucible_assembler"
+    }
+  }
+}

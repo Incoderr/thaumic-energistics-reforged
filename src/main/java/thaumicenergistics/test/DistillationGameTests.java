@@ -13,7 +13,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -66,12 +66,12 @@ public final class DistillationGameTests {
 
     private static void encodePattern(GameTestHelper helper) {
         helper.setBlock(ENCODER, DistillationFeature.ENCODER.get());
-        DistillationEncoderBlockEntity encoder = (DistillationEncoderBlockEntity) helper.getBlockEntity(ENCODER);
+        DistillationEncoderBlockEntity encoder = helper.getBlockEntity(ENCODER, DistillationEncoderBlockEntity.class);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         DistillationEncoderMenu menu = new DistillationEncoderMenu(1, player.getInventory(), helper.absolutePos(ENCODER));
         encoder.setItem(DistillationEncoderBlockEntity.SLOT_BLANK_PATTERNS, AEItems.BLANK_PATTERN.stack(2));
         menu.setCarried(new ItemStack(Items.STONE, 5));
-        menu.clicked(0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+        menu.clicked(0, 0, net.minecraft.world.inventory.ContainerInput.PICKUP, player);
         menu.broadcastChanges();
         helper.assertTrue(menu.sourceAspects() != null && menu.sourceAspects().get(0).aspect() == null && menu.selectedAspect() == null, "unscanned item reveals aspects");
         menu.clickMenuButton(player, DistillationEncoderMenu.BUTTON_ENCODE);
@@ -79,10 +79,10 @@ public final class DistillationGameTests {
         Knowledge.get(player).addScanned(ScanKind.OBJECT, ScanManager.itemKey(new ItemStack(Items.STONE)));
         Knowledge.get(player).discoverAspect(Aspect.EARTH);
         menu.setCarried(new ItemStack(Items.DIRT));
-        menu.clicked(0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+        menu.clicked(0, 0, net.minecraft.world.inventory.ContainerInput.PICKUP, player);
         menu.broadcastChanges();
         menu.setCarried(new ItemStack(Items.STONE));
-        menu.clicked(0, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+        menu.clicked(0, 0, net.minecraft.world.inventory.ContainerInput.PICKUP, player);
         menu.setCarried(ItemStack.EMPTY);
         menu.broadcastChanges();
         helper.assertTrue(menu.selectedAspect() != null && menu.selectedAspect().aspect() == Aspect.EARTH, "stone aspect was not selected");
@@ -102,11 +102,11 @@ public final class DistillationGameTests {
 
     private static void networkCraftable(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(PROVIDER, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:pattern_provider")));
-        PatternProviderBlockEntity provider = (PatternProviderBlockEntity) helper.getBlockEntity(PROVIDER);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(PROVIDER, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:pattern_provider")));
+        PatternProviderBlockEntity provider = helper.getBlockEntity(PROVIDER, PatternProviderBlockEntity.class);
         provider.getLogic().getPatternInv().insertItem(0, encode(Aspect.EARTH, 2), false);
-        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable"))));
+        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable"))));
         helper.runAfterDelay(25, () -> {
             IGrid grid = provider.getMainNode().getGrid();
             helper.assertTrue(grid.getCraftingService().isCraftable(EssentiaKey.of(Aspect.EARTH)), "essentia is not craftable in the network");

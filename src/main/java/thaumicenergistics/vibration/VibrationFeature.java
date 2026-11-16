@@ -29,7 +29,7 @@ public final class VibrationFeature {
         "essentia_vibration_chamber", VibrationChamberBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VibrationChamberBlockEntity>> ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "essentia_vibration_chamber", () -> BlockEntityType.Builder.of(VibrationChamberBlockEntity::new, CHAMBER.get()).build(null)
+        "essentia_vibration_chamber", () -> new BlockEntityType<>(VibrationChamberBlockEntity::new, CHAMBER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<VibrationChamberMenu>> MENU = ModMenus.MENUS.register(
         "essentia_vibration_chamber", () -> Menus.withPos(VibrationChamberMenu::new)

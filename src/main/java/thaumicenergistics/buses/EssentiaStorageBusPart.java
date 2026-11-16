@@ -1,5 +1,7 @@
 package thaumicenergistics.buses;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.AECapabilities;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridNodeListener;
@@ -8,7 +10,6 @@ import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
 import appeng.api.storage.IStorageMounts;
 import appeng.api.storage.IStorageProvider;
 import appeng.api.storage.MEStorage;
@@ -19,29 +20,26 @@ import appeng.menu.ISubMenu;
 import appeng.menu.MenuOpener;
 import appeng.menu.implementations.PriorityMenu;
 import appeng.menu.locator.MenuLocators;
-import appeng.parts.PartModel;
 import appeng.parts.automation.UpgradeablePart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.essentia.EssentiaTileContainers;
 
 public final class EssentiaStorageBusPart extends UpgradeablePart implements IGridTickable, IStorageProvider, IPriorityHost, EssentiaBusHost {
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/essentia_storage_bus_base");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_storage_bus_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_storage_bus_on");
-    private static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE, MODEL_OFF);
-    private static final IPartModel MODELS_ON = new PartModel(MODEL_BASE, MODEL_ON);
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/essentia_storage_bus_base");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_storage_bus_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_storage_bus_on");
     private static final double IDLE_POWER_DRAIN = 1.0;
     private static final int[] FILTER_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     private static final String PRIORITY_KEY = "Priority";
@@ -229,10 +227,6 @@ public final class EssentiaStorageBusPart extends UpgradeablePart implements IGr
         helper.addBox(5, 5, 13, 11, 11, 14);
     }
 
-    @Override
-    public IPartModel getStaticModels() {
-        return isActive() ? MODELS_ON : MODELS_OFF;
-    }
 
     @Override
     public float getCableConnectionLength(AECableType cable) {
@@ -240,18 +234,18 @@ public final class EssentiaStorageBusPart extends UpgradeablePart implements IGr
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
-        priority = tag.getInt(PRIORITY_KEY);
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
+        priority = tag.getIntOr(PRIORITY_KEY, 0);
         for (int index = 0; index < FILTER_SIZE; index++) {
-            filters[index] = tag.contains(FILTER_KEY + index) ? Aspect.getAspect(tag.getString(FILTER_KEY + index)) : null;
+            filters[index] = tag.getString(FILTER_KEY + index).map(Aspect::getAspect).orElse(null);
         }
-        voidAllowed = tag.getBoolean(VOID_KEY);
+        voidAllowed = tag.getBooleanOr(VOID_KEY, false);
     }
 
     @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
         if (priority != 0) {
             tag.putInt(PRIORITY_KEY, priority);
         }

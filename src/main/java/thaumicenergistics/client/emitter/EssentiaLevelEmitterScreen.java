@@ -1,25 +1,29 @@
 package thaumicenergistics.client.emitter;
 
+import thaumicenergistics.client.platform.TeGuiBlit;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.Minecraft;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
 import appeng.client.gui.widgets.ServerSettingToggleButton;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import org.lwjgl.glfw.GLFW;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.client.essentia.AspectWidgets;
 import thaumicenergistics.emitter.EssentiaLevelEmitterMenu;
 
 public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<EssentiaLevelEmitterMenu> {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.level.emitter.png");
-    private static final ResourceLocation WIDGET_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.io.bus.png");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.level.emitter.png");
+    private static final Identifier WIDGET_TEXTURE = ThaumicEnergistics.id("textures/gui/essentia.io.bus.png");
     private static final long[] ADJUSTMENTS = {1, 10, 100, -1, -10, -100};
     private static final int GUI_WIDTH = 176;
     private static final int GUI_HEIGHT = 184;
@@ -47,9 +51,7 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
     private long shownThreshold = -1;
 
     public EssentiaLevelEmitterScreen(EssentiaLevelEmitterMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        imageWidth = GUI_WIDTH;
-        imageHeight = GUI_HEIGHT;
+        super(menu, inventory, title, GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
@@ -59,10 +61,13 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
         amountField.setBordered(false);
         amountField.setMaxLength(AMOUNT_MAX_CHARS);
         amountField.setTextColor(0xFFFFFF);
-        amountField.setFilter(text -> text.chars().allMatch(Character::isDigit));
         amountField.setValue(Long.toString(menu.threshold));
         shownThreshold = menu.threshold;
         amountField.setResponder(text -> {
+            if (!text.chars().allMatch(Character::isDigit)) {
+                amountField.setValue(text.replaceAll("[^0-9]", ""));
+                return;
+            }
             long value = 0;
             try {
                 value = Long.parseLong(text);
@@ -88,7 +93,7 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
     }
 
     private static long adjustment(int index) {
-        return ADJUSTMENTS[index] * (Screen.hasShiftDown() ? 100 : 1);
+        return ADJUSTMENTS[index] * (Minecraft.getInstance().hasShiftDown() ? 100 : 1);
     }
 
     private static String label(int index, boolean shifted) {
@@ -107,29 +112,29 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        boolean shifted = Screen.hasShiftDown();
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        boolean shifted = Minecraft.getInstance().hasShiftDown();
         for (int index = 0; index < adjustButtons.length; index++) {
             adjustButtons[index].setMessage(Component.literal(label(index, shifted)));
         }
-        super.render(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         Aspect aspect = menu.tracked();
         if (aspect != null && isOverWidget(mouseX, mouseY) && menu.getCarried().isEmpty()) {
-            graphics.renderComponentTooltip(font, AspectWidgets.tooltip(aspect), mouseX, mouseY);
+            graphics.setComponentTooltipForNextFrame(font, AspectWidgets.tooltip(aspect), mouseX, mouseY);
         } else {
-            renderTooltip(graphics, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos, topPos, (float) (0), (float) (0), GUI_WIDTH, GUI_HEIGHT, 256, 256);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, TITLE_X, TITLE_Y, 0, false);
-        graphics.blit(WIDGET_TEXTURE, WIDGET_X, WIDGET_Y, 79, 39, WIDGET_SIZE, WIDGET_SIZE);
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        graphics.text(font, title, TITLE_X, TITLE_Y, 0, false);
+        TeGuiBlit.blit(graphics, WIDGET_TEXTURE, WIDGET_X, WIDGET_Y, (float) (79), (float) (39), WIDGET_SIZE, WIDGET_SIZE, 256, 256);
         if (isOverWidget(mouseX, mouseY)) {
             graphics.fill(WIDGET_X + 1, WIDGET_Y + 1, WIDGET_X + WIDGET_SIZE - 1, WIDGET_Y + WIDGET_SIZE - 1, HOVER_COLOR);
         }
@@ -146,24 +151,28 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x();
+        double mouseY = event.y();
+        int button = event.button();
         if (isOverWidget(mouseX, mouseY)) {
             menu.clickAspect(true);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key();
+        if (keyCode == InputConstants.KEY_ESCAPE) {
             onClose();
             return true;
         }
         if (amountField.isFocused()) {
-            amountField.keyPressed(keyCode, scanCode, modifiers);
+            amountField.keyPressed(event);
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 }

@@ -1,6 +1,6 @@
 package thaumicenergistics.client.essentia;
 
-import appeng.api.client.AEKeyRendering;
+import appeng.client.api.AEKeyRendering;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import thaumicenergistics.essentia.EssentiaKey;
 import thaumicenergistics.essentia.EssentiaKeyType;

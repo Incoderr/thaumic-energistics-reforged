@@ -11,6 +11,10 @@ tasks.named('wrapper', Wrapper).configure {
 version = mod_version
 group = mod_group_id
 
+sourceSets.main.java {
+    exclude 'thaumicenergistics/client/rei/**'
+}
+
 sourceSets.main.resources {
     srcDir('src/generated/resources')
 }
@@ -53,12 +57,6 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(Integer.parseInt(java_ve
 
 neoForge {
     version = project.neo_version
-
-    parchment {
-        minecraftVersion = "1.21.1"
-        mappingsVersion = "2024.11.17"
-    }
-
     runs {
         client {
             client()
@@ -98,11 +96,6 @@ dependencies {
     implementation "com.github.glitchfiend:TerraBlender-neoforge:${terrablender_version}"
     implementation files("libs/appliedenergistics2-${ae2_version}.jar")
     implementation files("libs/guideme-${guideme_version}.jar")
-    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-    localRuntime "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    if (!providers.gradleProperty("withoutRei").isPresent()) {
-        localRuntime "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -159,7 +152,7 @@ tasks.named('runGameTestServer') {
     }
     doLast {
         def log = gameTestLog
-        if (!log.isFile() || !log.text.contains("Enabled Gametest Namespaces: [thaumicenergistics]") || !(log.text =~ /All [1-9][0-9]* required tests passed/)) {
+        if (!log.isFile() || !log.text.contains("Running test environment 'thaumicenergistics:") || !(log.text =~ /All [1-9][0-9]* required tests passed/)) {
             throw new GradleException("GameTest server did not report a completed successful test run")
         }
     }

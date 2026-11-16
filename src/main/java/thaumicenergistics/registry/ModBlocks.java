@@ -21,7 +21,7 @@ public final class ModBlocks {
         DeferredBlock<B> block,
         UnaryOperator<Item.Properties> itemProperties
     ) {
-        ModItems.ITEMS.registerSimpleBlockItem(block, itemProperties.apply(new Item.Properties()));
+        ModItems.ITEMS.registerSimpleBlockItem(block, itemProperties);
         return block;
     }
 

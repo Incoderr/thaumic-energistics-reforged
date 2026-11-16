@@ -1,5 +1,8 @@
 package thaumicenergistics.workbench;
 
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -128,16 +131,24 @@ public final class EssentiaCellWorkbenchBlockEntity extends BlockEntity implemen
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        cell = tag.contains(CELL_KEY) ? ItemStack.parseOptional(registries, tag.getCompound(CELL_KEY)) : ItemStack.EMPTY;
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        cell = tag.read(CELL_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (!cell.isEmpty()) {
-            tag.put(CELL_KEY, cell.save(registries));
+            tag.store(CELL_KEY, ItemStack.CODEC, cell);
+        }
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            Containers.dropContents(level, pos, this);
         }
     }
 }

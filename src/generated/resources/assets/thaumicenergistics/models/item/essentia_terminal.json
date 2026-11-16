@@ -82,12 +82,12 @@
       "from": [
         3,
         3,
-        6.98
+        7
       ],
       "to": [
         13,
         13,
-        7
+        8
       ],
       "faces": {
         "north": {
@@ -97,8 +97,8 @@
             13,
             13
           ],
-          "texture": "#dark",
-          "tintindex": 1
+          "texture": "#light",
+          "tintindex": 3
         }
       }
     },
@@ -106,12 +106,12 @@
       "from": [
         3,
         3,
-        6.96
+        7
       ],
       "to": [
         13,
         13,
-        7
+        8
       ],
       "faces": {
         "north": {
@@ -130,12 +130,12 @@
       "from": [
         3,
         3,
-        6.94
+        7
       ],
       "to": [
         13,
         13,
-        7
+        8
       ],
       "faces": {
         "north": {
@@ -145,8 +145,8 @@
             13,
             13
           ],
-          "texture": "#light",
-          "tintindex": 3
+          "texture": "#dark",
+          "tintindex": 1
         }
       }
     },

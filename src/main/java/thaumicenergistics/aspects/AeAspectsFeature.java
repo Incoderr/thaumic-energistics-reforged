@@ -1,5 +1,6 @@
 package thaumicenergistics.aspects;
 
+import net.minecraft.world.item.crafting.CraftingInput;
 import appeng.recipes.AERecipeTypes;
 import appeng.recipes.handlers.InscriberRecipe;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +55,7 @@ public final class AeAspectsFeature {
     }
 
     private static Item item(String path) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AE2, path));
+        return BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(AE2, path));
     }
 
     private static AspectList list(Object... pairs) {
@@ -121,7 +122,7 @@ public final class AeAspectsFeature {
                 if (holder.value().getType() != type) {
                     continue;
                 }
-                ItemStack result = holder.value().getResultItem(server.registryAccess());
+                ItemStack result = resultOf(holder.value());
                 if (!result.isEmpty()) {
                     recipes.computeIfAbsent(result.getItem(), key -> new ArrayList<>()).add(holder.value());
                 }
@@ -213,25 +214,40 @@ public final class AeAspectsFeature {
             }
         }
 
+        private static ItemStack resultOf(Recipe<?> recipe) {
+            if (recipe instanceof InscriberRecipe inscriber) {
+                return inscriber.result().create();
+            }
+            if (recipe instanceof ShapedRecipe shaped) {
+                return shaped.assemble(CraftingInput.EMPTY);
+            }
+            if (recipe instanceof ShapelessRecipe shapeless) {
+                return shapeless.result().create();
+            }
+            return ItemStack.EMPTY;
+        }
+
         private AspectList fromRecipe(Recipe<?> recipe) {
             List<Ingredient> inputs = new ArrayList<>();
             if (recipe instanceof InscriberRecipe inscriber) {
                 inputs.add(inscriber.getMiddleInput());
-                inputs.add(inscriber.getTopOptional());
-                inputs.add(inscriber.getBottomOptional());
-            } else if (recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe) {
-                inputs.addAll(recipe.getIngredients());
+                inscriber.getTopOptional().ifPresent(inputs::add);
+                inscriber.getBottomOptional().ifPresent(inputs::add);
+            } else if (recipe instanceof ShapedRecipe shaped) {
+                shaped.getIngredients().forEach(optional -> optional.ifPresent(inputs::add));
+            } else if (recipe instanceof ShapelessRecipe shapeless) {
+                inputs.addAll(shapeless.placementInfo().ingredients());
             }
             AspectList result = new AspectList();
             for (Ingredient input : inputs) {
                 if (input == null || input.isEmpty()) {
                     continue;
                 }
-                ItemStack[] options = input.getItems();
-                if (options.length == 0) {
+                var first = input.items().findFirst();
+                if (first.isEmpty()) {
                     continue;
                 }
-                AspectList stackAspects = tags(options[0].getItem());
+                AspectList stackAspects = tags(first.get().value());
                 if (stackAspects == null) {
                     continue;
                 }

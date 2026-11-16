@@ -1,5 +1,6 @@
 package thaumicenergistics.monitor;
 
+import net.minecraft.util.Prediction;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.security.IActionSource;
@@ -7,20 +8,20 @@ import appeng.api.parts.IPartItem;
 import appeng.util.Platform;
 import java.util.List;
 import java.util.UUID;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.essentia.EssentiaContainers;
 import thaumicenergistics.essentia.EssentiaNetwork;
 
 public final class EssentiaConversionMonitorPart extends EssentiaStorageMonitorPart {
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_conversion_monitor_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_conversion_monitor_on");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_conversion_monitor_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_conversion_monitor_on");
     private static final long DOUBLE_CLICK_TICKS = 2 * 20L;
 
     private @Nullable UUID depositedPlayer;
@@ -101,7 +102,7 @@ public final class EssentiaConversionMonitorPart extends EssentiaStorageMonitorP
             insertAll(player);
             return true;
         }
-        boolean drained = drainContainer(player, player.getInventory().selected, null);
+        boolean drained = drainContainer(player, player.getInventory().getSelectedSlot(), null);
         if (drained) {
             depositedPlayer = player.getUUID();
             depositedTick = getLevel().getGameTime();
@@ -162,7 +163,7 @@ public final class EssentiaConversionMonitorPart extends EssentiaStorageMonitorP
             inventory.setItem(slot, drained.stack());
         } else {
             container.shrink(1);
-            give(player, drained.stack(), stack -> player.drop(stack, false));
+            give(player, drained.stack(), stack -> player.drop(stack, false, Prediction.SERVER_ONLY));
         }
         depositedAspect = aspect;
         return true;

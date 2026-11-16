@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.platform.Menus;
@@ -45,7 +44,7 @@ public final class ArcaneAssemblerBlock extends AeWrenchableBlock implements Ent
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -65,7 +64,7 @@ public final class ArcaneAssemblerBlock extends AeWrenchableBlock implements Ent
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (stack.getItem() instanceof IMemoryCard card && canPlayerInteract(player)) {
             if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ArcaneAssemblerBlockEntity assembler) {
                 CompoundTag data = VisRelayFeature.LINK.get(stack);
@@ -81,7 +80,7 @@ public final class ArcaneAssemblerBlock extends AeWrenchableBlock implements Ent
                     assembler.linkChanged();
                 }
             }
-            return ItemInteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
@@ -94,7 +93,7 @@ public final class ArcaneAssemblerBlock extends AeWrenchableBlock implements Ent
                 Component.translatable("thaumicenergistics.gui.arcane.assembler.title")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -118,20 +117,10 @@ public final class ArcaneAssemblerBlock extends AeWrenchableBlock implements Ent
         }
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public static void appendTooltip(ItemStack stack, List<Component> tooltip) {
         if (AssemblerFeature.STORED_VIS.has(stack)) {
             tooltip.add(Component.translatable("thaumicenergistics.tooltip.arcane.assembler.hasVis"));
         }
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof ArcaneAssemblerBlockEntity assembler) {
-            for (ItemStack drop : assembler.drops()) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), drop);
-            }
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
 }

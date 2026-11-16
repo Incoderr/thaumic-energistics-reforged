@@ -1,14 +1,14 @@
 package thaumicenergistics.buses;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
-import appeng.parts.PartModel;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumcraft.essentia.VoidJarBlockEntity;
@@ -17,11 +17,9 @@ import thaumicenergistics.essentia.EssentiaNetwork;
 import thaumicenergistics.essentia.EssentiaTileContainers;
 
 public final class EssentiaExportBusPart extends EssentiaIOBusPart {
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/essentia_export_bus_base");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_export_bus_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_export_bus_on");
-    private static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE, MODEL_OFF);
-    private static final IPartModel MODELS_ON = new PartModel(MODEL_BASE, MODEL_ON);
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/essentia_export_bus_base");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_export_bus_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_export_bus_on");
     private static final String VOID_KEY = "IsVoidAllowed";
 
     private boolean voidAllowed;
@@ -86,20 +84,16 @@ public final class EssentiaExportBusPart extends EssentiaIOBusPart {
         helper.addBox(6, 6, 15, 10, 10, 16);
     }
 
+
     @Override
-    public IPartModel getStaticModels() {
-        return isActive() ? MODELS_ON : MODELS_OFF;
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
+        voidAllowed = tag.getBooleanOr(VOID_KEY, false);
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
-        voidAllowed = tag.getBoolean(VOID_KEY);
-    }
-
-    @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
         if (voidAllowed) {
             tag.putBoolean(VOID_KEY, true);
         }

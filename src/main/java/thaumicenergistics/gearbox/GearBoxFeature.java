@@ -1,5 +1,7 @@
 package thaumicenergistics.gearbox;
 
+import org.jspecify.annotations.Nullable;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +46,7 @@ public final class GearBoxFeature {
         "thaumium_gear_box", properties -> new GearBoxBlock(properties, true), GearBoxFeature::properties
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GearBoxBlockEntity>> ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "gear_box", () -> BlockEntityType.Builder.of(GearBoxBlockEntity::new, IRON_GEAR_BOX.get(), THAUMIUM_GEAR_BOX.get()).build(null)
+        "gear_box", () -> new BlockEntityType<>(GearBoxBlockEntity::new, IRON_GEAR_BOX.get(), THAUMIUM_GEAR_BOX.get())
     );
 
     private GearBoxFeature() {
@@ -120,7 +122,7 @@ public final class GearBoxFeature {
 
         @Override
         protected RenderShape getRenderShape(BlockState state) {
-            return RenderShape.ENTITYBLOCK_ANIMATED;
+            return RenderShape.INVISIBLE;
         }
 
         @Override
@@ -142,7 +144,7 @@ public final class GearBoxFeature {
         @Override
         protected boolean canPlayerInteract(Player player) {
             if (player instanceof FakePlayer) {
-                return allowGolemInteraction && GOLEM_NAME.equalsIgnoreCase(player.getGameProfile().getName());
+                return allowGolemInteraction && GOLEM_NAME.equalsIgnoreCase(player.getGameProfile().name());
             }
             return true;
         }
@@ -150,14 +152,14 @@ public final class GearBoxFeature {
         @Override
         protected InteractionResult activate(Level level, BlockPos pos, Player player) {
             if (level.getBlockEntity(pos) instanceof GearBoxBlockEntity gearbox && gearbox.crankGearbox()) {
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
         }
 
         @Override
-        protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, BlockPos neighborPos, boolean movedByPiston) {
-            super.neighborChanged(state, level, pos, neighbor, neighborPos, movedByPiston);
+        protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, @Nullable Orientation orientation, boolean movedByPiston) {
+            super.neighborChanged(state, level, pos, neighbor, orientation, movedByPiston);
             if (level.getBlockEntity(pos) instanceof GearBoxBlockEntity gearbox) {
                 gearbox.updateCrankables();
                 gearbox.sync();

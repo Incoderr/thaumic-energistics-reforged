@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "thaumicenergistics:block/crucible.assembler.fallback"
   }

@@ -1,13 +1,16 @@
 package thaumicenergistics.client.alchemy;
 
-import appeng.client.gui.Icon;
-import net.minecraft.client.gui.GuiGraphics;
+import thaumicenergistics.client.platform.TeGuiBlit;
+import net.minecraft.client.input.InputWithModifiers;
+import appeng.client.gui.style.Blitter;
+import appeng.util.Icon;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.client.aspect.AspectRenderer;
@@ -16,7 +19,7 @@ import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.alchemy.AlchemyInscriberMenu;
 
 public final class AlchemyInscriberScreen extends AbstractContainerScreen<AlchemyInscriberMenu> {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/alchemy.inscriber.png");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/gui/alchemy.inscriber.png");
     private static final int GUI_WIDTH = 210;
     private static final int GUI_HEIGHT = 244;
     private static final int ASPECTS_X = 98;
@@ -26,9 +29,7 @@ public final class AlchemyInscriberScreen extends AbstractContainerScreen<Alchem
     private SaveButton saveButton;
 
     public AlchemyInscriberScreen(AlchemyInscriberMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        imageWidth = GUI_WIDTH;
-        imageHeight = GUI_HEIGHT;
+        super(menu, inventory, title, GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
@@ -45,19 +46,19 @@ public final class AlchemyInscriberScreen extends AbstractContainerScreen<Alchem
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos, topPos, (float) (0), (float) (0), imageWidth, imageHeight, 256, 256);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, 6, 6, 0, false);
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        graphics.text(font, title, 6, 6, 0, false);
         CrucibleRecipe recipe = menu.selected();
         if (recipe == null) {
             return;
@@ -69,7 +70,7 @@ public final class AlchemyInscriberScreen extends AbstractContainerScreen<Alchem
         }
         int count = menu.recipes().size();
         if (count > 1) {
-            graphics.drawString(font, (menu.recipes().indexOf(recipe) + 1) + "/" + count, 92, 90, 0x404040, false);
+            graphics.text(font, (menu.recipes().indexOf(recipe) + 1) + "/" + count, 92, 90, 0x404040, false);
         }
     }
 
@@ -101,17 +102,17 @@ public final class AlchemyInscriberScreen extends AbstractContainerScreen<Alchem
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             press(AlchemyInscriberMenu.BUTTON_SAVE_DELETE);
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter().dest(getX(), getY()).blit(graphics);
+        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            Blitter.icon(Icon.TOOLBAR_BUTTON_BACKGROUND).dest(getX(), getY()).blit(graphics);
             if (state == AlchemyInscriberMenu.SaveState.SAVE) {
-                Icon.WHITE_ARROW_DOWN.getBlitter().dest(getX(), getY()).blit(graphics);
+                Blitter.icon(Icon.WHITE_ARROW_DOWN).dest(getX(), getY()).blit(graphics);
             } else if (state == AlchemyInscriberMenu.SaveState.DELETE) {
-                Icon.CLEAR.getBlitter().dest(getX(), getY()).blit(graphics);
+                Blitter.icon(Icon.CLEAR).dest(getX(), getY()).blit(graphics);
             }
         }
 
@@ -128,13 +129,13 @@ public final class AlchemyInscriberScreen extends AbstractContainerScreen<Alchem
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             press(AlchemyInscriberMenu.BUTTON_NEXT);
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            Icon.ARROW_RIGHT.getBlitter().dest(getX(), getY(), width, height).blit(graphics);
+        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            Blitter.icon(Icon.ARROW_RIGHT).dest(getX(), getY(), width, height).blit(graphics);
         }
 
         @Override

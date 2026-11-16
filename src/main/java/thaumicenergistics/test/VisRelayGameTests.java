@@ -1,5 +1,6 @@
 package thaumicenergistics.test;
 
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.PartHelper;
 import java.util.List;
@@ -7,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +57,7 @@ public final class VisRelayGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static void researchAndRecipe(GameTestHelper helper) {
@@ -75,7 +76,7 @@ public final class VisRelayGameTests {
      */
     private static final class RootSource extends VisNode {
         private RootSource(BlockPos pos, Level level) {
-            super(BlockEntityType.BEACON, pos, Blocks.BEACON.defaultBlockState());
+            super(BlockEntityTypes.BEACON, pos, Blocks.BEACON.defaultBlockState());
             setLevel(level);
         }
 
@@ -96,13 +97,13 @@ public final class VisRelayGameTests {
     }
 
     private static void placeRelay(GameTestHelper helper, BlockPos pos, Direction facing) {
-        BlockState state = BuiltInRegistries.BLOCK.get(ResourceLocation.parse("thaumcraft:vis_relay")).defaultBlockState()
+        BlockState state = BuiltInRegistries.BLOCK.getValue(Identifier.parse("thaumcraft:vis_relay")).defaultBlockState()
             .setValue(VisRelayBlock.FACING, facing);
         helper.setBlock(pos, state);
     }
 
     private static void placeCable(GameTestHelper helper, Player player, BlockPos absoluteCable) {
-        PartHelper.setPart(helper.getLevel(), absoluteCable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
+        PartHelper.setPart(helper.getLevel(), absoluteCable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable")));
     }
 
     private static ItemStack linkedCard(VisRelayInterfacePart source) {
@@ -118,7 +119,7 @@ public final class VisRelayGameTests {
 
     private static void drainsFromRelay(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
+        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
         BlockPos cable = helper.absolutePos(CABLE);
         placeCable(helper, player, cable);
         placeRelay(helper, RELAY_EAST, Direction.EAST);
@@ -136,7 +137,7 @@ public final class VisRelayGameTests {
 
     private static void p2pProvider(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
+        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
         BlockPos cable = helper.absolutePos(CABLE);
         placeCable(helper, player, cable);
         placeRelay(helper, RELAY_EAST, Direction.EAST);
@@ -152,7 +153,7 @@ public final class VisRelayGameTests {
         });
         helper.runAfterDelay(80, () -> {
             connected(helper, RELAY_WEST, "provider relay did not connect to the digital source");
-            VisRelayBlockEntity relay = (VisRelayBlockEntity) helper.getBlockEntity(RELAY_WEST);
+            VisRelayBlockEntity relay = helper.getBlockEntity(RELAY_WEST, VisRelayBlockEntity.class);
             int drained = relay.consumeVis(Aspect.FIRE, 8);
             helper.assertTrue(drained == 8, "digital vis chain drained " + drained + " vis");
             helper.succeed();
@@ -161,7 +162,7 @@ public final class VisRelayGameTests {
 
     private static void terminalRefill(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
+        helper.setBlock(ENERGY_HIGH, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
         BlockPos cable = helper.absolutePos(CABLE);
         placeCable(helper, player, cable);
         placeRelay(helper, RELAY_WEST, Direction.WEST);

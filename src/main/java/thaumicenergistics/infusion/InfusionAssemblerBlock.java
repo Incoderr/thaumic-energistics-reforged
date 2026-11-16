@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
@@ -24,13 +24,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import thaumcraft.platform.Menus;
 import thaumicenergistics.block.AeWrenchableBlock;
 
 public final class InfusionAssemblerBlock extends AeWrenchableBlock implements EntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public InfusionAssemblerBlock(Properties properties) {
         super(properties);
@@ -64,7 +64,7 @@ public final class InfusionAssemblerBlock extends AeWrenchableBlock implements E
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -91,7 +91,7 @@ public final class InfusionAssemblerBlock extends AeWrenchableBlock implements E
                 Component.translatable("block.thaumicenergistics.infusion_assembler")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -102,13 +102,4 @@ public final class InfusionAssemblerBlock extends AeWrenchableBlock implements E
         }
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof InfusionAssemblerBlockEntity assembler) {
-            for (ItemStack drop : assembler.drops()) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), drop);
-            }
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
 }

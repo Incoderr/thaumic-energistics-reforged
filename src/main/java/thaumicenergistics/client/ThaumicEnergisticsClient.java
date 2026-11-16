@@ -1,5 +1,7 @@
 package thaumicenergistics.client;
 
+import appeng.client.api.model.parts.RegisterPartModelsEvent;
+import appeng.client.api.renderer.parts.RegisterPartRendererEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,10 +11,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import thaumicenergistics.ThaumicEnergistics;
 
 @Mod(value = ThaumicEnergistics.MODID, dist = Dist.CLIENT)
@@ -34,13 +37,18 @@ public final class ThaumicEnergisticsClient {
     }
 
     @SubscribeEvent
-    static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        ClientFeatures.registerItemColors(event);
+    static void registerPartModels(RegisterPartModelsEvent event) {
+        ClientFeatures.registerPartModels(event);
     }
 
     @SubscribeEvent
-    static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-        ClientFeatures.registerBlockColors(event);
+    static void registerPartRenderers(RegisterPartRendererEvent event) {
+        ClientFeatures.registerPartRenderers(event);
+    }
+
+    @SubscribeEvent
+    static void registerBlockTints(RegisterColorHandlersEvent.BlockTintSources event) {
+        ClientFeatures.registerBlockTints(event);
     }
 
     @SubscribeEvent
@@ -49,7 +57,12 @@ public final class ThaumicEnergisticsClient {
     }
 
     @SubscribeEvent
-    static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        ClientFeatures.registerClientExtensions(event);
+    static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
+        ClientFeatures.registerSpecialRenderers(event);
+    }
+
+    @SubscribeEvent
+    static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        ClientFeatures.registerRenderStateModifiers(event);
     }
 }

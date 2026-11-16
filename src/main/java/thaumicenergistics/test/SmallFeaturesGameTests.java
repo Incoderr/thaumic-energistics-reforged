@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -36,7 +36,7 @@ public final class SmallFeaturesGameTests {
     }
 
     private static Item ae(String path) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("ae2", path));
+        return BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("ae2", path));
     }
 
     private static void quartzDupe(GameTestHelper helper) {
@@ -75,9 +75,9 @@ public final class SmallFeaturesGameTests {
     }
 
     private static void facades(GameTestHelper helper) {
-        TagKey<Block> whitelist = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("ae2", "whitelisted/facades"));
+        TagKey<Block> whitelist = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("ae2", "whitelisted/facades"));
         for (String name : List.of("amber_block", "arcane_stone_bricks", "greatwood_planks", "flesh_block")) {
-            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("thaumcraft", name));
+            Block block = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath("thaumcraft", name));
             helper.assertTrue(block.defaultBlockState().is(whitelist), name + " is not a facade block");
         }
         helper.succeed();

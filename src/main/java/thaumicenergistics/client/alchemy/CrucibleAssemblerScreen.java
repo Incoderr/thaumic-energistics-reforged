@@ -1,15 +1,16 @@
 package thaumicenergistics.client.alchemy;
 
-import net.minecraft.client.gui.GuiGraphics;
+import thaumicenergistics.client.platform.TeGuiBlit;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.alchemy.CrucibleAssemblerMenu;
 
 public final class CrucibleAssemblerScreen extends AbstractContainerScreen<CrucibleAssemblerMenu> {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/gui/crucible.assembler.png");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/gui/crucible.assembler.png");
     private static final int MAIN_GUI_WIDTH = 176;
     private static final int UPGRADE_GUI_WIDTH = 234 - MAIN_GUI_WIDTH;
     private static final int GUI_HEIGHT = 197;
@@ -21,29 +22,27 @@ public final class CrucibleAssemblerScreen extends AbstractContainerScreen<Cruci
     private static final int PROGRESS_BAR_X = 149;
 
     public CrucibleAssemblerScreen(CrucibleAssemblerMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        imageWidth = MAIN_GUI_WIDTH + UPGRADE_GUI_WIDTH;
-        imageHeight = GUI_HEIGHT;
+        super(menu, inventory, title, MAIN_GUI_WIDTH + UPGRADE_GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, MAIN_GUI_WIDTH, imageHeight);
-        graphics.blit(TEXTURE, leftPos + MAIN_GUI_WIDTH, topPos, MAIN_GUI_WIDTH, 0, UPGRADE_GUI_WIDTH, UPGRADE_GUI_HEIGHT);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos, topPos, (float) (0), (float) (0), MAIN_GUI_WIDTH, imageHeight, 256, 256);
+        TeGuiBlit.blit(graphics, TEXTURE, leftPos + MAIN_GUI_WIDTH, topPos, (float) (MAIN_GUI_WIDTH), (float) (0), UPGRADE_GUI_WIDTH, UPGRADE_GUI_HEIGHT, 256, 256);
         int height = (int) Math.floor(menu.percentComplete() * BAR_HEIGHT);
         if (height > 0) {
-            graphics.blit(TEXTURE, leftPos + PROGRESS_BAR_X, topPos + BAR_EMPTY_Y + BAR_HEIGHT - height, PROGRESS_BAR_X, BAR_FULL_Y + BAR_HEIGHT - height, BAR_WIDTH, height);
+            TeGuiBlit.blit(graphics, TEXTURE, leftPos + PROGRESS_BAR_X, topPos + BAR_EMPTY_Y + BAR_HEIGHT - height, (float) (PROGRESS_BAR_X), (float) (BAR_FULL_Y + BAR_HEIGHT - height), BAR_WIDTH, height, 256, 256);
         }
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, 6, 6, 0, false);
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        graphics.text(font, title, 6, 6, 0, false);
     }
 }

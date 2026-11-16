@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectKeys;
 import thaumcraft.aspect.AspectList;
@@ -17,18 +17,18 @@ public final class EssentiaContainers {
     public static final int PHIAL_CAPACITY = 8;
     public static final int JAR_CAPACITY = 64;
 
-    private static final ResourceLocation GLASS_PHIAL = ResourceLocation.parse("thaumcraft:glass_phial");
-    private static final ResourceLocation ESSENTIA_PHIAL = ResourceLocation.parse("thaumcraft:essentia_phial");
-    private static final ResourceLocation FILLED_JAR = ResourceLocation.parse("thaumcraft:filled_jar");
-    private static final ResourceLocation FILLED_VOID_JAR = ResourceLocation.parse("thaumcraft:filled_void_jar");
-    private static final ResourceLocation JAR_LABEL = ResourceLocation.parse("thaumcraft:jar_label");
-    private static final Map<ResourceLocation, ResourceLocation> EMPTY_JARS = Map.of(
-        FILLED_JAR, ResourceLocation.parse("thaumcraft:warded_jar"),
-        FILLED_VOID_JAR, ResourceLocation.parse("thaumcraft:void_jar")
+    private static final Identifier GLASS_PHIAL = Identifier.parse("thaumcraft:glass_phial");
+    private static final Identifier ESSENTIA_PHIAL = Identifier.parse("thaumcraft:essentia_phial");
+    private static final Identifier FILLED_JAR = Identifier.parse("thaumcraft:filled_jar");
+    private static final Identifier FILLED_VOID_JAR = Identifier.parse("thaumcraft:filled_void_jar");
+    private static final Identifier JAR_LABEL = Identifier.parse("thaumcraft:jar_label");
+    private static final Map<Identifier, Identifier> EMPTY_JARS = Map.of(
+        FILLED_JAR, Identifier.parse("thaumcraft:warded_jar"),
+        FILLED_VOID_JAR, Identifier.parse("thaumcraft:void_jar")
     );
-    private static final Map<ResourceLocation, ResourceLocation> FILLED_JARS = Map.of(
-        ResourceLocation.parse("thaumcraft:warded_jar"), FILLED_JAR,
-        ResourceLocation.parse("thaumcraft:void_jar"), FILLED_VOID_JAR
+    private static final Map<Identifier, Identifier> FILLED_JARS = Map.of(
+        Identifier.parse("thaumcraft:warded_jar"), FILLED_JAR,
+        Identifier.parse("thaumcraft:void_jar"), FILLED_VOID_JAR
     );
 
     public record Result(int amount, ItemStack stack) {
@@ -37,26 +37,26 @@ public final class EssentiaContainers {
     private record Restricted(int capacity, Predicate<Aspect> accepts) {
     }
 
-    private static final Map<ResourceLocation, Restricted> RESTRICTED = new ConcurrentHashMap<>();
+    private static final Map<Identifier, Restricted> RESTRICTED = new ConcurrentHashMap<>();
 
-    public static void registerRestricted(ResourceLocation item, int capacity, Predicate<Aspect> accepts) {
+    public static void registerRestricted(Identifier item, int capacity, Predicate<Aspect> accepts) {
         RESTRICTED.put(item, new Restricted(capacity, accepts));
     }
 
     private EssentiaContainers() {
     }
 
-    private static ResourceLocation id(ItemStack stack) {
+    private static Identifier id(ItemStack stack) {
         return BuiltInRegistries.ITEM.getKey(stack.getItem());
     }
 
-    private static ItemStack create(ResourceLocation id) {
-        Item item = BuiltInRegistries.ITEM.get(id);
+    private static ItemStack create(Identifier id) {
+        Item item = BuiltInRegistries.ITEM.getValue(id);
         return new ItemStack(item);
     }
 
     private static boolean isPhial(ItemStack stack) {
-        ResourceLocation id = id(stack);
+        Identifier id = id(stack);
         return id.equals(GLASS_PHIAL) || id.equals(ESSENTIA_PHIAL);
     }
 

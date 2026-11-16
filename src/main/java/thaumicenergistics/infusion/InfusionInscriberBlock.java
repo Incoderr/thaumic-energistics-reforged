@@ -38,14 +38,7 @@ public final class InfusionInscriberBlock extends AeWrenchableBlock implements E
                 Component.translatable("block.thaumicenergistics.infusion_inscriber")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof InfusionInscriberBlockEntity inscriber) {
-            Containers.dropContents(level, pos, inscriber);
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
 }

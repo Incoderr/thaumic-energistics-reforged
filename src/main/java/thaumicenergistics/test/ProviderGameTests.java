@@ -15,7 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -66,15 +66,15 @@ public final class ProviderGameTests {
     @SuppressWarnings("unchecked")
     private static <T extends ProviderBlockEntity> void network(GameTestHelper helper, Block block, Consumer<T> body) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
         helper.setBlock(PROVIDER, block);
-        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable"))));
+        helper.runAfterDelay(5, () -> PartHelper.setPart(helper.getLevel(), helper.absolutePos(CABLE), null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable"))));
         helper.runAfterDelay(25, () -> {
             helper.assertTrue(GridHelper.getNodeHost(helper.getLevel(), helper.absolutePos(PROVIDER)) != null, "provider exposes no grid node host capability");
-            T provider = (T) helper.getBlockEntity(PROVIDER);
+            T provider = (T) helper.getBlockEntity(PROVIDER, ProviderBlockEntity.class);
             helper.assertTrue(provider.isActive(), "provider is not active in the network");
             helper.assertTrue(helper.getBlockState(PROVIDER).getValue(ProviderBlock.ACTIVE), "provider block state is not active");
             body.accept(provider);

@@ -35,7 +35,7 @@ public final class KnowledgeFeature {
         "knowledge_inscriber", KnowledgeInscriberBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnowledgeInscriberBlockEntity>> INSCRIBER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "knowledge_inscriber", () -> BlockEntityType.Builder.of(KnowledgeInscriberBlockEntity::new, INSCRIBER.get()).build(null)
+        "knowledge_inscriber", () -> new BlockEntityType<>(KnowledgeInscriberBlockEntity::new, INSCRIBER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<KnowledgeInscriberMenu>> MENU = ModMenus.MENUS.register(
         "knowledge_inscriber", () -> Menus.withPos(KnowledgeInscriberMenu::new)

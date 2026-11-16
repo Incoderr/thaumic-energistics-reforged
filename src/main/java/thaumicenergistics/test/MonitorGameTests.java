@@ -1,5 +1,7 @@
 package thaumicenergistics.test;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.security.IActionSource;
@@ -13,7 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +55,7 @@ public final class MonitorGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static ItemStack filled(String id, Aspect aspect, int amount) {
@@ -69,12 +71,12 @@ public final class MonitorGameTests {
     @SuppressWarnings("unchecked")
     private static <T extends AEBasePart> void network(GameTestHelper helper, IPartItem<T> partItem, BiConsumer<T, IGrid> body) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
         BlockPos cable = helper.absolutePos(CABLE);
-        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
+        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable")));
         T part = PartHelper.setPart(helper.getLevel(), cable, Direction.EAST, player, partItem);
         helper.assertTrue(part != null, "monitor was not placed");
         helper.runAfterDelay(20, () -> {
@@ -86,7 +88,7 @@ public final class MonitorGameTests {
 
     private static void recipesAndResearch(GameTestHelper helper) {
         for (String name : new String[] {"essentia_storage_monitor", "essentia_conversion_monitor"}) {
-            helper.assertTrue(helper.getLevel().getRecipeManager().byKey(ThaumicEnergistics.id(name)).isPresent(), "recipe " + name + " is not loaded");
+            helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, ThaumicEnergistics.id(name))).isPresent(), "recipe " + name + " is not loaded");
         }
         var pages = ResearchCategories.getResearch("thaumicenergistics.TEESSTERM").pages();
         helper.assertTrue(pages.contains(ResearchPage.crafting(TerminalFeature.STORAGE_MONITOR_RECIPE)) && pages.contains(ResearchPage.crafting(TerminalFeature.CONVERSION_MONITOR_RECIPE)), "terminal research lacks monitor pages");
@@ -120,7 +122,7 @@ public final class MonitorGameTests {
         network(helper, MonitorFeature.CONVERSION_MONITOR.get(), (EssentiaConversionMonitorPart part, IGrid grid) -> {
             MEStorage storage = grid.getStorageService().getInventory();
             Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-            player.getInventory().selected = 0;
+            player.getInventory().setSelectedSlot(0);
             player.setItemInHand(InteractionHand.MAIN_HAND, filled("thaumcraft:filled_jar", Aspect.WATER, 30));
             player.getInventory().setItem(5, filled("thaumcraft:essentia_phial", Aspect.WATER, 8).copyWithCount(2));
             player.getInventory().setItem(6, filled("thaumcraft:essentia_phial", Aspect.FIRE, 8));

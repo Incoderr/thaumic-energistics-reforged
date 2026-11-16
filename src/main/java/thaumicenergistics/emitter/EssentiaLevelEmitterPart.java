@@ -1,5 +1,9 @@
 package thaumicenergistics.emitter;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import appeng.parts.automation.PartModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Setting;
 import appeng.api.config.Settings;
@@ -9,14 +13,12 @@ import appeng.api.networking.IStackWatcher;
 import appeng.api.networking.storage.IStorageWatcherNode;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
 import appeng.api.stacks.AEKey;
 import appeng.api.util.AECableType;
 import appeng.api.util.IConfigManager;
 import appeng.api.util.IConfigManagerBuilder;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
-import appeng.parts.PartModel;
 import appeng.parts.automation.UpgradeablePart;
 import appeng.util.Platform;
 import net.minecraft.core.BlockPos;
@@ -25,23 +27,21 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.essentia.EssentiaKey;
 
 public final class EssentiaLevelEmitterPart extends UpgradeablePart {
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/essentia_level_emitter_base");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_level_emitter_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_level_emitter_on");
-    private static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE, MODEL_OFF);
-    private static final IPartModel MODELS_ON = new PartModel(MODEL_BASE, MODEL_ON);
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/essentia_level_emitter_base");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_level_emitter_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_level_emitter_on");
     public static final long MAX_THRESHOLD = 9999999999L;
     private static final double IDLE_POWER_DRAIN = 0.3;
     private static final String ASPECT_KEY = "aspect";
@@ -230,9 +230,11 @@ public final class EssentiaLevelEmitterPart extends UpgradeablePart {
         return 8;
     }
 
+
     @Override
-    public IPartModel getStaticModels() {
-        return emitting ? MODELS_ON : MODELS_OFF;
+    public void collectModelData(ModelData.Builder builder) {
+        super.collectModelData(builder);
+        builder.with(PartModelData.LEVEL_EMITTER_ON, emitting);
     }
 
     @Override
@@ -250,16 +252,16 @@ public final class EssentiaLevelEmitterPart extends UpgradeablePart {
     }
 
     @Override
-    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readFromNBT(tag, registries);
-        trackedAspect = tag.contains(ASPECT_KEY) ? Aspect.getAspect(tag.getString(ASPECT_KEY)) : null;
-        thresholdLevel = tag.getLong(THRESHOLD_KEY);
-        emitting = tag.getBoolean(EMITTING_KEY);
+    public void readFromNBT(ValueInput tag) {
+        super.readFromNBT(tag);
+        trackedAspect = tag.getString(ASPECT_KEY).map(Aspect::getAspect).orElse(null);
+        thresholdLevel = tag.getLongOr(THRESHOLD_KEY, 0L);
+        emitting = tag.getBooleanOr(EMITTING_KEY, false);
     }
 
     @Override
-    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeToNBT(tag, registries);
+    public void writeToNBT(ValueOutput tag) {
+        super.writeToNBT(tag);
         if (trackedAspect != null) {
             tag.putString(ASPECT_KEY, trackedAspect.getTag());
         }

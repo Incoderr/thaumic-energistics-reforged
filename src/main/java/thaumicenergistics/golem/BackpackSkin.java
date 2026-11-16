@@ -1,10 +1,10 @@
 package thaumicenergistics.golem;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumicenergistics.ThaumicEnergistics;
 
 public enum BackpackSkin {
@@ -20,13 +20,13 @@ public enum BackpackSkin {
     DIAMOND("diamond");
 
     private static final BackpackSkin[] VALUES = values();
-    private final ResourceLocation texture;
+    private final Identifier texture;
 
     BackpackSkin(String texture) {
         this.texture = ThaumicEnergistics.id("textures/models/golembackpack/" + texture + ".png");
     }
 
-    public ResourceLocation texture() {
+    public Identifier texture() {
         return texture;
     }
 
@@ -35,7 +35,7 @@ public enum BackpackSkin {
     }
 
     public static @Nullable BackpackSkin fromBlock(Block block) {
-        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier id = BuiltInRegistries.BLOCK.getKey(block);
         if ("thaumcraft".equals(id.getNamespace())) {
             return switch (id.getPath()) {
                 case "thaumium_block" -> THAUMIUM;

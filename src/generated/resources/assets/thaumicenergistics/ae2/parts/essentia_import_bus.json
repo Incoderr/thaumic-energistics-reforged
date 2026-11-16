@@ -1,0 +1,17 @@
+{
+  "model": {
+    "type": "ae2:composite",
+    "models": [
+      {
+        "type": "ae2:model",
+        "model": "thaumicenergistics:part/essentia_import_bus_base"
+      },
+      {
+        "type": "ae2:status_indicator",
+        "active": "thaumicenergistics:part/essentia_import_bus_on",
+        "powered": "thaumicenergistics:part/essentia_import_bus_off",
+        "unpowered": "thaumicenergistics:part/essentia_import_bus_off"
+      }
+    ]
+  }
+}

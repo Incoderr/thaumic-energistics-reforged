@@ -1,5 +1,6 @@
 package thaumicenergistics.test;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 import appeng.api.config.Actionable;
 import appeng.api.ids.AEComponents;
 import appeng.api.networking.IGrid;
@@ -15,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -47,7 +48,7 @@ public final class GolemGameTests {
     }
 
     private static Block ae(String path) {
-        return BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("ae2", path));
+        return BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath("ae2", path));
     }
 
     private static void researchAndRecipe(GameTestHelper helper) {
@@ -60,7 +61,7 @@ public final class GolemGameTests {
 
     private static void facadeSkins(GameTestHelper helper) {
         helper.assertTrue(BackpackSkin.fromBlock(net.minecraft.world.level.block.Blocks.GOLD_BLOCK) == BackpackSkin.GOLD, "gold skin is wrong");
-        Block flesh = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("thaumcraft", "flesh_block"));
+        Block flesh = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath("thaumcraft", "flesh_block"));
         helper.assertTrue(BackpackSkin.fromBlock(flesh) == BackpackSkin.FLESH, "flesh skin is wrong");
         helper.assertTrue(BackpackSkin.fromBlock(net.minecraft.world.level.block.Blocks.DIRT) == null, "dirt gave a skin");
         helper.assertTrue(GolemBackpackFeature.skinOf(ItemStack.EMPTY) == BackpackSkin.THAUMIUM, "default skin is wrong");
@@ -74,15 +75,15 @@ public final class GolemGameTests {
         helper.setBlock(energy, ae("creative_energy_cell"));
         BlockPos drive = energy.above();
         helper.setBlock(drive, ae("drive"));
-        ((DriveBlockEntity) helper.getBlockEntity(drive)).getInternalInventory().insertItem(0, new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:item_storage_cell_1k"))), false);
-        GolemBase golem = ModEntities.GOLEM.get().create(helper.getLevel());
+        (helper.getBlockEntity(drive, DriveBlockEntity.class)).getInternalInventory().insertItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:item_storage_cell_1k"))), false);
+        GolemBase golem = ModEntities.GOLEM.get().create(helper.getLevel(), EntitySpawnReason.MOB_SUMMONED);
         BlockPos golemPos = helper.absolutePos(new BlockPos(2, 1, 4));
-        golem.moveTo(golemPos.getX() + 0.5, golemPos.getY(), golemPos.getZ() + 0.5);
+        golem.snapTo(golemPos.getX() + 0.5, golemPos.getY(), golemPos.getZ() + 0.5);
         golem.configure(GolemType.STRAW, new GolemSnapshot(2, false, List.of(), "", List.of(), net.minecraft.world.item.component.ItemContainerContents.EMPTY, List.of(), 0));
         golem.setHome(golemPos, Direction.UP);
         helper.getLevel().addFreshEntity(golem);
         helper.runAfterDelay(20, () -> {
-            WirelessAccessPointBlockEntity wap = (WirelessAccessPointBlockEntity) helper.getBlockEntity(ACCESS_POINT);
+            WirelessAccessPointBlockEntity wap = helper.getBlockEntity(ACCESS_POINT, WirelessAccessPointBlockEntity.class);
             helper.assertTrue(wap.isActive(), "access point is not active");
             ItemStack backpack = GolemBackpackFeature.BACKPACK.toStack();
             backpack.set(AEComponents.WIRELESS_LINK_TARGET, GlobalPos.of(helper.getLevel().dimension(), helper.absolutePos(ACCESS_POINT)));

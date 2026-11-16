@@ -1,5 +1,9 @@
 package thaumicenergistics.test;
 
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.InteractionResult;
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
@@ -65,8 +69,10 @@ public final class CellsGameTests {
     }
 
     private static void keyTagRoundtrip(GameTestHelper helper) {
-        CompoundTag tag = EssentiaKey.of(Aspect.MAGIC).toTagGeneric(helper.getLevel().registryAccess());
-        AEKey loaded = AEKey.fromTagGeneric(helper.getLevel().registryAccess(), tag);
+        TagValueOutput output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.getLevel().registryAccess());
+        EssentiaKey.of(Aspect.MAGIC).toTagGeneric(output);
+        CompoundTag tag = output.buildResult();
+        AEKey loaded = AEKey.fromTagGeneric(TagValueInput.create(ProblemReporter.DISCARDING, helper.getLevel().registryAccess(), tag));
         helper.assertTrue(EssentiaKey.of(Aspect.MAGIC).equals(loaded), "essentia key does not survive tag roundtrip: " + loaded);
         helper.succeed();
     }
@@ -178,7 +184,7 @@ public final class CellsGameTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setShiftKeyDown(true);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_16K).get()));
-        ItemStack result = player.getMainHandItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND).getObject();
+        ItemStack result = player.getMainHandItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null ? success.heldItemTransformedTo() : player.getMainHandItem();
         helper.assertTrue(result.is(CellsFeature.component(EssentiaStorageType.TYPE_16K).get()), "empty cell did not become a component: " + result);
         helper.assertTrue(player.getInventory().contains(new ItemStack(CellsFeature.HOUSING.get())), "housing was not returned");
         helper.succeed();
@@ -190,7 +196,7 @@ public final class CellsGameTests {
         ItemStack stack = new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_1K).get());
         EssentiaCellInventory.of(stack, null).insert(key(Aspect.FIRE), 1, Actionable.MODULATE, SOURCE);
         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
-        ItemStack result = stack.use(helper.getLevel(), player, InteractionHand.MAIN_HAND).getObject();
+        ItemStack result = stack.use(helper.getLevel(), player, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null ? success.heldItemTransformedTo() : player.getMainHandItem();
         helper.assertTrue(result == stack, "non-empty cell was disassembled");
         helper.assertTrue(!player.getInventory().contains(new ItemStack(CellsFeature.HOUSING.get())), "housing was given for a non-empty cell");
         helper.succeed();

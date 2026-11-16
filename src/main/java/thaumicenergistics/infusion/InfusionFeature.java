@@ -45,7 +45,7 @@ public final class InfusionFeature {
         "infusion_inscriber", InfusionInscriberBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionInscriberBlockEntity>> INSCRIBER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "infusion_inscriber", () -> BlockEntityType.Builder.of(InfusionInscriberBlockEntity::new, INSCRIBER.get()).build(null)
+        "infusion_inscriber", () -> new BlockEntityType<>(InfusionInscriberBlockEntity::new, INSCRIBER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<InfusionInscriberMenu>> INSCRIBER_MENU = ModMenus.MENUS.register(
         "infusion_inscriber", () -> Menus.withPos(InfusionInscriberMenu::new)
@@ -54,7 +54,7 @@ public final class InfusionFeature {
         "infusion_assembler", InfusionAssemblerBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL).noOcclusion()
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionAssemblerBlockEntity>> ASSEMBLER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "infusion_assembler", () -> BlockEntityType.Builder.of(InfusionAssemblerBlockEntity::new, ASSEMBLER.get()).build(null)
+        "infusion_assembler", () -> new BlockEntityType<>(InfusionAssemblerBlockEntity::new, ASSEMBLER.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<InfusionAssemblerMenu>> ASSEMBLER_MENU = ModMenus.MENUS.register(
         "infusion_assembler", () -> Menus.withPos(InfusionAssemblerMenu::new)

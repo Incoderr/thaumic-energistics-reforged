@@ -1,5 +1,7 @@
 package thaumicenergistics.provider;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.Actionable;
 import appeng.api.implementations.blockentities.IColorableBlockEntity;
 import appeng.api.networking.GridFlags;
@@ -19,7 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.essentia.EssentiaKey;
 import thaumicenergistics.essentia.EssentiaNetwork;
@@ -192,20 +194,17 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
     }
 
     @Override
-    public void loadTag(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadTag(tag, registries);
-        colorForced = tag.getBoolean(FORCED_KEY);
-        color = AEColor.values()[Math.floorMod(tag.getInt(COLOR_KEY), AEColor.values().length)];
-        if (!tag.contains(COLOR_KEY)) {
-            color = AEColor.TRANSPARENT;
-        }
+    public void loadTag(ValueInput tag) {
+        super.loadTag(tag);
+        colorForced = tag.getBooleanOr(FORCED_KEY, false);
+        color = tag.getInt(COLOR_KEY).map(index -> AEColor.values()[Math.floorMod(index, AEColor.values().length)]).orElse(AEColor.TRANSPARENT);
         getMainNode().setGridColor(color);
-        attachmentSide = tag.contains(ATTACHMENT_KEY) ? Direction.from3DDataValue(tag.getInt(ATTACHMENT_KEY)) : null;
+        attachmentSide = tag.getInt(ATTACHMENT_KEY).map(Direction::from3DDataValue).orElse(null);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.putInt(COLOR_KEY, color.ordinal());
         if (attachmentSide != null) {
             tag.putInt(ATTACHMENT_KEY, attachmentSide.get3DDataValue());

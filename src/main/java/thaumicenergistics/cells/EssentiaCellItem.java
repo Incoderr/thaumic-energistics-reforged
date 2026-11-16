@@ -1,7 +1,7 @@
 package thaumicenergistics.cells;
 
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,18 +20,18 @@ public final class EssentiaCellItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!player.isShiftKeyDown() || storageType.isCreative()) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
         if (level.isClientSide()) {
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
         EssentiaCellInventory inventory = EssentiaCellInventory.of(stack, null);
         if (inventory == null || inventory.getUsedBytes() != 0 || !player.getInventory().add(new ItemStack(CellsFeature.HOUSING.get()))) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
-        return InteractionResultHolder.success(new ItemStack(CellsFeature.component(storageType).get()));
+        return InteractionResult.SUCCESS.heldItemTransformedTo(new ItemStack(CellsFeature.component(storageType).get()));
     }
 }

@@ -1,5 +1,7 @@
 package thaumicenergistics.gearbox;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.implementations.blockentities.ICrankable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class GearBoxBlockEntity extends BlockEntity {
     private static final int BASE_POWER = 6;
@@ -165,23 +167,22 @@ public final class GearBoxBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-        readSync(packet.getTag());
+    public void onDataPacket(Connection connection, ValueInput input) {
+        readSync(input);
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
-        readSync(tag);
+    public void handleUpdateTag(ValueInput input) {
+        readSync(input);
     }
 
-    private void readSync(CompoundTag tag) {
-        if (tag.contains(CRANKABLES_KEY)) {
-            byte flags = tag.getByte(CRANKABLES_KEY);
+    private void readSync(ValueInput tag) {
+        tag.read(CRANKABLES_KEY, Codec.BYTE).ifPresent(flags -> {
             for (int side = 0; side < SIDE_COUNT; side++) {
                 sideIsFacingCrankable[side] = (flags & 1 << side) != 0;
             }
-        }
-        if (tag.contains(ROTATION_KEY) && shaftRotation < 1.0F) {
+        });
+        if (tag.getBooleanOr(ROTATION_KEY, false) && shaftRotation < 1.0F) {
             shaftRotation += FULL_ROTATION * 2;
         }
     }

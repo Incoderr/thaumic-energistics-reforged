@@ -1,7 +1,7 @@
 package thaumicenergistics.client.assembler;
 
+import thaumicenergistics.client.platform.TeRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.model.geom.ModelPart;
@@ -10,14 +10,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thaumicenergistics.ThaumicEnergistics;
+import thaumicenergistics.client.platform.TeGeometry;
 
 public final class ArcaneAssemblerModel {
-    private static final ResourceLocation TEXTURE = ThaumicEnergistics.id("textures/models/arcane.assembler.png");
+    private static final Identifier TEXTURE = ThaumicEnergistics.id("textures/models/arcane.assembler.png");
     private static final float HALF_TURN = 1.570796325F;
     private static final float FULL_TURN = HALF_TURN + HALF_TURN;
     private static final float SCALE = 0.047F * 0.625F * 16.0F;
@@ -64,25 +64,27 @@ public final class ArcaneAssemblerModel {
         glass = glassNames.stream().map(root::getChild).toList();
     }
 
-    public static void render(PoseStack pose, MultiBufferSource buffers, int light) {
-        render(pose, buffers, light, TEXTURE);
+    public static void render(OrderedSubmitNodeCollector collector, PoseStack pose, int light) {
+        render(collector, pose, light, TEXTURE);
     }
 
-    public static void render(PoseStack pose, MultiBufferSource buffers, int light, ResourceLocation texture) {
+    public static void render(OrderedSubmitNodeCollector collector, PoseStack pose, int light, Identifier texture) {
         if (root == null) {
             build();
         }
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
         pose.scale(SCALE, SCALE, SCALE);
-        VertexConsumer solid = buffers.getBuffer(RenderType.entityCutout(texture));
-        for (ModelPart part : frames) {
-            part.render(pose, solid, light, OverlayTexture.NO_OVERLAY);
-        }
-        VertexConsumer translucent = buffers.getBuffer(RenderType.entityTranslucent(texture));
-        for (ModelPart part : glass) {
-            part.render(pose, translucent, light, OverlayTexture.NO_OVERLAY);
-        }
+        TeGeometry.submit(collector, pose, TeRenderTypes.entityCutout(texture), (local, buffer) -> {
+            for (ModelPart part : frames) {
+                part.render(local, buffer, light, OverlayTexture.NO_OVERLAY);
+            }
+        });
+        TeGeometry.submit(collector, pose, TeRenderTypes.entityTranslucent(texture), (local, buffer) -> {
+            for (ModelPart part : glass) {
+                part.render(local, buffer, light, OverlayTexture.NO_OVERLAY);
+            }
+        });
         pose.popPose();
     }
 }

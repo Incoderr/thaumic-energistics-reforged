@@ -9,11 +9,9 @@
           "name": "thaumicenergistics:infusion_inscriber"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "thaumicenergistics:blocks/infusion_inscriber"

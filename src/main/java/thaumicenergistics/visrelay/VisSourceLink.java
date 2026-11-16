@@ -1,5 +1,7 @@
 package thaumicenergistics.visrelay;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.networking.IGrid;
 import appeng.api.parts.IPartHost;
 import java.lang.ref.WeakReference;
@@ -9,10 +11,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 /**
@@ -62,7 +64,7 @@ public final class VisSourceLink {
         tag.putBoolean(NBT_KEY_HAS_DATA, hasData);
         if (hasData) {
             CompoundTag data = new CompoundTag();
-            data.putString("world", world.location().toString());
+            data.putString("world", world.identifier().toString());
             data.putLong("pos", pos.asLong());
             data.putInt("side", side == null ? -1 : side.ordinal());
             tag.put(NBT_KEY_DATA, data);
@@ -71,31 +73,31 @@ public final class VisSourceLink {
         return tag;
     }
 
-    public void writeToTag(CompoundTag data, String name) {
-        data.put(name, writeToTag());
+    public void writeToTag(ValueOutput data, String name) {
+        data.store(name, CompoundTag.CODEC, writeToTag());
     }
 
     public void readFromTag(@Nullable CompoundTag tag) {
         clearData();
-        if (tag == null || !tag.getBoolean(NBT_KEY_HAS_DATA)
+        if (tag == null || !tag.getBooleanOr(NBT_KEY_HAS_DATA, false)
             || !tag.contains(NBT_KEY_UID) || !tag.contains(NBT_KEY_DATA)) {
             return;
         }
-        CompoundTag data = tag.getCompound(NBT_KEY_DATA);
-        ResourceLocation dimension = ResourceLocation.tryParse(data.getString("world"));
+        CompoundTag data = tag.getCompoundOrEmpty(NBT_KEY_DATA);
+        Identifier dimension = Identifier.tryParse(data.getStringOr("world", ""));
         if (dimension == null) {
             return;
         }
         world = ResourceKey.create(Registries.DIMENSION, dimension);
-        pos = BlockPos.of(data.getLong("pos"));
-        int sideIndex = data.getInt("side");
+        pos = BlockPos.of(data.getLongOr("pos", 0L));
+        int sideIndex = data.getIntOr("side", -1);
         side = sideIndex >= 0 && sideIndex < Direction.values().length ? Direction.values()[sideIndex] : null;
-        uid = tag.getLong(NBT_KEY_UID);
+        uid = tag.getLongOr(NBT_KEY_UID, 0L);
         hasData = true;
     }
 
-    public void readFromTag(CompoundTag data, String name) {
-        readFromTag(data.getCompound(name));
+    public void readFromTag(ValueInput data, String name) {
+        readFromTag(data.read(name, CompoundTag.CODEC).orElse(null));
     }
 
     /**

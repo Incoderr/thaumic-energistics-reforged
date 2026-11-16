@@ -42,11 +42,11 @@ def generate(ctx):
             },
             *[
                 {
-                    "from": [3, 3, depth],
-                    "to": [13, 13, 7],
+                    "from": [3, 3, 7],
+                    "to": [13, 13, 8],
                     "faces": {"north": {"uv": [3, 3, 13, 13], "texture": f"#{layer}", "tintindex": tint}},
                 }
-                for layer, tint, depth in (("dark", 1, 6.98), ("medium", 2, 6.96), ("light", 3, 6.94))
+                for layer, tint in (("light", 3), ("medium", 2), ("dark", 1))
             ],
             {
                 "from": [4, 4, 9],
@@ -61,7 +61,8 @@ def generate(ctx):
             },
         ],
     })
-    ctx.item_definition("essentia_terminal", ctx.ref("essentia_terminal", "item"))
+    ctx.item_definition("essentia_terminal", ctx.ref("essentia_terminal", "item"), ctx.ae2_part_tints())
+    ctx.part_definition("essentia_terminal", "thaumicenergistics:part/essentia_terminal_base", ctx.part_status("thaumicenergistics:part/essentia_terminal_on", "thaumicenergistics:part/essentia_terminal_off", "thaumicenergistics:part/essentia_terminal_on"), ctx.part_status("ae2:part/display_status_on", "ae2:part/display_status_off", "ae2:part/display_status_has_channel"))
     ctx.generated_item("wireless_essentia_terminal", "wireless.essentia.terminal")
     ctx.shapeless("wireless_essentia_terminal", "thaumicenergistics:wireless_essentia_terminal", 1, [
         "ae2:wireless_receiver", "thaumicenergistics:essentia_terminal", "ae2:dense_energy_cell",

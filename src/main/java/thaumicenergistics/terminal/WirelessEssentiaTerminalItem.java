@@ -6,7 +6,7 @@ import appeng.menu.locator.ItemMenuHostLocator;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.phys.BlockHitResult;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class WirelessEssentiaTerminalItem extends WirelessTerminalItem {
     public static final double POWER_STORAGE = 1600000.0;

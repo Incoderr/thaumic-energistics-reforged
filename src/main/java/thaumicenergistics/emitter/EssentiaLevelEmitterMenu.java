@@ -1,5 +1,7 @@
 package thaumicenergistics.emitter;
 
+import net.minecraft.network.codec.ByteBufCodecs;
+import appeng.menu.guisync.ClientActionKey;
 import appeng.api.config.RedstoneMode;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.SlotSemantics;
@@ -9,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumicenergistics.essentia.EssentiaItems;
 
@@ -17,9 +19,9 @@ public final class EssentiaLevelEmitterMenu extends AEBaseMenu {
     private static final int PLAYER_INVENTORY_Y = 102;
     private static final int HOTBAR_Y = 160;
     private static final Set<Long> ADJUSTMENTS = Set.of(1L, 10L, 100L, 1000L, 10000L, -1L, -10L, -100L, -1000L, -10000L);
-    private static final String ACTION_ASPECT = "aspect";
-    private static final String ACTION_THRESHOLD = "threshold";
-    private static final String ACTION_ADJUST = "adjust";
+    private static final ClientActionKey<Boolean> ACTION_ASPECT = new ClientActionKey<>("aspect");
+    private static final ClientActionKey<Long> ACTION_THRESHOLD = new ClientActionKey<>("threshold");
+    private static final ClientActionKey<Long> ACTION_ADJUST = new ClientActionKey<>("adjust");
 
     private final EssentiaLevelEmitterPart emitter;
 
@@ -41,9 +43,9 @@ public final class EssentiaLevelEmitterMenu extends AEBaseMenu {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(inventory, column, 8 + column * 18, HOTBAR_Y), SlotSemantics.PLAYER_HOTBAR);
         }
-        registerClientAction(ACTION_ASPECT, Boolean.class, this::clickAspect);
-        registerClientAction(ACTION_THRESHOLD, Long.class, this::setThreshold);
-        registerClientAction(ACTION_ADJUST, Long.class, this::adjustThreshold);
+        registerClientAction(ACTION_ASPECT, ByteBufCodecs.BOOL, this::clickAspect);
+        registerClientAction(ACTION_THRESHOLD, ByteBufCodecs.VAR_LONG, this::setThreshold);
+        registerClientAction(ACTION_ADJUST, ByteBufCodecs.VAR_LONG, this::adjustThreshold);
     }
 
     public EssentiaLevelEmitterPart getEmitter() {

@@ -1,5 +1,6 @@
 package thaumicenergistics.essentia;
 
+import net.minecraft.world.level.storage.ValueOutput;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 import com.mojang.serialization.Codec;
@@ -13,10 +14,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 
 public final class EssentiaKey extends AEKey {
@@ -62,8 +63,8 @@ public final class EssentiaKey extends AEKey {
     }
 
     @Override
-    public CompoundTag toTag(HolderLookup.Provider registries) {
-        return (CompoundTag) CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), this).getOrThrow();
+    public void toTag(ValueOutput output) {
+        output.store(MAP_CODEC, this);
     }
 
     @Override
@@ -72,8 +73,8 @@ public final class EssentiaKey extends AEKey {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return ResourceLocation.fromNamespaceAndPath("thaumcraft", aspect.getTag());
+    public Identifier getId() {
+        return Identifier.fromNamespaceAndPath("thaumcraft", aspect.getTag());
     }
 
     @Override

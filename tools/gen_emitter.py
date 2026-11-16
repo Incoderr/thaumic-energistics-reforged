@@ -42,4 +42,5 @@ def generate(ctx):
             box((7, 7, 14, 9, 9, 16), "#active", ITEM_SHIFT),
         ],
     })
-    ctx.item_definition("essentia_level_emitter", ctx.ref("essentia_level_emitter", "item"))
+    ctx.item_definition("essentia_level_emitter", ctx.ref("essentia_level_emitter", "item"), ctx.ae2_part_tints())
+    ctx.part_definition("essentia_level_emitter", "thaumicenergistics:part/essentia_level_emitter_base", {"type": "ae2:level_emitter", "on": "thaumicenergistics:part/essentia_level_emitter_on", "off": "thaumicenergistics:part/essentia_level_emitter_off"})

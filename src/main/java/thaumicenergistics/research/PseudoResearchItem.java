@@ -2,7 +2,7 @@ package thaumicenergistics.research;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.crafting.TcStack;
 import thaumcraft.research.ResearchItem;
@@ -17,7 +17,7 @@ public final class PseudoResearchItem extends ResearchItem {
         setStub().setHidden();
     }
 
-    private PseudoResearchItem(String key, String category, int column, int row, ResourceLocation icon, ResearchItem real) {
+    private PseudoResearchItem(String key, String category, int column, int row, Identifier icon, ResearchItem real) {
         super(key, category, new AspectList(), column, row, 1, icon);
         this.real = real;
         setStub().setHidden();

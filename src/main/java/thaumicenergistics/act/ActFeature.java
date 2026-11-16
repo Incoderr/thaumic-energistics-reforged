@@ -1,7 +1,6 @@
 package thaumicenergistics.act;
 
 import thaumicenergistics.platform.TeNetwork;
-import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
 import appeng.menu.implementations.MenuTypeBuilder;
 import net.minecraft.world.inventory.MenuType;
@@ -37,7 +36,6 @@ public final class ActFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(ArcaneCraftingTerminalPart.MODEL_BASE, ArcaneCraftingTerminalPart.MODEL_OFF, ArcaneCraftingTerminalPart.MODEL_ON);
     }
 
     public static void recipes() {

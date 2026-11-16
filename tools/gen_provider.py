@@ -16,7 +16,7 @@ def generate(ctx):
             "overlay": ctx.ref(f"{kind}.provider.overlay"),
             "particle": ctx.ref(f"{kind}.provider"),
         }
-        for state, extra in (("off", {"tintindex": 0}), ("on", {"tintindex": 0, "neoforge_data": {"block_light": 15, "sky_light": 15}})):
+        for state, extra in (("off", {"tintindex": 0, "uv": [0, 0, 16, 16]}), ("on", {"tintindex": 0, "uv": [0, 0, 16, 16], "neoforge_data": {"block_light": 15, "sky_light": 15}})):
             ctx.write(ctx.ASSETS / "models" / "block" / f"{name}_{state}.json", {
                 "loader": "neoforge:composite",
                 "parent": "minecraft:block/block",

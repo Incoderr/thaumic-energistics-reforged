@@ -9,7 +9,7 @@ import appeng.api.storage.MEStorage;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import java.util.Map;
 import net.minecraft.network.chat.Component;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumcraft.essentia.EssentiaReservoirBlockEntity;
@@ -166,6 +166,6 @@ final class EssentiaBusStorage implements MEStorage {
 
     @Override
     public Component getDescription() {
-        return bus.getPartItem().asItem().getDescription();
+        return bus.getPartItem().asItem().getName(bus.getPartItem().asItem().getDefaultInstance());
     }
 }

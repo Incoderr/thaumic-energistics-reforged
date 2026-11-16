@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumicenergistics:item/iron_gear_box",
+    "model": {
+      "type": "thaumicenergistics:iron_gear_box"
+    }
+  }
+}

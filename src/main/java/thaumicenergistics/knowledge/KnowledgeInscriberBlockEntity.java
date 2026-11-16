@@ -1,5 +1,8 @@
 package thaumicenergistics.knowledge;
 
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -81,16 +84,24 @@ public final class KnowledgeInscriberBlockEntity extends BlockEntity implements 
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        core = tag.contains(CORE_KEY) ? ItemStack.parseOptional(registries, tag.getCompound(CORE_KEY)) : ItemStack.EMPTY;
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        core = tag.read(CORE_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (!core.isEmpty()) {
-            tag.put(CORE_KEY, core.save(registries));
+            tag.store(CORE_KEY, ItemStack.CODEC, core);
+        }
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            Containers.dropContents(level, pos, this);
         }
     }
 }

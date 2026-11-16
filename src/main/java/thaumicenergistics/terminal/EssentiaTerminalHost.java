@@ -5,7 +5,7 @@ import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGrid;
 import appeng.api.storage.ISubMenuHost;
 import net.minecraft.world.entity.player.Player;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 
 public interface EssentiaTerminalHost extends ISubMenuHost {

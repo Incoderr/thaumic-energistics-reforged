@@ -1,7 +1,6 @@
 package thaumicenergistics.terminal;
 
 import appeng.api.features.GridLinkables;
-import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
 import appeng.items.tools.powered.WirelessTerminalItem;
 import appeng.menu.implementations.MenuTypeBuilder;
@@ -45,7 +44,6 @@ public final class TerminalFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(EssentiaTerminalPart.MODEL_TERMINAL_BASE, EssentiaTerminalPart.MODEL_OFF, EssentiaTerminalPart.MODEL_ON);
     }
 
     public static void setup() {

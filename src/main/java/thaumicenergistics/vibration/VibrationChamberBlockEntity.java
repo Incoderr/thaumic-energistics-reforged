@@ -1,5 +1,7 @@
 package thaumicenergistics.vibration;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
@@ -16,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumcraft.aspect.AspectList;
@@ -112,7 +114,7 @@ public final class VibrationChamberBlockEntity extends AENetworkedBlockEntity im
 
     private int adjustProcessingValues() {
         if (coalBurnTime == 0) {
-            coalBurnTime = new ItemStack(Items.COAL).getBurnTime(null);
+            coalBurnTime = 1600;
         }
         int time = 0;
         if (storedAspect == Aspect.FIRE) {
@@ -375,24 +377,24 @@ public final class VibrationChamberBlockEntity extends AENetworkedBlockEntity im
     }
 
     @Override
-    public void loadTag(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadTag(tag, registries);
-        storedAspect = tag.contains(STORED_ASPECT_KEY) ? Aspect.getAspect(tag.getString(STORED_ASPECT_KEY)) : null;
-        storedAmount = storedAspect == null ? 0 : tag.getInt(STORED_AMOUNT_KEY);
-        processingTicksRemaining = tag.getInt(TIME_REMAINING_KEY);
+    public void loadTag(ValueInput tag) {
+        super.loadTag(tag);
+        storedAspect = tag.getString(STORED_ASPECT_KEY).map(Aspect::getAspect).orElse(null);
+        storedAmount = storedAspect == null ? 0 : tag.getIntOr(STORED_AMOUNT_KEY, 0);
+        processingTicksRemaining = tag.getIntOr(TIME_REMAINING_KEY, 0);
         processingAspect = null;
         if (processingTicksRemaining > 0) {
-            processingSpeed = tag.getInt(PROCESSING_SPEED_KEY);
-            powerProducedPerProcessingTick = tag.getDouble(POWER_PER_TICK_KEY);
-            if (tag.contains(PROCESSING_ASPECT_KEY)) {
-                processingAspect = Aspect.getAspect(tag.getString(PROCESSING_ASPECT_KEY));
+            processingSpeed = tag.getIntOr(PROCESSING_SPEED_KEY, 0);
+            powerProducedPerProcessingTick = tag.getDoubleOr(POWER_PER_TICK_KEY, 0.0);
+            if (tag.getString(PROCESSING_ASPECT_KEY).isPresent()) {
+                processingAspect = Aspect.getAspect(tag.getStringOr(PROCESSING_ASPECT_KEY, ""));
             }
         }
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (hasStoredEssentia()) {
             tag.putString(STORED_ASPECT_KEY, storedAspect.getTag());
             tag.putInt(STORED_AMOUNT_KEY, storedAmount);

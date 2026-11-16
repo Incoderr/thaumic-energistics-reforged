@@ -114,7 +114,8 @@ def generate(ctx):
         "textures": textures,
         "elements": geometry(shift) + active_layers(shift, 15) + [lights({"texture": "#light", "tintindex": 1, **glow(13)}, shift)],
     })
-    ctx.item_definition("arcane_crafting_terminal", ctx.ref("arcane_crafting_terminal", "item"))
+    ctx.item_definition("arcane_crafting_terminal", ctx.ref("arcane_crafting_terminal", "item"), ctx.ae2_part_tints())
+    ctx.part_definition("arcane_crafting_terminal", "thaumicenergistics:part/arcane_crafting_terminal_base", ctx.part_status("thaumicenergistics:part/arcane_crafting_terminal_on", "thaumicenergistics:part/arcane_crafting_terminal_off"))
     ae2 = ctx.OUT / "assets" / "ae2"
     ctx.write(ae2 / "screens" / "thaumicenergistics" / "arcane_crafting_terminal.json", style())
     texture = ae2 / "textures" / TEXTURE

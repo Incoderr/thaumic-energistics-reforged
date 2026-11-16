@@ -1,5 +1,7 @@
 package thaumicenergistics.test;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import appeng.api.config.Actionable;
 import appeng.api.config.ViewItems;
 import appeng.api.features.GridLinkables;
@@ -15,7 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -62,7 +64,7 @@ public final class TerminalGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static ItemStack phial(Aspect aspect) {
@@ -120,12 +122,12 @@ public final class TerminalGameTests {
     @SuppressWarnings("unchecked")
     private static void terminalInNetwork(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
         BlockPos cable = helper.absolutePos(CABLE);
-        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
+        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable")));
         EssentiaTerminalPart part = PartHelper.setPart(helper.getLevel(), cable, Direction.EAST, player, TerminalFeature.TERMINAL.get());
         helper.assertTrue(part != null, "terminal part was not placed");
         helper.runAfterDelay(20, () -> {
@@ -182,7 +184,7 @@ public final class TerminalGameTests {
         host.getWorkInventory().setItemDirect(0, item("thaumcraft:glass_phial"));
         host.onMenuClosed(player);
         helper.assertTrue(player.getInventory().contains(item("thaumcraft:glass_phial")), "work slot item was not returned");
-        helper.assertTrue(helper.getLevel().getRecipeManager().byKey(ThaumicEnergistics.id("wireless_essentia_terminal")).isPresent(), "wireless terminal recipe is not loaded");
+        helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, ThaumicEnergistics.id("wireless_essentia_terminal"))).isPresent(), "wireless terminal recipe is not loaded");
         ResearchItem research = ResearchCategories.getResearch("thaumicenergistics.TEESSTERM");
         helper.assertTrue(research.pages().contains(ResearchPage.crafting(TerminalFeature.WIRELESS_TERMINAL_RECIPE)), "research has no wireless terminal page");
         helper.succeed();

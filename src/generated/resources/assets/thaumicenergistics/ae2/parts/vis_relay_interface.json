@@ -1,0 +1,17 @@
+{
+  "model": {
+    "type": "ae2:composite",
+    "models": [
+      {
+        "type": "ae2:model",
+        "model": "thaumicenergistics:part/vis_relay_interface_base"
+      },
+      {
+        "type": "ae2:status_indicator",
+        "active": "thaumicenergistics:part/vis_relay_interface_on",
+        "powered": "thaumicenergistics:part/vis_relay_interface_off",
+        "unpowered": "thaumicenergistics:part/vis_relay_interface_off"
+      }
+    ]
+  }
+}

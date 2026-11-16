@@ -4,9 +4,9 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
@@ -39,7 +39,7 @@ public final class KnowledgeGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static void researchAndRecipes(GameTestHelper helper) {
@@ -71,7 +71,7 @@ public final class KnowledgeGameTests {
 
     private static void inscriberSaveAndDelete(GameTestHelper helper) {
         helper.setBlock(INSCRIBER, KnowledgeFeature.INSCRIBER.get());
-        KnowledgeInscriberBlockEntity inscriber = (KnowledgeInscriberBlockEntity) helper.getBlockEntity(INSCRIBER);
+        KnowledgeInscriberBlockEntity inscriber = helper.getBlockEntity(INSCRIBER, KnowledgeInscriberBlockEntity.class);
         inscriber.setItem(0, new ItemStack(KnowledgeFeature.CORE.get()));
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Knowledge.get(player).addResearch(TeResearch.ARCANE_TERMINAL);
@@ -81,7 +81,7 @@ public final class KnowledgeGameTests {
         String[] ids = {"ae2:terminal", "thaumcraft:arcane_worktable", "ae2:calculation_processor"};
         for (int index = 0; index < ids.length; index++) {
             menu.setCarried(item(ids[index]));
-            menu.clicked(1 + KnowledgeCore.MAXIMUM_STORED_PATTERNS + index, 0, ClickType.PICKUP, player);
+            menu.clicked(1 + KnowledgeCore.MAXIMUM_STORED_PATTERNS + index, 0, ContainerInput.PICKUP, player);
         }
         menu.setCarried(ItemStack.EMPTY);
         helper.assertTrue(menu.saveState() == KnowledgeInscriberMenu.SaveState.SAVE, "recipe state is " + menu.saveState());
@@ -92,7 +92,7 @@ public final class KnowledgeGameTests {
         helper.assertTrue(menu.saveState() == KnowledgeInscriberMenu.SaveState.DELETE && menu.saveCounter() == 1, "state after save is " + menu.saveState());
         menu.clickMenuButton(player, KnowledgeInscriberMenu.BUTTON_CLEAR);
         menu.broadcastChanges();
-        menu.clicked(1, 0, ClickType.PICKUP, player);
+        menu.clicked(1, 0, ContainerInput.PICKUP, player);
         helper.assertTrue(menu.saveState() == KnowledgeInscriberMenu.SaveState.DELETE, "pattern did not load back");
         menu.clickMenuButton(player, KnowledgeInscriberMenu.BUTTON_SAVE_DELETE);
         helper.assertTrue(KnowledgeCore.patterns(inscriber.getItem(0)).isEmpty(), "pattern was not deleted");

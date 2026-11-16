@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "ae2:composite",
+    "models": [
+      {
+        "type": "ae2:model",
+        "model": "thaumicenergistics:part/essentia_level_emitter_base"
+      },
+      {
+        "type": "ae2:level_emitter",
+        "on": "thaumicenergistics:part/essentia_level_emitter_on",
+        "off": "thaumicenergistics:part/essentia_level_emitter_off"
+      }
+    ]
+  }
+}

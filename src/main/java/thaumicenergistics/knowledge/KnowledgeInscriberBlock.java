@@ -38,14 +38,7 @@ public final class KnowledgeInscriberBlock extends AeWrenchableBlock implements 
                 Component.translatable("block.thaumicenergistics.knowledge_inscriber")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof KnowledgeInscriberBlockEntity inscriber) {
-            Containers.dropContents(level, pos, inscriber);
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
 }

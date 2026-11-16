@@ -9,11 +9,9 @@
           "name": "thaumicenergistics:iron_gear_box"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "thaumicenergistics:blocks/iron_gear_box"

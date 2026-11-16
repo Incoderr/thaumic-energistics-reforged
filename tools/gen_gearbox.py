@@ -12,10 +12,11 @@ def generate(ctx):
     for name, fallback in (("iron_gear_box", "gear.box.fallback"), ("thaumium_gear_box", "golem.gear.box.fallback")):
         ctx.block_model(name, {"textures": {"particle": ctx.ref(fallback)}})
         ctx.write(ctx.ASSETS / "models" / "item" / f"{name}.json", {
-            "parent": "minecraft:builtin/entity",
+            "parent": ctx.special_parent(),
             "textures": {"particle": ctx.ref(fallback)},
             "display": DISPLAY,
         })
+        ctx.special_item(name, f"thaumicenergistics:{name}")
         ctx.simple_state(name)
         ctx.self_drop(name)
         ctx.mineable("pickaxe", name)

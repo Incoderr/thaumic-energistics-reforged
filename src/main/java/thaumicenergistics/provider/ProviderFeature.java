@@ -36,10 +36,10 @@ public final class ProviderFeature {
         "infusion_provider", InfusionProviderBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL)
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaProviderBlockEntity>> ESSENTIA_PROVIDER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "essentia_provider", () -> BlockEntityType.Builder.of(EssentiaProviderBlockEntity::new, ESSENTIA_PROVIDER.get()).build(null)
+        "essentia_provider", () -> new BlockEntityType<>(EssentiaProviderBlockEntity::new, ESSENTIA_PROVIDER.get())
     );
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionProviderBlockEntity>> INFUSION_PROVIDER_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "infusion_provider", () -> BlockEntityType.Builder.of(InfusionProviderBlockEntity::new, INFUSION_PROVIDER.get()).build(null)
+        "infusion_provider", () -> new BlockEntityType<>(InfusionProviderBlockEntity::new, INFUSION_PROVIDER.get())
     );
 
     private ProviderFeature() {

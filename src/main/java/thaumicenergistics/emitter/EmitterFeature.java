@@ -1,6 +1,5 @@
 package thaumicenergistics.emitter;
 
-import appeng.api.parts.PartModels;
 import appeng.items.parts.PartItem;
 import appeng.menu.implementations.MenuTypeBuilder;
 import net.minecraft.world.inventory.MenuType;
@@ -30,7 +29,6 @@ public final class EmitterFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(EssentiaLevelEmitterPart.MODEL_BASE, EssentiaLevelEmitterPart.MODEL_OFF, EssentiaLevelEmitterPart.MODEL_ON);
     }
 
     public static void recipes() {

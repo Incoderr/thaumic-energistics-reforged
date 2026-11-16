@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.alchemy.AlembicBlockEntity;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.entity.golem.GolemBase;
@@ -104,7 +104,7 @@ public abstract class GolemWifiGoal extends Goal {
     }
 
     protected static BlockPos homeContainer(GolemBase golem) {
-        return golem.getRestrictCenter().relative(golem.getHomeFacing().getOpposite());
+        return golem.getHomePosition().relative(golem.getHomeFacing().getOpposite());
     }
 
     protected static List<ItemStack> filters(GolemBase golem) {
@@ -294,7 +294,7 @@ public abstract class GolemWifiGoal extends Goal {
             targetVoid = false;
             Level level = golem.level();
             golemRange = golem.getRange() * golem.getRange();
-            BlockPos home = golem.getRestrictCenter();
+            BlockPos home = golem.getHomePosition();
             for (Marker marker : golem.getMarkers()) {
                 if (!marker.inLevel(level) || !(level.getBlockEntity(marker.pos()) instanceof JarBlockEntity jar)) {
                     continue;

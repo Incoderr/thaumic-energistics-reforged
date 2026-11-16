@@ -21,7 +21,7 @@ public final class WorkbenchFeature {
         "essentia_cell_workbench", EssentiaCellWorkbenchBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL).requiresCorrectToolForDrops()
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaCellWorkbenchBlockEntity>> BLOCK_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "essentia_cell_workbench", () -> BlockEntityType.Builder.of(EssentiaCellWorkbenchBlockEntity::new, BLOCK.get()).build(null)
+        "essentia_cell_workbench", () -> new BlockEntityType<>(EssentiaCellWorkbenchBlockEntity::new, BLOCK.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<EssentiaCellWorkbenchMenu>> MENU = ModMenus.MENUS.register(
         "essentia_cell_workbench", () -> Menus.withPos(EssentiaCellWorkbenchMenu::new)

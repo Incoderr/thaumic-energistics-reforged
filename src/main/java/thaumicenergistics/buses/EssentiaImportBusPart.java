@@ -4,10 +4,8 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
-import appeng.parts.PartModel;
-import net.minecraft.resources.ResourceLocation;
-import javax.annotation.Nullable;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumicenergistics.ThaumicEnergistics;
@@ -15,11 +13,9 @@ import thaumicenergistics.essentia.EssentiaNetwork;
 import thaumicenergistics.essentia.EssentiaTileContainers;
 
 public final class EssentiaImportBusPart extends EssentiaIOBusPart {
-    public static final ResourceLocation MODEL_BASE = ThaumicEnergistics.id("part/essentia_import_bus_base");
-    public static final ResourceLocation MODEL_OFF = ThaumicEnergistics.id("part/essentia_import_bus_off");
-    public static final ResourceLocation MODEL_ON = ThaumicEnergistics.id("part/essentia_import_bus_on");
-    private static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE, MODEL_OFF);
-    private static final IPartModel MODELS_ON = new PartModel(MODEL_BASE, MODEL_ON);
+    public static final Identifier MODEL_BASE = ThaumicEnergistics.id("part/essentia_import_bus_base");
+    public static final Identifier MODEL_OFF = ThaumicEnergistics.id("part/essentia_import_bus_off");
+    public static final Identifier MODEL_ON = ThaumicEnergistics.id("part/essentia_import_bus_on");
 
     public EssentiaImportBusPart(IPartItem<?> partItem) {
         super(partItem);
@@ -71,8 +67,4 @@ public final class EssentiaImportBusPart extends EssentiaIOBusPart {
         helper.addBox(6, 6, 11, 10, 10, 12);
     }
 
-    @Override
-    public IPartModel getStaticModels() {
-        return isActive() ? MODELS_ON : MODELS_OFF;
-    }
 }

@@ -51,7 +51,7 @@ def generate(ctx):
     name = "infusion_assembler"
     ctx.block_model(name, {"textures": {"particle": ctx.ref("infusion.assembler.fallback")}})
     ctx.write(ctx.ASSETS / "models" / "item" / f"{name}.json", {
-        "parent": "minecraft:builtin/entity",
+        "parent": ctx.special_parent(),
         "textures": {"particle": ctx.ref("infusion.assembler.fallback")},
         "display": {
             "gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [0.625, 0.625, 0.625]},
@@ -63,6 +63,7 @@ def generate(ctx):
         },
     })
     model = ctx.ref(name)
+    ctx.special_item(name, "thaumicenergistics:infusion_assembler")
     ctx.blockstate(name, {"variants": {f"facing={side}": {"model": model} for side in ("north", "south", "east", "west")}})
     ctx.self_drop(name)
     ctx.mineable("pickaxe", name)

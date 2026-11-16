@@ -44,7 +44,7 @@ public final class AssemblerFeature {
         "arcane_assembler", ArcaneAssemblerBlock::new, properties -> properties.strength(1.0F).sound(SoundType.METAL).noOcclusion()
     ));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneAssemblerBlockEntity>> ENTITY = ModBlockEntities.BLOCK_ENTITIES.register(
-        "arcane_assembler", () -> BlockEntityType.Builder.of(ArcaneAssemblerBlockEntity::new, BLOCK.get()).build(null)
+        "arcane_assembler", () -> new BlockEntityType<>(ArcaneAssemblerBlockEntity::new, BLOCK.get())
     );
     public static final DeferredHolder<MenuType<?>, MenuType<ArcaneAssemblerMenu>> MENU = ModMenus.MENUS.register(
         "arcane_assembler", () -> Menus.withPos(ArcaneAssemblerMenu::new)

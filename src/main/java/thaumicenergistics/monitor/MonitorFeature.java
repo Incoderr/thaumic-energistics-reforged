@@ -1,12 +1,11 @@
 package thaumicenergistics.monitor;
 
 import appeng.api.parts.IPartHost;
-import appeng.api.parts.PartModels;
 import appeng.api.parts.SelectedPart;
 import appeng.items.parts.PartItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thaumcraft.crafting.TcStack;
@@ -28,11 +27,6 @@ public final class MonitorFeature {
     }
 
     public static void load() {
-        PartModels.registerModels(
-            EssentiaStorageMonitorPart.MODEL_BASE, EssentiaStorageMonitorPart.MODEL_EMPTY_OFF, EssentiaStorageMonitorPart.MODEL_EMPTY_ON,
-            EssentiaStorageMonitorPart.MODEL_OFF, EssentiaStorageMonitorPart.MODEL_ON,
-            EssentiaConversionMonitorPart.MODEL_OFF, EssentiaConversionMonitorPart.MODEL_ON
-        );
         NeoForge.EVENT_BUS.addListener(MonitorFeature::onRightClickBlock);
     }
 

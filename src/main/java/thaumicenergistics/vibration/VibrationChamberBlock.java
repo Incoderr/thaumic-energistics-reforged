@@ -21,9 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectKeys;
@@ -32,7 +31,7 @@ import thaumcraft.platform.Menus;
 import thaumicenergistics.block.AeWrenchableBlock;
 
 public final class VibrationChamberBlock extends AeWrenchableBlock implements EntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final EnumProperty<Processing> PROCESSING = EnumProperty.create("processing", Processing.class);
 
     public enum Processing implements StringRepresentable {
@@ -100,7 +99,7 @@ public final class VibrationChamberBlock extends AeWrenchableBlock implements En
                 Component.translatable("block.thaumicenergistics.essentia_vibration_chamber")
             ), pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -128,8 +127,7 @@ public final class VibrationChamberBlock extends AeWrenchableBlock implements En
         }
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public static void appendTooltip(ItemStack stack, List<Component> tooltip) {
         AspectList stored = AspectKeys.ASPECTS.get(stack);
         if (stored != null && !stored.isEmpty()) {
             Aspect aspect = stored.getAspects().get(0);

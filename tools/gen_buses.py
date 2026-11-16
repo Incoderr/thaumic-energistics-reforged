@@ -97,7 +97,8 @@ def bus(ctx, name, body, overlay_box, overlay_faces, item_overlay_box, lights_bo
             overlay(lights_box, ALL_FACES, lit("#light", 13), ITEM_SHIFT),
         ],
     })
-    ctx.item_definition(f"essentia_{name}_bus", ctx.ref(f"essentia_{name}_bus", "item"))
+    ctx.item_definition(f"essentia_{name}_bus", ctx.ref(f"essentia_{name}_bus", "item"), ctx.ae2_part_tints())
+    ctx.part_definition(f"essentia_{name}_bus", f"thaumicenergistics:part/essentia_{name}_bus_base", ctx.part_status(f"thaumicenergistics:part/essentia_{name}_bus_on", f"thaumicenergistics:part/essentia_{name}_bus_off"))
 
 
 def generate(ctx):

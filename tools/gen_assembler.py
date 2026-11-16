@@ -2,7 +2,7 @@ def generate(ctx):
     name = "arcane_assembler"
     ctx.block_model(name, {"textures": {"particle": ctx.ref("arcane.assembler.fallback")}})
     ctx.write(ctx.ASSETS / "models" / "item" / f"{name}.json", {
-        "parent": "minecraft:builtin/entity",
+        "parent": ctx.special_parent(),
         "textures": {"particle": ctx.ref("arcane.assembler.fallback")},
         "display": {
             "gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [0.625, 0.625, 0.625]},
@@ -13,6 +13,7 @@ def generate(ctx):
             "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
         },
     })
+    ctx.special_item(name, "thaumicenergistics:arcane_assembler")
     ctx.simple_state(name)
     ctx.self_drop(name)
     ctx.mineable("pickaxe", name)

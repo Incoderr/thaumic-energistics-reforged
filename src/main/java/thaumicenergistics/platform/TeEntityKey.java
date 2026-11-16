@@ -9,7 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import thaumicenergistics.ThaumicEnergistics;
 
 public final class TeEntityKey<T> {
@@ -22,7 +22,7 @@ public final class TeEntityKey<T> {
     }
 
     public static <T> TeEntityKey<T> persistent(String name, Supplier<T> fallback, Codec<T> codec) {
-        return new TeEntityKey<>(ATTACHMENTS.register(name, () -> AttachmentType.builder(fallback).serialize(codec).build()));
+        return new TeEntityKey<>(ATTACHMENTS.register(name, () -> AttachmentType.builder(fallback).serialize(codec.fieldOf("value")).build()));
     }
 
     public static <T> TeEntityKey<T> synced(String name, Supplier<T> fallback, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {

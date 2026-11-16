@@ -16,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -61,7 +61,7 @@ public final class BusesGameTests {
     }
 
     private static ItemStack item(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
     }
 
     private static ItemStack phial(Aspect aspect) {
@@ -71,8 +71,8 @@ public final class BusesGameTests {
     }
 
     private static JarBlockEntity jar(GameTestHelper helper, String block, Aspect aspect, int amount) {
-        helper.setBlock(TARGET, BuiltInRegistries.BLOCK.get(ResourceLocation.parse(block)));
-        JarBlockEntity jar = (JarBlockEntity) helper.getBlockEntity(TARGET);
+        helper.setBlock(TARGET, BuiltInRegistries.BLOCK.getValue(Identifier.parse(block)));
+        JarBlockEntity jar = helper.getBlockEntity(TARGET, JarBlockEntity.class);
         if (aspect != null) {
             jar.setAspect(aspect);
             jar.setAmount(amount);
@@ -87,12 +87,12 @@ public final class BusesGameTests {
     @SuppressWarnings("unchecked")
     private static <T extends AEBasePart> void network(GameTestHelper helper, IPartItem<T> busItem, BiConsumer<T, IGrid> body) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:creative_energy_cell")));
-        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.get(ResourceLocation.parse("ae2:drive")));
-        DriveBlockEntity drive = (DriveBlockEntity) helper.getBlockEntity(DRIVE);
+        helper.setBlock(ENERGY, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:creative_energy_cell")));
+        helper.setBlock(DRIVE, BuiltInRegistries.BLOCK.getValue(Identifier.parse("ae2:drive")));
+        DriveBlockEntity drive = helper.getBlockEntity(DRIVE, DriveBlockEntity.class);
         drive.getInternalInventory().insertItem(0, new ItemStack(CellsFeature.cell(EssentiaStorageType.TYPE_4K).get()), false);
         BlockPos cable = helper.absolutePos(CABLE);
-        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.get(ResourceLocation.parse("ae2:fluix_glass_cable")));
+        PartHelper.setPart(helper.getLevel(), cable, null, player, (IPartItem<?>) BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:fluix_glass_cable")));
         T part = PartHelper.setPart(helper.getLevel(), cable, Direction.EAST, player, busItem);
         helper.assertTrue(part != null, "bus part was not placed");
         helper.runAfterDelay(20, () -> {
