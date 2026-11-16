@@ -29,19 +29,21 @@ jobs:
         with:
           path: thaumic-energistics-reforged
 
+      - name: Read versions
+        id: props
+        run: |
+          mc="$(grep '^minecraft_version=' gradle.properties | cut -d= -f2)"
+          echo "java=$(grep '^java_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+          echo "mc=$mc" >> "$GITHUB_OUTPUT"
+          echo "version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+          if [ "$mc" = "26.3" ]; then echo "base=main" >> "$GITHUB_OUTPUT"; else echo "base=mc/$mc" >> "$GITHUB_OUTPUT"; fi
+
       - name: Checkout Thaumcraft
         uses: actions/checkout@v5
         with:
           repository: notlikethiss/thaumcraft-4-reforged
-          ref: mc/1.21.1
+          ref: ${{ steps.props.outputs.base }}
           path: thaumcraft-4-reforged
-
-      - name: Read versions
-        id: props
-        run: |
-          echo "java=$(grep '^java_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
-          echo "mc=$(grep '^minecraft_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
-          echo "version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-java@v5
         with:
