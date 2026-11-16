@@ -7,14 +7,14 @@ ROOT = Path(__file__).resolve().parent.parent
 LIBS = ROOT / "libs"
 JARS = [
     (
-        "appliedenergistics2-19.2.18.jar",
-        "https://cdn.modrinth.com/data/XxWD5pD3/versions/KDnFUmMm/appliedenergistics2-19.2.18.jar",
-        "39bc4cf733a4321631e2637a1a6dfd3527135fdac1b572534e6fd1f9eab7a6dd92d56c5fa066263c95149c9b20cabdd1fd3dff80bea515381b1d2d754cad26c3",
+        "appliedenergistics2-26.3.1-alpha.jar",
+        "https://cdn.modrinth.com/data/XxWD5pD3/versions/PDPQ4WfW/appliedenergistics2-26.3.1-alpha.jar",
+        "0b2cd09cb2fc63c39e600d2989edb6c8ac2ceac396cbb15224aadd87c555ffa8465503af165a02df73646f1e0cc2f3a6d711f669fa7ba9a5dd9fe88d0b9533cc",
     ),
     (
-        "guideme-21.1.22.jar",
-        "https://cdn.modrinth.com/data/Ck4E7v7R/versions/QeYKsstN/guideme-21.1.22.jar",
-        "2a7b29143c1bef18375f221c337c6e744d04b79bc3cc10cadac46b7d6bb217ad78c51a3c33cd802b221cc7b38ff04a3f7064bd63d292e53bf9f3e09047eeda24",
+        "guideme-26.3.7-alpha.jar",
+        "https://cdn.modrinth.com/data/Ck4E7v7R/versions/fDhc3PEw/guideme-26.3.7-alpha.jar",
+        "8baf0f39168b59faed239689a220fe041c490c09d71086ec5986e6b34463f0c56230cc0ba48c75fe8aaba9e30716416118d15d27ea938bee816d4f91557466f4",
     ),
 ]
 
