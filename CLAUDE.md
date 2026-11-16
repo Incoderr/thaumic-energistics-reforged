@@ -1,6 +1,6 @@
 # Thaumic Energistics: Reforged
 
-Port of Thaumic Energistics 1.1.3.0 (MC 1.7.10, Nividica) as an addon to Thaumcraft 4: Reforged (`../thaumcraft-4-reforged`, "the base" below) for Minecraft 1.21.1 on NeoForge 21.1. The target is 1.21.1, not 26.3 like the base `main` and the other addons, because AE2 has no stable 26.3 release; the base is used from its `mc/1.21.1` branch. Logic, numbers, recipes, texts and assets of the original are carried over 1:1, the technical side is written on modern APIs.
+Port of Thaumic Energistics 1.1.3.0 (MC 1.7.10, Nividica) as an addon to Thaumcraft 4: Reforged (`../thaumcraft-4-reforged`, "the base" below) for Minecraft 1.21.1 on NeoForge 21.1. The target is 1.21.1, not 26.3 like the base `main` and the other addons, because AE2 has no stable 26.3 release; the base is used from its `mc/1.21.1` branch. Branches: `main` is this 1.21.1 version on AE2 19.2.18; `mc/26.3` is the 26.3 port on AE2 26.3 (alpha) with its own CLAUDE.md. Do not merge them into each other; fixes that apply to both are ported by hand. Logic, numbers, recipes, texts and assets of the original are carried over 1:1, the technical side is written on modern APIs.
 
 This file describes how to develop and port the mod. Phase status, test counts, run dates and log paths do not belong here. Add a line only if an agent would make a mistake without it: a non-obvious API rule, a required order of steps, or a deliberate deviation from TE that would otherwise get "fixed" back.
 
