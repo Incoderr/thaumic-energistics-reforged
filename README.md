@@ -2,7 +2,7 @@
 
 Unofficial port of **Thaumic Energistics 1.1.3.0** by Nividica from Minecraft 1.7.10 to **Minecraft 1.21.1** on **NeoForge 21.1**. It is an addon to [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) (branch `mc/1.21.1`) and needs it and Applied Energistics 2 to run.
 
-The port targets 1.21.1 instead of 26.3 because there is no stable Applied Energistics 2 release for Minecraft 26.3; 1.21.1 has AE2 `19.2.18`.
+This version targets 1.21.1 with the stable Applied Energistics 2 `19.2.18`; for Minecraft 26.3 AE2 is only available as an alpha release.
 
 The goal is to recreate the original gameplay as closely as possible: essentia storage cells, import, export and storage buses, the essentia terminal, the arcane crafting terminal, the arcane assembler, the vis relay P2P tunnel, infusion provider and the rest of the bridge between Thaumcraft and Applied Energistics 2. Integrations with other mods (except REI and AE2) are not ported. The technical side is rebuilt on modern APIs, the original coremod (ASM transformers) is replaced by events or mixins.
 
