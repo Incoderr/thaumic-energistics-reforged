@@ -1,6 +1,7 @@
 package thaumicenergistics.cells;
 
 import appeng.api.storage.StorageCells;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import net.minecraft.world.item.Item;
@@ -66,7 +67,7 @@ public final class CellsFeature {
     }
 
     public static void recipes() {
-        TcIngredient essence = TcIngredient.item("thaumcraft:wisp_essence");
+        TcIngredient essence = anyWispEssence();
         TcIngredient salis = TcIngredient.item("thaumcraft:salis_mundus");
         TcIngredient quartzGlass = TcIngredient.item("ae2:quartz_glass");
         TeRecipes.arcane(
@@ -120,6 +121,13 @@ public final class CellsFeature {
             .setParents(TeResearch.BASIC, TeResearch.pseudo(TeResearch.DISTILESSENTIA), TeResearch.pseudo(TeResearch.WARDED))
             .setParentsHidden(TeResearch.DISTILESSENTIA)
             .registerResearchItem();
+    }
+
+    private static TcIngredient anyWispEssence() {
+        TcIngredient[] options = Arrays.stream(Aspect.values())
+            .map(aspect -> TcIngredient.of(TcStack.withAspects("thaumcraft:wisp_essence", 1, new AspectList().add(aspect, 2))))
+            .toArray(TcIngredient[]::new);
+        return TcIngredient.anyOf(options);
     }
 
     private static TcStack stack(DeferredItem<? extends Item> item) {

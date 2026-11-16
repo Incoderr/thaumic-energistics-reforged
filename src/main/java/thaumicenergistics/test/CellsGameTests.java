@@ -1,5 +1,12 @@
 package thaumicenergistics.test;
 
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import thaumicenergistics.research.TeResearch;
+import thaumcraft.research.Knowledge;
+import thaumcraft.crafting.ArcaneCrafting;
+import thaumcraft.aspect.AspectList;
+import thaumcraft.aspect.AspectKeys;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -49,6 +56,7 @@ public final class CellsGameTests {
             .add("rejects_items", CellsGameTests::rejectsItems)
             .add("creative", CellsGameTests::creative)
             .add("disassemble_empty_cell", CellsGameTests::disassembleEmptyCell)
+            .add("component_accepts_any_wisp_essence", CellsGameTests::componentAcceptsAnyWispEssence)
             .add("full_cell_not_disassembled", CellsGameTests::fullCellNotDisassembled)
             .register(bus);
     }
@@ -199,6 +207,25 @@ public final class CellsGameTests {
         ItemStack result = stack.use(helper.getLevel(), player, InteractionHand.MAIN_HAND) instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null ? success.heldItemTransformedTo() : player.getMainHandItem();
         helper.assertTrue(result == stack, "non-empty cell was disassembled");
         helper.assertTrue(!player.getInventory().contains(new ItemStack(CellsFeature.HOUSING.get())), "housing was given for a non-empty cell");
+        helper.succeed();
+    }
+
+    private static void componentAcceptsAnyWispEssence(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Knowledge.get(player).addResearch(TeResearch.STORAGE);
+        ItemStack fire = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("thaumcraft:wisp_essence")));
+        AspectKeys.ASPECTS.set(fire, new AspectList().add(Aspect.FIRE, 2));
+        ItemStack water = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("thaumcraft:wisp_essence")));
+        AspectKeys.ASPECTS.set(water, new AspectList().add(Aspect.WATER, 2));
+        ItemStack quartz = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:certus_quartz_crystal")));
+        ItemStack processor = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse("ae2:logic_processor")));
+        List<ItemStack> grid = List.of(
+            fire, quartz, ItemStack.EMPTY,
+            quartz, processor, quartz,
+            ItemStack.EMPTY, quartz, water
+        );
+        ArcaneCrafting.Match match = ArcaneCrafting.find(grid, player);
+        helper.assertTrue(match != null && match.result().is(CellsFeature.component(EssentiaStorageType.TYPE_1K).get()), "1k component does not accept wisp essence of any aspect");
         helper.succeed();
     }
 }
