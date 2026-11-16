@@ -44,7 +44,7 @@ Versions:
 - Mod `1.1`
 - [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) `1.1.3`
 - Minecraft `26.3`
-- NeoForge `26.3.0.103` (GuideME needs `26.3.0.100` or newer)
+- NeoForge `26.3.0.100` (GuideME needs `26.3.0.100` or newer)
 - ModDevGradle `2.0.148`
 - Applied Energistics 2 `26.3.1-alpha` (required, from `libs/`)
 - GuideME `26.3.7-alpha` (required by AE2, from `libs/`)
