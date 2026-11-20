@@ -71,6 +71,6 @@ public final class ArcaneAssemblerScreen extends AbstractContainerScreen<ArcaneA
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, TITLE_X, TITLE_Y, 0, false);
+        graphics.text(font, title, TITLE_X, TITLE_Y, 0xFF000000, false);
     }
 }

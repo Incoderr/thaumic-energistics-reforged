@@ -43,6 +43,6 @@ public final class InfusionAssemblerScreen extends AbstractContainerScreen<Infus
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, 6, 6, 0, false);
+        graphics.text(font, title, 6, 6, 0xFF000000, false);
     }
 }

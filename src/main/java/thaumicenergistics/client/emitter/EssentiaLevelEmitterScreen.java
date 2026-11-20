@@ -60,7 +60,7 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
         amountField = new EditBox(font, leftPos + AMOUNT_X, topPos + AMOUNT_Y, AMOUNT_WIDTH, AMOUNT_HEIGHT, Component.empty());
         amountField.setBordered(false);
         amountField.setMaxLength(AMOUNT_MAX_CHARS);
-        amountField.setTextColor(0xFFFFFF);
+        amountField.setTextColor(0xFFFFFFFF);
         amountField.setValue(Long.toString(menu.threshold));
         shownThreshold = menu.threshold;
         amountField.setResponder(text -> {
@@ -133,7 +133,7 @@ public final class EssentiaLevelEmitterScreen extends AbstractContainerScreen<Es
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, TITLE_X, TITLE_Y, 0, false);
+        graphics.text(font, title, TITLE_X, TITLE_Y, 0xFF000000, false);
         TeGuiBlit.blit(graphics, WIDGET_TEXTURE, WIDGET_X, WIDGET_Y, (float) (79), (float) (39), WIDGET_SIZE, WIDGET_SIZE, 256, 256);
         if (isOverWidget(mouseX, mouseY)) {
             graphics.fill(WIDGET_X + 1, WIDGET_Y + 1, WIDGET_X + WIDGET_SIZE - 1, WIDGET_Y + WIDGET_SIZE - 1, HOVER_COLOR);

@@ -77,7 +77,7 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         searchBar = new EditBox(font, leftPos + 98, topPos + 6, 69, 10, Component.empty());
         searchBar.setBordered(false);
         searchBar.setMaxLength(14);
-        searchBar.setTextColor(0xFFFFFF);
+        searchBar.setTextColor(0xFFFFFFFF);
         searchBar.setValue(searchTerm);
         searchBar.setResponder(value -> {
             searchTerm = value.trim().toLowerCase();
@@ -171,7 +171,7 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, 7, 6, 0, false);
+        graphics.text(font, title, 7, 6, 0xFF000000, false);
         Aspect selected = menu.selected();
         for (int widget = 0; widget < WIDGETS_PER_PAGE; widget++) {
             EssentiaListPayload.Entry entry = entryAt(widget);
@@ -189,8 +189,8 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         if (selected != null) {
             for (EssentiaListPayload.Entry entry : menu.clientList()) {
                 if (entry.aspect() == selected) {
-                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.aspect").append(": ").append(AspectWidgets.name(selected)), SELECTED_INFO_X, SELECTED_NAME_Y, 0, false);
-                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.amount").append(": " + entry.amount()), SELECTED_INFO_X, SELECTED_AMOUNT_Y, 0, false);
+                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.aspect").append(": ").append(AspectWidgets.name(selected)), SELECTED_INFO_X, SELECTED_NAME_Y, 0xFF000000, false);
+                    graphics.text(font, Component.translatable("thaumicenergistics.gui.selected.amount").append(": " + entry.amount()), SELECTED_INFO_X, SELECTED_AMOUNT_Y, 0xFF000000, false);
                     break;
                 }
             }
@@ -221,7 +221,7 @@ public final class EssentiaTerminalScreen extends AbstractContainerScreen<Essent
         graphics.pose().scale(0.5F, 0.5F);
         float right = (x + WIDGET_SIZE - 1) * 2;
         float bottom = (y + WIDGET_SIZE - 2) * 2;
-        graphics.text(font, text, (int) (right - font.width(text)), (int) (bottom - font.lineHeight + 1), 0xFFFFFF, true);
+        graphics.text(font, text, (int) (right - font.width(text)), (int) (bottom - font.lineHeight + 1), 0xFFFFFFFF, true);
         graphics.pose().popMatrix();
     }
 

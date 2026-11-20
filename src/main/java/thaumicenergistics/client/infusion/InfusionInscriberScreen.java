@@ -59,7 +59,7 @@ public final class InfusionInscriberScreen extends AbstractContainerScreen<Infus
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, 6, 6, 0, false);
+        graphics.text(font, title, 6, 6, 0xFF000000, false);
         InfusionRecipe recipe = menu.selected();
         if (recipe == null) {
             return;
@@ -73,7 +73,7 @@ public final class InfusionInscriberScreen extends AbstractContainerScreen<Infus
         }
         int count = menu.recipes().size();
         if (count > 1) {
-            graphics.text(font, (menu.recipes().indexOf(recipe) + 1) + "/" + count, 92, 90, 0x404040, false);
+            graphics.text(font, (menu.recipes().indexOf(recipe) + 1) + "/" + count, 92, 90, 0xFF404040, false);
         }
     }
 

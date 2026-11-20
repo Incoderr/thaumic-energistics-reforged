@@ -74,7 +74,7 @@ public final class EssentiaCellWorkbenchScreen extends AbstractContainerScreen<E
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(font, title, 6, 6, 0, false);
+        graphics.text(font, title, 6, 6, 0xFF000000, false);
     }
 
     @Override
