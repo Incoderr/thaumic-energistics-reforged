@@ -73,6 +73,7 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
             public void updateWatcher(IStackWatcher newWatcher) {
                 watcher = newWatcher;
                 configureWatcher();
+                getHost().markForUpdate();
             }
 
             @Override
@@ -123,6 +124,7 @@ public class EssentiaStorageMonitorPart extends AEBasePart {
     @Override
     protected void onMainNodeStateChanged(IGridNodeListener.State reason) {
         super.onMainNodeStateChanged(reason);
+        configureWatcher();
         getHost().markForUpdate();
     }
 
