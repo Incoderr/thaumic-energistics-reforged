@@ -1,9 +1,10 @@
-import shutil
+import pngtint
 
 from gen_buses import convert, textured, sides
 
 GUI_HEIGHT = 243
 TEXTURE = "guis/thaumicenergistics/arcane_crafting.png"
+SEARCH_BOX = (96, 4, 169, 16)
 FRONT = (2, 2, 14, 14, 14, 16)
 LIGHTS = (5, 5, 13, 11, 11, 14)
 ALL_FACES = ("north", "south", "east", "west", "up", "down")
@@ -73,8 +74,8 @@ def style():
         },
         "widgets": {
             "scrollbar": {"left": 175, "top": 18},
-            "search": {"left": 98, "top": 6, "width": 65, "height": 10},
-            "viewCells": {"left": 205, "top": 2},
+            "search": {"left": 124, "top": 4, "width": 46, "height": 10},
+            "viewCells": {"left": -10000, "top": 0},
             "clearCraftingGrid": {"left": 98, "bottom": bottom(89)},
             "swapArmor": {"left": 26, "bottom": bottom(112)},
         },
@@ -120,4 +121,9 @@ def generate(ctx):
     ctx.write(ae2 / "screens" / "thaumicenergistics" / "arcane_crafting_terminal.json", style())
     texture = ae2 / "textures" / TEXTURE
     texture.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(ctx.ROOT / "src" / "main" / "resources" / "assets" / "thaumicenergistics" / "textures" / "gui" / "arcane.crafting.png", texture)
+    width, height, pixels = pngtint.read(ctx.ROOT / "src" / "main" / "resources" / "assets" / "thaumicenergistics" / "textures" / "gui" / "arcane.crafting.png")
+    background = pixels[SEARCH_BOX[1] * width + SEARCH_BOX[0] - 1]
+    for y in range(SEARCH_BOX[1], SEARCH_BOX[3]):
+        for x in range(SEARCH_BOX[0], SEARCH_BOX[2]):
+            pixels[y * width + x] = background
+    pngtint.write(texture, width, height, pixels)
