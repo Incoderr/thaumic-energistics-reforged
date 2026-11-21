@@ -37,6 +37,14 @@ repositories {
         }
     }
     maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+        content {
+            includeGroup "mezz.jei"
+            includeGroup "net.mezzdev.config"
+        }
+    }
+    maven {
         name = "Architectury"
         url = "https://maven.architectury.dev/"
         content {
@@ -96,6 +104,11 @@ dependencies {
     implementation "com.github.glitchfiend:TerraBlender-neoforge:${terrablender_version}"
     implementation files("libs/appliedenergistics2-${ae2_version}.jar")
     implementation files("libs/guideme-${guideme_version}.jar")
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    if (!providers.gradleProperty("withoutJei").isPresent()) {
+        localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
