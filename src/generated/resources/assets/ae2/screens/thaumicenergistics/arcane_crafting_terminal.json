@@ -103,14 +103,14 @@
       "top": 18
     },
     "search": {
-      "left": 98,
-      "top": 6,
-      "width": 65,
+      "left": 124,
+      "top": 4,
+      "width": 46,
       "height": 10
     },
     "viewCells": {
-      "left": 205,
-      "top": 2
+      "left": -10000,
+      "top": 0
     },
     "clearCraftingGrid": {
       "left": 98,

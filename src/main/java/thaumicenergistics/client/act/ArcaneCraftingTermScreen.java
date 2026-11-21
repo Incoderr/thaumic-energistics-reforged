@@ -1,21 +1,28 @@
 package thaumicenergistics.client.act;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import appeng.api.config.ActionItems;
 import appeng.client.gui.Icon;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.ActionButton;
+import appeng.menu.SlotSemantics;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import thaumcraft.client.aspect.AspectRenderer;
 import thaumicenergistics.ThaumicEnergistics;
 import thaumicenergistics.act.ArcaneCraftingTermMenu;
+import thaumicenergistics.mixin.SlotAccessor;
 
 public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCraftingTermMenu> {
     public static final String STYLE = "/screens/thaumicenergistics/arcane_crafting_terminal.json";
@@ -27,6 +34,13 @@ public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCrafti
     private static final double ASPECT_COST_BLINK_SPEED = 0.5;
     private static final float ASPECT_COST_MIN_ALPHA = 0.25F;
     private static final float ASPECT_COST_MAX_ALPHA = 0.75F;
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("ae2", "textures/guis/thaumicenergistics/arcane_crafting.png");
+    private static final int MAIN_BODY_WIDTH = 195;
+    private static final int VIEW_CELL_TEXTURE_WIDTH = 35;
+    private static final int VIEW_CELL_TEXTURE_HEIGHT = 104;
+    private static final int VIEW_SLOT_X = 206;
+    private static final int VIEW_SLOT_Y = 8;
+    private static final int SLOT_SIZE = 18;
 
     public ArcaneCraftingTermScreen(ArcaneCraftingTermMenu menu, Inventory inventory, Component title, ScreenStyle style) {
         super(menu, inventory, title, style);
@@ -35,6 +49,30 @@ public final class ArcaneCraftingTermScreen extends MEStorageScreen<ArcaneCrafti
         clear.setDisableBackground(true);
         widgets.add("clearCraftingGrid", clear);
         widgets.add("swapArmor", new SwapArmorButton(menu));
+    }
+
+    @Override
+    protected void updateBeforeRender() {
+        super.updateBeforeRender();
+        int row = 0;
+        for (Slot slot : menu.getSlots(SlotSemantics.VIEW_CELL)) {
+            SlotAccessor accessor = (SlotAccessor) slot;
+            accessor.thaumicenergistics$setX(VIEW_SLOT_X);
+            accessor.thaumicenergistics$setY(VIEW_SLOT_Y + row++ * SLOT_SIZE);
+        }
+    }
+
+    @Override
+    public void drawBG(GuiGraphics graphics, int offsetX, int offsetY, int mouseX, int mouseY, float partialTicks) {
+        super.drawBG(graphics, offsetX, offsetY, mouseX, mouseY, partialTicks);
+        graphics.blit(TEXTURE, offsetX + MAIN_BODY_WIDTH, offsetY, MAIN_BODY_WIDTH, 0, VIEW_CELL_TEXTURE_WIDTH, VIEW_CELL_TEXTURE_HEIGHT);
+    }
+
+    @Override
+    public List<Rect2i> getExclusionZones() {
+        List<Rect2i> zones = new ArrayList<>(super.getExclusionZones());
+        zones.add(new Rect2i(leftPos + MAIN_BODY_WIDTH, topPos, VIEW_CELL_TEXTURE_WIDTH, VIEW_CELL_TEXTURE_HEIGHT));
+        return zones;
     }
 
     @Override
