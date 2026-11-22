@@ -18,7 +18,8 @@ This file describes how to develop and port the mod. Phase status, test counts, 
 
 ## Environment
 
-- Mod `thaumicenergistics`, package `thaumicenergistics`, asset namespace `thaumicenergistics`, archive `thaumic-energistics-reforged`, version 1.1.
+- Mod `thaumicenergistics`, package `thaumicenergistics`, asset namespace `thaumicenergistics`, archive `thaumic-energistics-reforged`, version in `mod_version` (`gradle.properties`).
+- Versions are `MAJOR.MINOR.PATCH`. Every commit that changes the built jar bumps `mod_version` (and `Mod` in README): PATCH for fixes, MINOR for new features or content, MAJOR for breaking world or save compatibility. The CI release is replaced under the Minecraft version tag, so the jar version is the only way issue reports tell builds apart. The `main` branch is versioned on its own.
 - MC 26.3, NeoForge 26.3.0.100, ModDevGradle 2.0.148 (no Parchment), AE2 26.3.1-alpha, GuideME 26.3.7-alpha, TerraBlender 26.3-26.3.0.0.9, Java 25. The base `main` and the other addons are on NeoForge 26.3.0.57-beta; the addon is ahead only because of GuideME.
 - 26.3 API is the same as in the base `main` and `../thaumic-tinkerer-reforged` `main`; copy snippets from there. When porting a fix from the 1.21.1 `main` branch: `Identifier` not `ResourceLocation`, `ValueInput`/`ValueOutput` not `CompoundTag` + `HolderLookup.Provider`, `InteractionResult` not `ItemInteractionResult`/`InteractionResultHolder` (a changed held item goes through `InteractionResult.SUCCESS.heldItemTransformedTo`), drops on removal in `BlockEntity.preRemoveSideEffects` or AE2 `addAdditionalDrops` (no `Block.onRemove`), `GuiGraphicsExtractor` screens with `extract*` methods and `MouseButtonEvent`/`KeyEvent` input, `ModConfig.Type.SYNCED`.
 - Python 3, `tools/` scripts have no external dependencies.

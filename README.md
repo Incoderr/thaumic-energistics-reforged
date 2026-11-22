@@ -41,7 +41,7 @@ Deliberate differences from the original are listed in `CLAUDE.md` (content miss
 
 Versions:
 
-- Mod `1.1`
+- Mod `1.1.1`
 - [Thaumcraft 4: Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) `1.1.3`
 - Minecraft `26.3`
 - NeoForge `26.3.0.100` (GuideME needs `26.3.0.100` or newer)
