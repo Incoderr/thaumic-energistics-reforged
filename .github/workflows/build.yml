@@ -75,5 +75,5 @@ jobs:
           gh release create "$tag" build/libs/*.jar \
             --latest="$latest" \
             --target "$GITHUB_SHA" \
-            --title "$MC" \
+            --title "$VERSION for Minecraft $MC" \
             --notes "$notes"

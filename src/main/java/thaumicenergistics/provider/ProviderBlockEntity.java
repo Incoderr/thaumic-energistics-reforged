@@ -126,8 +126,13 @@ public abstract class ProviderBlockEntity extends AENetworkedBlockEntity impleme
     }
 
     public void checkGridConnectionColor() {
-        if (level == null || level.isClientSide() || colorForced) {
+        if (level == null || level.isClientSide() || colorForced || unloading || isRemoved()) {
             return;
+        }
+        for (Direction side : Direction.values()) {
+            if (!level.isLoaded(worldPosition.relative(side))) {
+                return;
+            }
         }
         if (attachmentSide != null) {
             AEColor attached = neighborColor(attachmentSide);
